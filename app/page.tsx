@@ -8,7 +8,7 @@ import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 import { Card, CardFooter, Image, Button, User } from "@heroui/react";
-import HeroCard from "@/components/HeroCard";
+
 import CardDrop from "@/components/CardDrop";
 import { useState } from "react";
 import { Tabs, Tab, CardBody, CardHeader } from "@heroui/react";
