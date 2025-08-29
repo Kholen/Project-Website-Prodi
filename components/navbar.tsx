@@ -46,7 +46,7 @@ export const Navbar = () => {
                 className={clsx(
                   linkStyles({ color: "foreground" }),
                   "transition-transform duration-300",
-                  pathname === item.href ? "text-white font-medium" : "text-gray-600 hover:scale-110 hover:text-white"
+                  pathname === item.href ? "text-black font-semibold" : "text-gray-600 hover:scale-110 hover:text-black"
                 )}
                 color="foreground"
                 href={item.href}
@@ -55,10 +55,8 @@ export const Navbar = () => {
               </NextLink>
             </NavbarItem>
           ))}
-          <ThemeSwitch />
         </ul>
       </NavbarContent>
-
     </HeroUINavbar>
   );
 };
