@@ -9,7 +9,7 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
+
 import { TwitterIcon, GithubIcon, DiscordIcon, HeartFilledIcon, SearchIcon, Logo } from "@/components/icons";
 import { usePathname } from "next/navigation";
 
@@ -51,7 +51,7 @@ export const Navbar = () => {
                 color="foreground"
                 href={item.href}
               >
-                <span>{item.label}</span>
+                <span>{item.label}</span> 
               </NextLink>
             </NavbarItem>
           ))}
