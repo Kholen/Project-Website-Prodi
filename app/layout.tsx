@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site";
 // import { fontSans } from "@/config/fonts";
 import { myFont } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
+import "../styles/globals.css";
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={clsx("min-h-screen text-foreground bg-background antialiased", myFont.className)}>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col ">
-            <div className="bg-blue-950 sticky top-0 z-11">
+            <div className="mainColor sticky top-0 z-11">
               <Navbar />
             </div>
 

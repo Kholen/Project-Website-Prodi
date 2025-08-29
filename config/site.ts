@@ -14,6 +14,10 @@ export const siteConfig = {
       href: "/visi-misi",
     },
     {
+      label: "Riset Dan Publikasi",
+      href: "/visi-misi",
+    },
+    {
       label: "Tentang Mahasiswa",
       href: "/tentang-mahasiswa",
     },
