@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={clsx("min-h-screen text-foreground bg-background antialiased", myFont.className)}>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col ">
-            <div className="mainColor sticky top-0 z-11">
+            <div className="bg-white sticky top-0 z-11">
               <Navbar />
             </div>
 
