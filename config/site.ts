@@ -15,7 +15,7 @@ export const siteConfig = {
     },
     {
       label: "Riset Dan Publikasi",
-      href: "/visi-misi",
+      href: "/riset-publikasi",
     },
     {
       label: "Tentang Mahasiswa",
