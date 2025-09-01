@@ -6,32 +6,23 @@
   background-color: #0a0950;
 }
 .secondColor {
-  background-color: #20307E;
+  background-color: #20307e;
 }
 
-html, body {
-  overflow: hidden !important;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-html::-webkit-scrollbar, body::-webkit-scrollbar {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px !important;
+.main-nav a span::after {
+  content: "";
+  display: block;
+  padding-bottom: 0.2rem;
+  border-bottom: 0.1rem solid rgb(0, 0, 0);
+  transform: scaleX(0);
+  transition: 0.2s ease-in-out;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #0a0950 !important; /* mainColor */
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #20307E !important; /* secondColor */
-  border-radius: 4px !important;
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin !important;
-  scrollbar-color: #20307E #0a0950 !important;
+.main-nav a:hover span::after {
+  transform: scaleX(0.5);
 }
