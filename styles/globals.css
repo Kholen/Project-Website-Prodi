@@ -26,3 +26,17 @@ body::-webkit-scrollbar {
 .main-nav a:hover span::after {
   transform: scaleX(0.5);
 }
+
+
+
+
+.text-stroke {
+  -webkit-text-stroke: 0.5px rgb(255, 255, 255);
+    transition: 0.5s ease-in-out;
+}
+.text-stroke:hover{
+  color: white;
+  -webkit-text-stroke: none;
+
+  transition: 0.5s ease-in-out;
+}
