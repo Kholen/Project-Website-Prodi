@@ -26,3 +26,14 @@ body::-webkit-scrollbar {
 .main-nav a:hover span::after {
   transform: scaleX(0.5);
 }
+
+.animasi-teks-awal {
+  color: white;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 0.5px rgb(255, 255, 255);
+}
+.text-stroke:hover {
+  -webkit-text-stroke: none;
+}
