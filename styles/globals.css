@@ -27,16 +27,13 @@ body::-webkit-scrollbar {
   transform: scaleX(0.5);
 }
 
-
-
+.animasi-teks-awal {
+  color: white;
+}
 
 .text-stroke {
   -webkit-text-stroke: 0.5px rgb(255, 255, 255);
-    transition: 0.5s ease-in-out;
 }
-.text-stroke:hover{
-  color: white;
+.text-stroke:hover {
   -webkit-text-stroke: none;
-
-  transition: 0.5s ease-in-out;
 }
