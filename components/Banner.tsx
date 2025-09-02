@@ -58,8 +58,8 @@ export const Banner = () => {
             initial="hidden"
             animate="visible"
             className={clsx(
-              "text-[60px] font-bold z-12 pt-10 ",
-              isWhite ? "text-white" : "text-blue-500/10 text-stroke hover:text-white duration-500 ease-in-out",
+              "text-[60px] font-bold z-12 pt-20 ",
+              isWhite ? "text-white" : "text-sky-900/10 text-stroke hover:text-white duration-500 ease-in-out",
               fontHeading.className
             )}
           >
@@ -69,7 +69,7 @@ export const Banner = () => {
               </motion.span>
             ))}
           </motion.div>
-          <motion.p variants={sloganVariant} initial="hidden" animate="visible" className={clsx("text-lg m-0 text-white pb-10", myFont.className)}>
+          <motion.p variants={sloganVariant} initial="hidden" animate="visible" className={clsx("text-lg m-0 text-white pb-0", myFont.className)}>
             {slogan}
           </motion.p>
         </div>
