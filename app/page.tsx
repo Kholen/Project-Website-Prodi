@@ -235,6 +235,51 @@ export default function Home() {
           </Card>
         </Tab>
       </Tabs>
+
+      <svg className="w-screen relative left-1/2 -translate-x-1/2 -mb-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+      <path fill="#0A0950" fillOpacity="1" d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,170.7C1200,171,1320,213,1380,234.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+
+      <div className="w-screen relative left-1/2 -translate-x-1/2 h-200 mainColor">
+        <div className="container mx-auto px-6 h-full flex flex-row">
+
+            <div className="">
+              <div className="mb-5">
+                <h1 className="bg-sky-800 w-15 text-center">Visi</h1>
+                <div className="bg-white rounded-lg w-175">
+                  <p className="p-5 justify-content">Menjadikan Program studi Sistem Informasi STT Indonesia Tanjungpinang berkualitas dan unggul pada tahun 2025 dalam pengajaran, penelitian, dan pengabdian masyarakat bidang Big Data dan Data Science di Kepulauan Riau.</p>
+                </div>
+              </div>
+
+              <h1 className="bg-sky-800 w-15 text-center">Misi</h1>
+              <div className="bg-white rounded-lg w-175">
+                <ul className="p-5 justify-content">
+                  <li>Menyelenggarakan pendidikan dan pengajaran yang berkualitas dengan terus mengikuti perkembangan ilmu dan teknologi khususnya di bidang Big Data dan Data Science.</li>
+                  <li>Menyiapkan mahasiswa untuk memasuki dunia kerja yang mampu bersaing baik lokal maupun nasional, mandiri dalam bidang Big Data dan Data Science, memiliki etos kerja tinggi, beretika, dan dapat bekerjasama dalam tim kerja.</li>
+                  <li>Menyelenggarakan penelitian yang dapat memberikan kontribusi terhadap masyarakat dan pengembangan dalam bidang Big Data dan Data Science serta Blockchain.</li>
+                  <li>Menyelenggarakan pengabdian kepada masyarakat sebagai kepedulian insan akademik dalam membantu meningkatkan kualitas masyarakat dalam bidang Big Data dan Data Science.</li>
+                  <li>Mengembangkan proses pembelajaran yang berkualitas berlandaskan Outcome Based Education (OBE).</li>
+                  <li>Menjalin kerjasama dalam pengembangan sumber daya manusia untuk menjembatani implementasi Big Data dan Data Science dalam konsep Smart City di Provinsi Kepulauan Riau.</li>
+                  <li>Mengembangkan kualitas SDM untuk memberikan layanan yang prima dalam bidang Big Data dan Data Science dan untuk menjadi seorang ilmuwan data.</li>
+                </ul>
+              </div>
+            </div>
+  
+            <div className="bg-gray-300 rounded-2xl w-80 h-100 m-auto">
+              <div className="bg-gray-400 rounded-2xl w-80 h-100 p-5 -mt-5 -ml-5">
+                  <Image
+                    alt="HeroUI hero Image"
+                    src="https://heroui.com/images/hero-card-complete.jpeg"
+                    width={300}
+                  />
+              </div>
+            </div>
+            
+
+        </div>
+      </div>
+
+
+
     </div>
   );
 }
