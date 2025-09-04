@@ -7,11 +7,13 @@ import { Input } from "@heroui/input";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { fontNavbar } from "@/config/fonts";
 
 import { siteConfig } from "@/config/site";
 
 import { TwitterIcon, GithubIcon, DiscordIcon, HeartFilledIcon, SearchIcon, Logo } from "@/components/icons";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -30,11 +32,15 @@ export const Navbar = () => {
   );
 
   return (
-    <HeroUINavbar maxWidth="xl" position="sticky">
+    <HeroUINavbar maxWidth="xl" position="sticky" className="">
       <NavbarBrand as="li" className="gap-3 max-w-fit">
         <NextLink className="flex justify-start items-center gap-1" href="/">
-          <Logo />
-          <p className="font-bold text-inherit">Zero Website</p>
+          {/* <Logo /> */}
+          <Image src={"/ERD.png"} width={50} height={50} alt="logo" className="mr-2 " priority />
+          <p className={clsx("font-bold text-inherit leading-none", fontNavbar.className)}>
+            Sekolah Tinggi Teknologi Indonesia.
+            <br /> Tanjungpinang
+          </p>
         </NextLink>
       </NavbarBrand>
 
@@ -46,12 +52,12 @@ export const Navbar = () => {
                 className={clsx(
                   linkStyles({ color: "foreground" }),
                   "transition-transform duration-300",
-                  pathname === item.href ? "text-black font-semibold" : "text-gray-600 hover:scale-110 hover:text-black"
+                  pathname === item.href ? "text-black font-bold" : "text-gray-600 font-medium hover:scale-110 hover:text-black"
                 )}
                 color="foreground"
                 href={item.href}
               >
-                <span>{item.label}</span> 
+                <span>{item.label}</span>
               </NextLink>
             </NavbarItem>
           ))}
