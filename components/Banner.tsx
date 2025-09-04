@@ -48,7 +48,7 @@ export const Banner = () => {
   };
 
   return (
-    <div className="relative w-screen">
+    <div className="relative container">
       <Image alt="Banner" src="/banner.png" width={1444} height={400} className="rounded-none " />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 ">
         <div className="text-center">
@@ -86,7 +86,7 @@ export const Banner = () => {
             variants={accreditationVariant2}
             initial="hidden"
             animate="visible"
-            className={clsx("text-md text-white text-left", myFont.className)}
+            className={clsx("text-md text-white text-start", myFont.className)}
           >
             {accreditation2}
           </motion.p>
