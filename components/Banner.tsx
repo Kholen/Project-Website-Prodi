@@ -3,7 +3,7 @@
 import { Image } from "@heroui/react";
 import { fontHeading, myFont } from "@/config/fonts";
 import clsx from "clsx";
-import { motion } from "framer-motion";
+import { motion, stagger, useAnimate, useInView } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -21,45 +21,49 @@ export const Banner = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.08 },
-    },
-  };
+  const [scope, animate] = useAnimate();
+  const isInView = useInView(scope, { once: true });
 
-  const titleChar = {
-    visible: { opacity: 1, x: 0, y: 0, transition: { type: "spring", damping: 12, stiffness: 100 } },
-    hidden: { opacity: 0, x: -20, y: 10, transition: { type: "spring", damping: 12, stiffness: 100 } },
-  };
+  useEffect(() => {
+    if (isInView) {
+      animate(
+        "span",
+        {
+          opacity: 1,
+        },
+        {
+          duration: 0.3,
+          delay: stagger(0.09),
+          ease: "easeInOut",
+        }
+      );
+    }
+  }, [isInView]);
 
   const sloganVariant = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { delay: title.length * 0.08 + 0.5, duration: 0.8 } },
+    visible: { opacity: 1, y: 0, transition: { delay: 1.5, duration: 0.8 } },
   };
 
   const accreditationVariant = {
     hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { delay: title.length * 0.08 + 1, duration: 0.8 } },
+    visible: { opacity: 1, x: 0, transition: { delay: 1.8, duration: 0.8 } },
   };
   const accreditationVariant2 = {
     hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { delay: title.length * 0.08 + 1.5, duration: 0.8 } },
+    visible: { opacity: 1, x: 0, transition: { delay: 2.1, duration: 0.8 } },
   };
 
   const pathname = usePathname();
   const isHidden = pathname !== "/";
   return (
     <div className={`relative w-full ${isHidden && "hidden"}`}>
-      <Image alt="Banner" src="/banner.png" width={1444} height={400} className="rounded-none " />
+      <Image alt="Banner" src="/banner.png" width={1444} height={600} className="rounded-none object-cover " />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 ">
         <div className="text-center">
           <motion.div
+            ref={scope}
             style={{ display: "flex", overflow: "hidden" }}
-            variants={container}
-            initial="hidden"
-            animate="visible"
             className={clsx(
               "text-[60px] font-bold z-12 pt-20 ",
               isWhite ? "text-white" : "text-sky-900/10 text-stroke hover:text-white duration-500 ease-in-out",
@@ -67,7 +71,7 @@ export const Banner = () => {
             )}
           >
             {title.split("").map((char, index) => (
-              <motion.span variants={titleChar} key={index}>
+              <motion.span style={{ opacity: 0 }} key={index}>
                 {char === " " ? "\u00A0" : char}
               </motion.span>
             ))}
