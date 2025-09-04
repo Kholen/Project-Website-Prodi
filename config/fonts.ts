@@ -7,3 +7,6 @@ export const myFont = localFont({
 export const fontHeading = localFont({
   src: "../assets/fonts/ArchivoBlack-Regular.ttf",
 });
+export const fontNavbar = localFont({
+  src: "../assets/fonts/ProductSansInfanity.ttf",
+});
