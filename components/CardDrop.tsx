@@ -68,8 +68,8 @@ function MyCard() {
               <div className="flex flex-wrap gap-2 justify-center mb-3">
                 <span className="px-3 py-1 rounded-full border text-xs">Backend Dev</span>
                 <span className="px-3 py-1 rounded-full border text-xs">React</span>
-                <span className="px-3 py-1 rounded-full border text-xs">Database Engineer</span>
                 <span className="px-3 py-1 rounded-full border text-xs">Dosen STTI</span>
+                <span className="px-3 py-1 rounded-full border text-xs">Database Engineer</span>
                 <span className="px-3 py-1 rounded-full border text-xs">ksdck</span>
               </div>
             </div>
