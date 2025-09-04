@@ -48,7 +48,7 @@ export const Banner = () => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-screen">
       <Image alt="Banner" src="/banner.png" width={1444} height={400} className="rounded-none " />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 ">
         <div className="text-center">
@@ -58,8 +58,8 @@ export const Banner = () => {
             initial="hidden"
             animate="visible"
             className={clsx(
-              "text-[60px] font-bold z-12 pt-10 ",
-              isWhite ? "text-white" : "text-blue-500/10 text-stroke hover:text-white duration-500 ease-in-out",
+              "text-[60px] font-bold z-12 pt-20 ",
+              isWhite ? "text-white" : "text-sky-900/10 text-stroke hover:text-white duration-500 ease-in-out",
               fontHeading.className
             )}
           >
@@ -69,7 +69,7 @@ export const Banner = () => {
               </motion.span>
             ))}
           </motion.div>
-          <motion.p variants={sloganVariant} initial="hidden" animate="visible" className={clsx("text-lg m-0 text-white pb-10", myFont.className)}>
+          <motion.p variants={sloganVariant} initial="hidden" animate="visible" className={clsx("text-lg m-0 text-white pb-0", myFont.className)}>
             {slogan}
           </motion.p>
         </div>

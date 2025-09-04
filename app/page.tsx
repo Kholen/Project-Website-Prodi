@@ -23,7 +23,7 @@ export default function Home() {
     "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
   return (
     // <>
-    <div className="container-fluid">
+    <div className="w-screen">
       <Tabs
         className="w-full max-w-8xl mx-auto"
         aria-label="Dynamic tabs"
