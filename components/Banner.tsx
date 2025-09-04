@@ -5,6 +5,7 @@ import { fontHeading, myFont } from "@/config/fonts";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export const Banner = () => {
   const title = "Sistem Informasi";
@@ -47,8 +48,10 @@ export const Banner = () => {
     visible: { opacity: 1, x: 0, transition: { delay: title.length * 0.08 + 1.5, duration: 0.8 } },
   };
 
+  const pathname = usePathname();
+  const isHidden = pathname !== "/";
   return (
-    <div className="relative container">
+    <div className={`relative w-full ${isHidden && "hidden"}`}>
       <Image alt="Banner" src="/banner.png" width={1444} height={400} className="rounded-none " />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 ">
         <div className="text-center">
