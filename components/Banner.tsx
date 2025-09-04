@@ -48,7 +48,7 @@ export const Banner = () => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-screen">
       <Image alt="Banner" src="/banner.png" width={1444} height={400} className="rounded-none " />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 ">
         <div className="text-center">
