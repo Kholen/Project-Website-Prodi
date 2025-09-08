@@ -37,3 +37,11 @@ body::-webkit-scrollbar {
 .text-stroke:hover {
   -webkit-text-stroke: none;
 }
+
+.hover {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.hover:hover {
+    transform: scale(1.05);
+}
