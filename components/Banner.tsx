@@ -1,11 +1,12 @@
 "use client";
 
 import { Image } from "@heroui/react";
-import { fontHeading, myFont } from "@/config/fonts";
 import clsx from "clsx";
 import { motion, stagger, useAnimate, useInView } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+
+import { fontHeading, myFont } from "@/config/fonts";
 
 export const Banner = () => {
   const title = "Sistem Informasi";
@@ -14,10 +15,12 @@ export const Banner = () => {
   const accreditation2 = "xxxxxxxxx";
 
   const [isWhite, setIsWhite] = useState(true);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsWhite(false);
     }, 3700);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -35,7 +38,7 @@ export const Banner = () => {
           duration: 0.3,
           delay: stagger(0.09),
           ease: "easeInOut",
-        }
+        },
       );
     }
   }, [isInView]);
@@ -56,44 +59,61 @@ export const Banner = () => {
 
   const pathname = usePathname();
   const isHidden = pathname !== "/";
+
   return (
     <div className={`relative w-full ${isHidden && "hidden"}`}>
-      <Image alt="Banner" src="/banner.png" width={1444} height={600} className="rounded-none object-cover " />
+      <Image
+        alt="Banner"
+        className="rounded-none object-cover "
+        height={600}
+        src="/banner.png"
+        width={1444}
+      />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-10 ">
         <div className="text-center">
           <motion.div
             ref={scope}
-            style={{ display: "flex", overflow: "hidden" }}
             className={clsx(
               "text-[60px] font-bold z-12 pt-20 ",
-              isWhite ? "text-white" : "text-sky-900/10 text-stroke hover:text-white duration-500 ease-in-out",
-              fontHeading.className
+              isWhite
+                ? "text-white"
+                : "text-sky-900/10 text-stroke hover:text-white duration-500 ease-in-out",
+              fontHeading.className,
             )}
+            style={{ display: "flex", overflow: "hidden" }}
           >
             {title.split("").map((char, index) => (
-              <motion.span style={{ opacity: 0 }} key={index}>
+              <motion.span key={index} style={{ opacity: 0 }}>
                 {char === " " ? "\u00A0" : char}
               </motion.span>
             ))}
           </motion.div>
-          <motion.p variants={sloganVariant} initial="hidden" animate="visible" className={clsx("text-lg m-0 text-white pb-0", myFont.className)}>
+          <motion.p
+            animate="visible"
+            className={clsx("text-lg m-0 text-white pb-0", myFont.className)}
+            initial="hidden"
+            variants={sloganVariant}
+          >
             {slogan}
           </motion.p>
         </div>
         <div className="w-full max-w-8xl mx-auto px-6">
           <motion.p
-            variants={accreditationVariant}
-            initial="hidden"
             animate="visible"
-            className={clsx("text-md mt-8 text-white text-left", myFont.className)}
+            className={clsx(
+              "text-md mt-8 text-white text-left",
+              myFont.className,
+            )}
+            initial="hidden"
+            variants={accreditationVariant}
           >
             {accreditation}
           </motion.p>
           <motion.p
-            variants={accreditationVariant2}
-            initial="hidden"
             animate="visible"
             className={clsx("text-md text-white text-start", myFont.className)}
+            initial="hidden"
+            variants={accreditationVariant2}
           >
             {accreditation2}
           </motion.p>
