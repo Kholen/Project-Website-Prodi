@@ -13,7 +13,7 @@ import CardDrop from "@/components/CardDrop";
 import { useState } from "react";
 import { Tabs, Tab, CardBody, CardHeader } from "@heroui/react";
 import { Accordion, AccordionItem } from "@heroui/react";
-import "@/styles/globals.css";
+import "../styles/globals.css";
 import { Banner } from "@/components/Banner";
 
 //table data
@@ -181,7 +181,7 @@ export default function Home() {
                       tabList: "relative w-full p-0 bg-white-500/10 rounded-none",
 
                       // Ini adalah kunci utamanya: menata 'cursor' sebagai garis bawah
-                      cursor: "w-full h-1 bg-zinc-1000 ",
+                      cursor: "w-full h-1 bg-white ",
                       // Anda bisa ganti bg-primary dengan warna lain, mis: bg-blue-500
 
                       // Menyesuaikan padding pada setiap tab jika perlu
