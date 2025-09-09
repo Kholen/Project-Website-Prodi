@@ -45,3 +45,8 @@ body::-webkit-scrollbar {
 .hover:hover {
     transform: scale(1.05);
 }
+
+.line-bawah [data-slot="cursor"] {
+  top: unset !important;
+  bottom: 0 !important;
+}
