@@ -10,6 +10,7 @@ import { siteConfig } from "@/config/site";
 import { myFont } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import "../styles/globals.css";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 export const metadata: Metadata = {
   title: {
@@ -44,17 +45,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="container mx-auto pt-10 px-6 flex-grow">{children}</main>
         </div>
 
-        <footer className="w-full flex items-center justify-center py-3">
-          <Link
-            isExternal
-            className="flex items-center gap-1 text-current"
-            href="https://heroui.com?utm_source=next-app-template"
-            title="heroui.com homepage"
-          >
-            <span className="text-default-600">Powered by</span>
-            <p className="text-primary">footer</p>
-          </Link>
-        </footer>
+        <div className="">
+          <ConditionalFooter />
+        </div>
+        
       </body>
     </html>
   );
