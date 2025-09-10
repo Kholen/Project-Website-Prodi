@@ -18,8 +18,6 @@ import { Banner } from "@/components/Banner";
 import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
 import { MdAccessTimeFilled } from "react-icons/md";
 
-
-
 //table data
 
 export default function Home() {

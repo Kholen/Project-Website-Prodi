@@ -1,13 +1,13 @@
 "use client";
 
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import Footer from "@/components/Footer";
 import FooterHome from "@/components/FooterHome";
 
 const ConditionalFooter = () => {
   const pathname = usePathname();
 
-  if (pathname === '/') {
+  if (pathname === "/") {
     return <FooterHome />;
   }
 

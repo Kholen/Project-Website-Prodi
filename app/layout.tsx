@@ -22,20 +22,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang="en">
       <head />
-      <body
-        className={clsx(
-          "min-h-screen text-foreground bg-background antialiased",
-          myFont.className,
-        )}
-      >
+      <body className={clsx("min-h-screen text-foreground bg-background antialiased", myFont.className)}>
         <div className="relative flex flex-col ">
           <div className="w-screen sticky top-0 z-11 bg-black/10">
             <Navbar />
@@ -50,15 +41,12 @@ export default function RootLayout({
               fillOpacity="1"
             />
           </svg>
-          <main className="container mx-auto pt-10 px-6 flex-grow">
-            {children}
-          </main>
+          <main className="container mx-auto pt-10 px-6 flex-grow">{children}</main>
         </div>
 
         <div className="">
           <ConditionalFooter />
         </div>
-        
       </body>
     </html>
   );
