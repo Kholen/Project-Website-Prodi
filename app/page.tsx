@@ -15,6 +15,10 @@ import { Tabs, Tab, CardBody, CardHeader } from "@heroui/react";
 import { Accordion, AccordionItem } from "@heroui/react";
 import "../styles/globals.css";
 import { Banner } from "@/components/Banner";
+import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
+import { MdAccessTimeFilled } from "react-icons/md";
+
+
 
 //table data
 
@@ -40,8 +44,8 @@ export default function Home() {
           <Tab key="tentang" title="Tentang">
             <Card className="mainColor text-white mt-2">
               <div className="p-6">
-                <strong className="text-xl">Sistem Informasi</strong>
-                <p className="mt-2">
+                <strong className="text-xl underline underline-offset-10">Sistem Informasi</strong>
+                <p className="mt-5">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid perferendis hic quisquam alias velit, porro deserunt reprehenderit
                   ab facilis at inventore quo voluptatum veniam obcaecati! At, dolorum eos? Expedita, accusantium!
                 </p>
@@ -71,7 +75,7 @@ export default function Home() {
             </Card>
           </Tab>
 
-          {/* Tab 2: Visi & Misi */}
+          {/* Tab 2: Prospek kerja */}
           <Tab key="prospek-kerja" title="Prospek Kerja">
             <Card className="mainColor text-white mt-2">
               {/* Menggunakan flexbox untuk membuat layout 2 kolom */}
@@ -82,8 +86,8 @@ export default function Home() {
                 <div className="flex-1">
                   {" "}
                   {/* Kolom ini mengambil 2/3 lebar */}
-                  <h1 className="text-4xl font-bold text-center">Prospek kerja</h1>
-                  <p className="mt-4 text-justify">
+                  <h1 className="text-4xl font-bold text-center underline underline-offset-15">Prospek kerja</h1>
+                  <p className="mt-10 text-justify">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus dicta dolorem, voluptates at consequuntur nam asperiores ex
                     architecto, illum minus placeat voluptatibus voluptatum ab delectus autem dolor non quasi incidunt.
                   </p>
@@ -135,40 +139,41 @@ export default function Home() {
             </Card>
           </Tab>
 
-          {/* Tab 3: Kurikulum */}
+          {/* Tab 3: Program Pendidikan */}
           <Tab key="programPendidikan" title="Program Pendidikan">
             <Card className="mainColor text-white mt-2">
               <CardBody>
-                <h1 className="text-center underline underline-offset-10 pt-2">Program Pendidikan</h1>
-                <div className="flex flex-wrap justify-evenly pt-5">
-                  <Card className="flex justify-center">
-                    <CardBody className="flex flex-col justify-center text-center ">
-                      <h4 className="font-bold text-large pb-2">Sistem Informasi</h4>
+                <h1 className="text-center underline underline-offset-10 pt-2 text-2xl">Program Pendidikan</h1>
+                <div className="flex flex-wrap justify-evenly items-center pt-10">
+                  <Card className="flex justify-center h-30 w-40">
+                    <CardBody className="flex flex-col justify-center items-center text-center">
+                      <FaUserGraduate className="text-3xl pb-2"/>
                       <h2>Gelar Lulusan</h2>
-                      <h3 className="font-bold">S.Si.</h3>
+                      <h3 className="font-bold">S.Kom.</h3>
                     </CardBody>
                   </Card>
-                  <Card className="m-3 py-2">
-                    <CardBody className="m-2 pt-2 px-4 flex-col items-start">
-                      <h4 className="font-bold text-large pb-4">Sistem Informasi</h4>
-                      <h2>Akreditasi</h2>
-                      <h3 className="font-bold">A (BAN-PT)</h3>
+                  <Card className="flex justify-center h-30 w-40">
+                    <CardBody className="flex flex-col justify-center items-center text-center">
+                      <FaMedal className="text-3xl pb-2"/>
+                      <h2>Akreditasi Prodi</h2>
+                      <h3 className="font-bold">Baik Sekali</h3>
                     </CardBody>
                   </Card>
-                  <Card className="m-3 py-2">
-                    <CardBody className="m-2 pt-2 px-4 flex-col items-start">
-                      <h4 className="font-bold text-large pb-4">Sistem Informasi</h4>
-                      <h2>Durasi Semester</h2>
+                  <Card className="flex justify-center h-30 w-40">
+                    <CardBody className="flex flex-col justify-center items-center text-center">
+                      <MdAccessTimeFilled className="text-3xl pb-2"/>
+                      <h2 className="leading-none">Jumlah Semester</h2>
                       <h3 className="font-bold">8 Semester</h3>
                     </CardBody>
                   </Card>
-                  <Card className="m-3 py-2">
-                    <CardBody className="m-2 pt-2 px-4 flex-col items-start">
-                      <h4 className="font-bold text-large pb-4">Sistem Informasi</h4>
-                      <h2>Gelar Lulusan</h2>
-                      <h3 className="font-bold">S.Si.</h3>
+                  <Card className="flex justify-center h-30 w-40">
+                    <CardBody className="flex flex-col justify-center items-center text-center">
+                      <FaMoneyBillWave className="text-3xl pb-2"/>
+                      <h2>Informasi Biaya</h2>
+                      <a href="#" className="font-bold underline underline-offset-2">Klik Disini</a>
                     </CardBody>
                   </Card>
+                 
                 </div>
 
                 <div className="flex w-full flex-col pt-4">
@@ -216,11 +221,12 @@ export default function Home() {
             </Card>
           </Tab>
 
-          {/* Tab 4: Dosen */}
+          {/* Tab 4: Kerja Sama */}
           <Tab key="kerjaSama" title="Kerja Sama Prodi">
             <Card className="mainColor mt-2">
+              <h1 className="text-white text-center text-3xl p-5 underline underline-offset-10">Kerja Sama</h1>
               <CardBody>
-                <div className="flex flex-wrap gap-9.5 justify-center mt-5 mb-5 ">
+                <div className="flex flex-wrap gap-9.5 justify-center mb-5 ">
                   <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
                   <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
                   <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
