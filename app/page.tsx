@@ -18,8 +18,6 @@ import { Banner } from "@/components/Banner";
 import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
 import { MdAccessTimeFilled } from "react-icons/md";
 
-
-
 //table data
 
 export default function Home() {
@@ -228,7 +226,7 @@ export default function Home() {
         <Tab key="kerjaSama" title="Kerja Sama Prodi">
           <Card className="mainColor mt-2">
             <h1 className="text-white text-center text-3xl p-5 underline underline-offset-10">Kerja Sama</h1>
-            <CardBody>
+            <CardBody className="pt-0">
               <div className="flex flex-wrap gap-11 justify-center mt-5 mb-5">
                 <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
                 <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />

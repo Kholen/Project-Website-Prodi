@@ -69,13 +69,9 @@ function MyCard({ person }: { person: PersonData }) {
           </div>
         </CardHeader>
         <CardBody className="flex-col items-center pt-1 overflow-hidden">
-          <h3 className="font-bold text-large pb-2 break-words text-center">
-            {person.name}
-          </h3>
+          <h3 className="font-bold text-large pb-2 break-words text-center">{person.name}</h3>
           <p className="text-tiny pb-2 break-words text-center">{person.job}</p>
-          <p className="text-tiny text-default-500 pb-2 break-words text-center">
-            {person.location}
-          </p>
+          <p className="text-tiny text-default-500 pb-2 break-words text-center">{person.location}</p>
           {showDetail && (
             <div className="mt-2 w-full px-2">
               <h2 className="mb-1">Expert In:</h2>
@@ -104,8 +100,7 @@ export default function App() {
     name: "Toni Sahroni",
     job: "Wakil ketua Komisi III",
     location: "Tanjung Priok",
-    imageUrl:
-      "https://nasdemjakarta.com/wp-content/uploads/2023/11/01.Ahmad-Sahroni-S.E.-M.I.Kom_.jpg", // Different image
+    imageUrl: "https://nasdemjakarta.com/wp-content/uploads/2023/11/01.Ahmad-Sahroni-S.E.-M.I.Kom_.jpg", // Different image
     skills: ["Nyocot", "terjarah", "Mantan Ironman", "TypeScript"],
   };
 

@@ -112,7 +112,12 @@ export const Banner = () => {
               </motion.span>
             ))}
           </motion.div>
-          <motion.p variants={sloganVariant} initial="hidden" animate="visible" className={clsx("text-lg m-0 text-white pb-0 text-right mb-30 me-38", myFont.className)}>
+          <motion.p
+            variants={sloganVariant}
+            initial="hidden"
+            animate="visible"
+            className={clsx("text-lg m-0 text-white pb-0 text-right mb-30 me-38", myFont.className)}
+          >
             {slogan}
           </motion.p>
         </div>
@@ -138,4 +143,3 @@ export const Banner = () => {
     </div>
   );
 };
-
