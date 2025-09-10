@@ -10,7 +10,7 @@ export const siteConfig = {
     },
     {
       label: "Visi & Misi",
-      href: "/visi-misi",
+      href: "/#Visi-Misi",
     },
     {
       label: "Riset Dan Publikasi",
