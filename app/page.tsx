@@ -41,15 +41,15 @@ export default function Home() {
       >
         {/* Tab 1: Tentang */}
 
-          <Tab key="tentang" title="Tentang">
-            <Card className="mainColor text-white mt-2">
-              <div className="p-6">
-                <strong className="text-xl underline underline-offset-10">Sistem Informasi</strong>
-                <p className="mt-2 text-justify indent-8">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid perferendis hic quisquam alias velit, porro deserunt reprehenderit
-                  ab facilis at inventore quo voluptatum veniam obcaecati! At, dolorum eos? Expedita, accusantium!
-                </p>
-                
+        <Tab key="tentang" title="Tentang">
+          <Card className="mainColor text-white mt-2">
+            <div className="p-6">
+              <strong className="text-xl underline underline-offset-10">Sistem Informasi</strong>
+              <p className="mt-2 text-justify indent-8">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid perferendis hic quisquam alias velit, porro deserunt reprehenderit ab
+                facilis at inventore quo voluptatum veniam obcaecati! At, dolorum eos? Expedita, accusantium!
+              </p>
+
               <div className="w-full mt-2 flex items-center">
                 <Image
                   alt="Foto Kepala Prodi"
@@ -139,41 +139,43 @@ export default function Home() {
           </Card>
         </Tab>
 
-          {/* Tab 3: Program Pendidikan */}
-          <Tab key="programPendidikan" title="Program Pendidikan">
-            <Card className="mainColor text-white mt-2">
-              <CardBody>
-                <h1 className="text-center underline underline-offset-10 pt-2 text-2xl">Program Pendidikan</h1>
-                <div className="flex flex-wrap justify-evenly items-center pt-10">
-                  <Card className="flex justify-center h-30 w-40">
-                    <CardBody className="flex flex-col justify-center items-center text-center">
-                      <FaUserGraduate className="text-3xl pb-2"/>
-                      <h2>Gelar Lulusan</h2>
-                      <h3 className="font-bold">S.Kom.</h3>
-                    </CardBody>
-                  </Card>
-                  <Card className="flex justify-center h-30 w-40">
-                    <CardBody className="flex flex-col justify-center items-center text-center">
-                      <FaMedal className="text-3xl pb-2"/>
-                      <h2>Akreditasi Prodi</h2>
-                      <h3 className="font-bold">Baik Sekali</h3>
-                    </CardBody>
-                  </Card>
-                  <Card className="flex justify-center h-30 w-40">
-                    <CardBody className="flex flex-col justify-center items-center text-center">
-                      <MdAccessTimeFilled className="text-3xl pb-2"/>
-                      <h2 className="leading-none">Jumlah Semester</h2>
-                      <h3 className="font-bold">8 Semester</h3>
-                    </CardBody>
-                  </Card>
-                  <Card className="flex justify-center h-30 w-40">
-                    <CardBody className="flex flex-col justify-center items-center text-center">
-                      <FaMoneyBillWave className="text-3xl pb-2"/>
-                      <h2>Informasi Biaya</h2>
-                      <a href="#" className="font-bold underline underline-offset-2">Klik Disini</a>
-                    </CardBody>
-                  </Card>
-                </div>
+        {/* Tab 3: Program Pendidikan */}
+        <Tab key="programPendidikan" title="Program Pendidikan">
+          <Card className="mainColor text-white mt-2">
+            <CardBody className="p-6">
+              <h1 className="text-center underline underline-offset-10 pt-2 text-2xl">Program Pendidikan</h1>
+              <div className="flex flex-wrap justify-evenly items-center pt-10">
+                <Card className="flex justify-center h-30 w-40">
+                  <CardBody className="flex flex-col justify-center items-center text-center">
+                    <FaUserGraduate className="text-3xl pb-2" />
+                    <h2>Gelar Lulusan</h2>
+                    <h3 className="font-bold">S.Kom.</h3>
+                  </CardBody>
+                </Card>
+                <Card className="flex justify-center h-30 w-40">
+                  <CardBody className="flex flex-col justify-center items-center text-center">
+                    <FaMedal className="text-3xl pb-2" />
+                    <h2>Akreditasi Prodi</h2>
+                    <h3 className="font-bold">Baik Sekali</h3>
+                  </CardBody>
+                </Card>
+                <Card className="flex justify-center h-30 w-40">
+                  <CardBody className="flex flex-col justify-center items-center text-center">
+                    <MdAccessTimeFilled className="text-3xl pb-2" />
+                    <h2 className="leading-none">Jumlah Semester</h2>
+                    <h3 className="font-bold">8 Semester</h3>
+                  </CardBody>
+                </Card>
+                <Card className="flex justify-center h-30 w-40">
+                  <CardBody className="flex flex-col justify-center items-center text-center">
+                    <FaMoneyBillWave className="text-3xl pb-2" />
+                    <h2>Informasi Biaya</h2>
+                    <a href="#" className="font-bold underline underline-offset-2">
+                      Klik Disini
+                    </a>
+                  </CardBody>
+                </Card>
+              </div>
 
               <div className="flex w-full flex-col pt-4">
                 <Tabs
@@ -195,7 +197,7 @@ export default function Home() {
                     tabContent: "group-data-[selected=true]:text-white",
                   }}
                 >
-                  <Tab key="photos" title="Deskripsi Program">
+                  <Tab key="photos" title="Deskripsi Program" className="pb-0 ps-0">
                     <Card>
                       <CardBody className=" text-justify indent-8">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -205,7 +207,7 @@ export default function Home() {
                       </CardBody>
                     </Card>
                   </Tab>
-                  <Tab key="videos" title="Keunggulan Prodi">
+                  <Tab key="videos" title="Keunggulan Prodi" className="pb-0 ps-0">
                     <Card>
                       <CardBody className=" text-justify indent-8">
                         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum
