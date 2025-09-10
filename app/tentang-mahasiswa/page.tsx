@@ -13,7 +13,7 @@ export default function TentangMhs() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
         <div className="relative h-full flex flex-col justify-end p-6 text-white">
           <h3 className="text-xl font-bold mb-2 transform transition-transform duration-500 ease-in-out group-hover:-translate-y-20">
-            Orgnaisasi Mahasiswa
+            Organisasi Mahasiswa
           </h3>
           <p className="text-sm opacity-90 mb-4 transform transition-transform duration-500 ease-in-out delay-75 group-hover:-translate-y-20">
            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quae ab consequatur veritatis, 
