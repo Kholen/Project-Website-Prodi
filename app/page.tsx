@@ -60,14 +60,16 @@ export default function Home() {
                 />
                 <div className="ml-4 self-start">
                   <h3 className="text-xl font-bold">Kepala Prodi</h3>
-                  <p className="mt-1 text-lg">Dr. Sigid Suseno, S.H.,M.Hum.</p>
+                  <p className="mt-1 text-lg">Liza Safitri, S.T., M.Kom.</p>
+                  <p className="mt-2">
+                    <strong>NUPTK: </strong>
+                    <br />
+                    123456789
+                  </p>
                   <p className="mt-4">
                     <strong>Alamat Kantor:</strong>
                     <br />
-                    Kampus Unpad Jatinangor, Jln. Raya Bandung-Sumedang Km. 21 Jatinangor, Sumedang 45363.
-                  </p>
-                  <p className="mt-2 text-gray-500">
-                    <strong>LHKPN:</strong> –
+                    Jalan Pompa Air No. 28, Kec. Bukit Bestari, Kel. Tanjungpinang Timur -29122
                   </p>
                 </div>
               </div>
