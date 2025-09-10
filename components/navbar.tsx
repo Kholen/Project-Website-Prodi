@@ -102,12 +102,16 @@ export const Navbar = () => {
             // Check if the item is an anchor link and if its hash is active
             const isAnchorActive =
               item.href.startsWith("/#") &&
-              activeHash === item.href.substring(2); 
+              activeHash === item.href.substring(2);
 
             // Check if the item is a regular page link and its path is active
             const isPathActive = pathname === item.href;
 
-            const isActive = isPathActive || isAnchorActive;
+            let isActive = isPathActive || isAnchorActive;
+
+            if (pathname === "/" && activeHash !== "" && item.href === "/") {
+              isActive = false;
+            }
 
             return (
               <NavbarItem key={item.href} isActive={isActive}>
