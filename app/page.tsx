@@ -10,7 +10,7 @@ import { GithubIcon } from "@/components/icons";
 import { Card, CardFooter, Image, Button, User } from "@heroui/react";
 
 import CardDrop from "@/components/CardDrop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, Tab, CardBody, CardHeader } from "@heroui/react";
 import { Accordion, AccordionItem } from "@heroui/react";
 import "../styles/globals.css";
@@ -21,6 +21,34 @@ import { MdAccessTimeFilled } from "react-icons/md";
 //table data
 
 export default function Home() {
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    const handleScroll = () => {
+      if (hash) {
+        const id = hash.substring(1);
+        const element = document.getElementById(id);
+
+        if (element) {
+          const navbarOffset = 80; // Adjust this value to your navbar's height
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - navbarOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+
+    // A timeout to ensure the page has rendered before scrolling
+    const timer = setTimeout(handleScroll, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
   const defaultContent =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
   const defaultContent2 =
