@@ -88,32 +88,34 @@ function MyCard({ person }: { person: PersonData }) {
 
 //contoh
 export default function App() {
-  const person1: PersonData = {
-    name: "Ahmad",
-    job: "Backend Developer",
+  const people: PersonData []= [{
+    name: "ABDUL RAHMAD, M.Pd",
+    job: "Dosen STTI",
     location: "Tanjungpinang",
-    imageUrl: "https://heroui.com/images/hero-card-complete.jpeg",
-    skills: ["PHP", "Laravel", "MySQL", "Go"],
-  };
-
-  const person2: PersonData = {
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/abdul1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
     name: "Toni Sahroni",
     job: "Wakil ketua Komisi III",
     location: "Tanjung Priok",
-    imageUrl: "https://nasdemjakarta.com/wp-content/uploads/2023/11/01.Ahmad-Sahroni-S.E.-M.I.Kom_.jpg", // Different image
+    imageUrl: "https://nasdemjakarta.com/wp-content/uploads/2023/11/01.Ahmad-Sahroni-S.E.-M.I.Kom_.jpg", 
     skills: ["Nyocot", "terjarah", "Mantan Ironman", "TypeScript"],
-  };
+  },
+  {
+    name: "Toni Sahroni",
+    job: "Wakil ketua Komisi III",
+    location: "Tanjung Priok",
+    imageUrl: "https://nasdemjakarta.com/wp-content/uploads/2023/11/01.Ahmad-Sahroni-S.E.-M.I.Kom_.jpg",
+    skills: ["Nyocot", "terjarah", "Mantan Ironman", "TypeScript"],
+  }
+];
 
   return (
-    <div className="grid grid-cols-5 items-start gap-13 justify-center">
-      <MyCard person={person1} />
-      <MyCard person={person2} />
-      <MyCard person={person1} />
-      <MyCard person={person2} />
-      <MyCard person={person1} />
-      <MyCard person={person2} />
-      <MyCard person={person1} />
-      <MyCard person={person2} />
+    <div className="grid grid-cols-5 items-start gap-8 justify-center">
+      {people.map((person, index) => ( 
+        <MyCard key={index} person={person} />
+      ))}
     </div>
   );
 }
