@@ -49,10 +49,112 @@ export default function Home() {
 
     return () => clearTimeout(timer);
   }, []);
-  const defaultContent =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-  const defaultContent2 =
-    "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  //mengatur isi accordion/content
+  const defaultContent = [
+    {
+      judul: "Analis Sistem (System Analyst)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Seorang analis sistem bertanggung jawab untuk menganalisis kebutuhan pengguna dan bisnis, lalu merancang solusi sistem informasi yang sesuai.
+            Mereka adalah 'penerjemah' antara tim bisnis dan tim teknis (programmer).
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Menganalisis masalah, merancang sistem baru, dan memastikan sistem yang dikembangkan sesuai dengan kebutuhan bisnis.
+          </p>
+        </div>
+      ),
+    },
+    {
+      judul: "Konsultan TI (IT Consultant)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Konsultan TI memberikan saran ahli kepada perusahaan tentang cara terbaik memanfaatkan teknologi untuk mencapai tujuan bisnis mereka. Peran ini
+            membutuhkan pemahaman mendalam tentang teknologi dan strategi bisnis.
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Mengevaluasi sistem TI yang ada, mengidentifikasi masalah, dan merekomendasikan perbaikan atau implementasi teknologi baru.
+          </p>
+        </div>
+      ),
+    },
+    {
+      judul: "Pengembang Perangkat Lunak/Web (Software/Web Developer)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Meskipun tidak sekode-intensif lulusan Teknik Informatika, banyak lulusan SI yang memiliki kemampuan coding yang kuat dan bekerja sebagai
+            pengembang. Keunggulan mereka adalah pemahaman konteks bisnis dari aplikasi yang mereka buat.
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Merancang, membangun, dan memelihara aplikasi perangkat lunak atau situs web sesuai kebutuhan klien atau perusahaan.
+          </p>
+        </div>
+      ),
+    },
+    {
+      judul: "Spesialis Basis Data (Database Administrator/Specialist)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Bertanggung jawab untuk merancang, mengimplementasikan, mengelola, dan memelihara database perusahaan. Mereka memastikan data tersimpan
+            dengan aman, terorganisir, dan mudah diakses.
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Mengelola keamanan data, melakukan pencadangan (backup), dan mengoptimalkan kinerja database.
+          </p>
+        </div>
+      ),
+    },
+    {
+      judul: "Pengelola Data (Data Steward / Data Governor)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Peran ini sangat cocok untuk lulusan SI yang kuat dalam pemahaman proses dan manajemen. Seorang Data Steward bertanggung jawab atas kualitas,
+            keamanan, dan kebijakan penggunaan aset data perusahaan. Mereka adalah 'penjaga' data.
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Menetapkan standar dan kebijakan data, memastikan kepatuhan terhadap regulasi (misalnya privasi data), dan bekerja sama dengan
+            berbagai departemen untuk menjaga kualitas data di seluruh organisasi.
+          </p>
+        </div>
+      ),
+    },
+    {
+      judul: "Ilmuwan Data (Data Scientist)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Meskipun peran Data Scientist murni sering membutuhkan latar belakang statistika yang kuat, lulusan SI sangat cocok untuk posisi Data
+            Scientist yang berorientasi pada bisnis. Mereka unggul dalam mengidentifikasi masalah bisnis yang bisa dipecahkan dengan data dan
+            menafsirkan hasil model prediktif menjadi strategi nyata.
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Menerapkan teknik statistik dan machine learning untuk membuat model prediksi, melakukan analisis mendalam untuk menjawab
+            pertanyaan bisnis yang kompleks, dan mengkomunikasikan hasil temuannya kepada stakeholder.
+          </p>
+        </div>
+      ),
+    },
+    {
+      judul: "Analis Business Intelligence (BI Analyst)",
+      penjelasan: (
+        <div className="text-justify">
+          <p className="indent-8">
+            Peran ini sangat selaras dengan keahlian inti SI. Seorang Analis BI fokus pada penggunaan tools dan teknik untuk menyajikan data historis dan
+            saat ini dalam format yang mudah dipahami oleh manajemen. Mereka membantu perusahaan 'bercermin' pada datanya sendiri.
+          </p>
+          <p className="indent-8 mt-2">
+            Tugas utama: Merancang dan mengembangkan solusi BI (seperti dashboard interaktif), mengelola data warehouse, dan memastikan para pengambil
+            keputusan memiliki akses ke informasi yang akurat dan tepat waktu.
+          </p>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="container">
       <Tabs
@@ -62,18 +164,18 @@ export default function Home() {
         classNames={{
           tabList: "w-full p-2 mainColor",
           tab: "w-full text-center px-3 py-5 font-bold",
-          tabContent: "text-white group-data-[selected=true]:text-black hover:text-white",
+          tabContent: "text-white group-data-[selected=true]:text-black",
         }}
       >
         {/* Tab 1: Tentang */}
-
         <Tab key="tentang" title="Tentang">
           <Card className="mainColor text-white mt-2">
             <div className="p-6">
               <strong className="text-xl underline underline-offset-10">Sistem Informasi</strong>
-              <p className="mt-2 text-justify indent-8">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid perferendis hic quisquam alias velit, porro deserunt reprehenderit ab
-                facilis at inventore quo voluptatum veniam obcaecati! At, dolorum eos? Expedita, accusantium!
+              <p className="mt-6 text-justify indent-8">
+                Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
+                yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah data
+                mentah menjadi informasi yang berguna dan dapat dipahami untuk mendukung pengambilan keputusan.
               </p>
 
               <div className="w-full mt-2 flex items-center">
@@ -116,51 +218,24 @@ export default function Home() {
                 {/* Kolom ini mengambil 2/3 lebar */}
                 <h1 className="text-4xl font-bold text-center underline underline-offset-15">Prospek kerja</h1>
                 <p className="mt-10 text-justify indent-8">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus dicta dolorem, voluptates at consequuntur nam asperiores ex
-                  architecto, illum minus placeat voluptatibus voluptatum ab delectus autem dolor non quasi incidunt.
+                  Lulusan Sistem Informasi memiliki prospek kerja yang sangat cerah dan luas. Hal ini karena mereka dibekali kemampuan unik yang
+                  menjembatani dunia teknologi informasi (TI) dan bisnis. Mereka tidak hanya paham tentang teknologi seperti software, database, dan
+                  jaringan, tetapi juga mengerti bagaimana teknologi tersebut dapat digunakan untuk memecahkan masalah bisnis dan meningkatkan
+                  efisiensi perusahaan.
                 </p>
-                <p className="mt-4 text-justify indent-8">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus dicta dolorem, voluptates at consequuntur nam asperiores ex
-                  architecto, illum minus placeat voluptatibus voluptatum ab delectus autem dolor non quasi incidunt.
+                <p className="text-justify indent-8 mt-2">
+                  Singkatnya, prospek kerjanya sangat menjanjikan karena hampir semua industri di era digital ini membutuhkan ahli yang bisa
+                  menyelaraskan teknologi dengan tujuan bisnis.
                 </p>
               </div>
               {/* Bagian Kanan: Judul H1 */}
-              {/* Bagian Kanan: Judul H1 */}
               <div className="flex-1">
                 <Accordion className="" itemClasses={{ title: "text-white", base: "border-b border-white" }}>
-                  <AccordionItem key="1" aria-label="Accordion 1" className="overflow-hidden" title="Pengembang Web(Web Developer)">
-                    {defaultContent}
-                  </AccordionItem>
-                  <AccordionItem key="2" aria-label="Accordion 2" className="overflow-hidden" title="Analisis Sistem(Sistem Analyst)">
-                    {defaultContent2}
-                  </AccordionItem>
-                  <AccordionItem key="3" aria-label="Accordion 3" className="overflow-hidden" title="Manajer Proyek TI(IT Project Manager)">
-                    {defaultContent}
-                  </AccordionItem>
-                  <AccordionItem
-                    key="4"
-                    aria-label="Accordion 4"
-                    className="overflow-hidden"
-                    title="Desainer UI/UX(User Interface/User Experience Designer)"
-                  >
-                    {defaultContent}
-                  </AccordionItem>
-                  <AccordionItem
-                    key="5"
-                    aria-label="Accordion 5"
-                    className="overflow-hidden"
-                    title="Pengembang Perangkat Lunak(Software Developer)ilai-Nilai Perusahaan"
-                  >
-                    {defaultContent}
-                  </AccordionItem>
-                  <AccordionItem
-                    key="6"
-                    aria-label="Accordion 6"
-                    className="overflow-hidden"
-                    title="Analis Data (Data Analyst) dan Ilmuwan Data (Data Scientist)"
-                  >
-                    {defaultContent}
-                  </AccordionItem>
+                  {defaultContent.map((item, index) => (
+                    <AccordionItem key={index} aria-label={item.judul} className="overflow-hidden" title={item.judul}>
+                      {item.penjelasan}
+                    </AccordionItem>
+                  ))}
                 </Accordion>
               </div>
             </CardBody>
@@ -228,19 +303,39 @@ export default function Home() {
                   <Tab key="photos" title="Deskripsi Program" className="pb-0 ps-0">
                     <Card>
                       <CardBody className=" text-justify indent-8">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                        enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit
-                        amet consectetur adipisicing elit. Fugit vero facilis voluptates ut alias, hic repellendus assumenda quis quasi, sequi, eum
-                        nostrum veritatis! Aspernatur excepturi tempore esse labore quaerat necessitatibus.
+                        <p>
+                          Program studi ini dirancang untuk mencetak para ahli dan pemimpin masa depan di era ekonomi digital yang berfokus pada
+                          <b>b Data dan Data Science</b>. Kami berkomitmen untuk menghasilkan lulusan yang tidak hanya unggul secara teknis, tetapi
+                          juga memiliki relevansi tinggi dengan kebutuhan industri serta mampu berkontribusi secara nyata pada pembangunan daerah,
+                          khususnya dalam mendukung implementasi konsep <b>Smart City di Kepulauan Riau</b>.
+                        </p>
+                        <p className="mt-2">
+                          Melalui pendekatan kurikulum modern <b>Outcome-Based Education (OBE)</b>, proses pembelajaran kami memastikan setiap mahasiswa
+                          mencapai kompetensi yang telah ditetapkan, selaras dengan perkembangan teknologi terkini.
+                        </p>
                       </CardBody>
                     </Card>
                   </Tab>
                   <Tab key="videos" title="Keunggulan Prodi" className="pb-0 ps-0">
                     <Card>
-                      <CardBody className=" text-justify indent-8">
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum
-                        dolor sit amet consectetur adipisicing elit. Quos, odio nostrum officiis excepturi doloribus iure unde atque molestias
-                        ratione, officia delectus non esse tempore expedita repellat. Sunt consequuntur earum dolore.
+                      <CardBody className=" text-justify">
+                        <p className="indent-8">
+                          Keunggulan utama program studi ini terletak pada <b>kurikulumnya yang sangat terfokus </b>pada bidang paling dicari saat
+                          ini, yaitu Big Data dan Data Science. Kurikulum modern ini tidak hanya bersifat teoretis, tetapi juga dihubungkan langsung
+                          dengan penerapan praktis melalui keterlibatan aktif dalam pengembangan proyek <b>Smart City di Kepulauan Riau</b>,
+                          memastikan mahasiswa mendapatkan pengalaman proyek yang nyata sebelum lulus.
+                        </p>
+                        <p className="indent-8 mt-2">
+                          Lebih dari itu, program ini dirancang untuk membentuk lulusan yang komplet. Selain menguasai{" "}
+                          <b>keahlian teknis (hardskills)</b>
+                          yang mendalam, mahasiswa juga dibekali <b>keterampilan wirausaha (softskills) </b>untuk mendorong mereka menjadi inovator,
+                          bukan sekadar pekerja.
+                        </p>
+                        <p className="indent-8 mt-2">
+                          Sebagai pelengkap, <b>jaringan kemitraan yang kuat</b> dengan berbagai industri dan pemerintah membuka akses luas untuk
+                          magang berkualitas dan peluang karir. Kombinasi inilah yang memastikan lulusan tidak hanya unggul secara akademis, tetapi
+                          juga <b>siap kerja dan berdaya saing tinggi</b> di tingkat lokal maupun nasional.
+                        </p>
                       </CardBody>
                     </Card>
                   </Tab>
