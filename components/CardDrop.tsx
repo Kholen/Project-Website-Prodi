@@ -105,7 +105,7 @@ export default function App() {
   };
 
   return (
-    <div className="grid grid-cols-5 items-start gap-13 justify-center">
+    <div className="grid grid-cols-5 items-start gap-5 justify-center">
       <MyCard person={person1} />
       <MyCard person={person2} />
       <MyCard person={person1} />
