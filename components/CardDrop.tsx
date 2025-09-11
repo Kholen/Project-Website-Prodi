@@ -59,7 +59,7 @@ function MyCard({ person }: { person: PersonData }) {
             </Button>
           )}
           <div className="flex w-full justify-center">
-            <div className="group relative rounded-full bg-primary p-1 overflow-hidden">
+            <div className="group relative rounded-full mainColor p-1 overflow-hidden">
               <Image
                 alt={person.name}
                 className="rounded-full w-24 h-24 object-cover transition-transform duration-300 ease-in-out group-hover:scale-120"
@@ -88,32 +88,84 @@ function MyCard({ person }: { person: PersonData }) {
 
 //contoh
 export default function App() {
-  const person1: PersonData = {
-    name: "Ahmad",
-    job: "Backend Developer",
+  const person: PersonData[] = [{
+    name: "ABDUL RAHMAD, M.Pd",
+    job: "Dosen STTI",
     location: "Tanjungpinang",
-    imageUrl: "https://heroui.com/images/hero-card-complete.jpeg",
-    skills: ["PHP", "Laravel", "MySQL", "Go"],
-  };
-
-  const person2: PersonData = {
-    name: "Toni Sahroni",
-    job: "Wakil ketua Komisi III",
-    location: "Tanjung Priok",
-    imageUrl: "https://nasdemjakarta.com/wp-content/uploads/2023/11/01.Ahmad-Sahroni-S.E.-M.I.Kom_.jpg", // Different image
-    skills: ["Nyocot", "terjarah", "Mantan Ironman", "TypeScript"],
-  };
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/abdul1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "AURORA ELSA S. FREDERICK, S.E., M.B.A",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/elsa1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "DARMAWAN MEGA PERMANA, S.Pi., M.M",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/wp-content/uploads/2025/05/darmawan1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "DWI NURUL HUDA, S.T., M.Kom",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/dwi1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "ELVIANNA, M.M",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/elvi1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "HENDI SETIAWAN, M.Kom",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/hendi1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "ILIVIA, S.Kom., M.M",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/ilivia1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "LARASATI INDRIASTUTI, S.E., M.Ak",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/larasati1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "LEVA AFFRILLIANGGI FALIHAH, S.Kom., M.M",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/wp-content/uploads/2025/05/leva2_1x1.png",
+    skills: ["Mengajar"],
+  },
+  {
+    name: "LISKEN SIRAIT, S.Sos., M.Pd",
+    job: "Dosen STTI",
+    location: "Tanjungpinang",
+    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/lisken1x1.png",
+    skills: ["Mengajar"],
+  },
+  
+];
 
   return (
     <div className="grid grid-cols-5 items-start gap-5 justify-center">
-      <MyCard person={person1} />
-      <MyCard person={person2} />
-      <MyCard person={person1} />
-      <MyCard person={person2} />
-      <MyCard person={person1} />
-      <MyCard person={person2} />
-      <MyCard person={person1} />
-      <MyCard person={person2} />
+      {person.map((p, index) => (
+        <MyCard key={index} person={p} />
+      ))}
     </div>
   );
 }
