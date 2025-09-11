@@ -4,3 +4,12 @@
   align-items: flex-start;
   transition: height 0.3s;
 }
+
+.detailWrapper {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out 0.2s; /* Add a delay to the opacity transition */
+}
+
+.detailVisible {
+  opacity: 1;
+}

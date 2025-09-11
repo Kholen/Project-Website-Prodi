@@ -3,7 +3,7 @@ import { Image } from "@heroui/image";
 
 export default function TentangMhs() {
   return (
-    <div className="flex flex-wrap gap-8 p-8">
+    <div className="flex flex-wrap gap-8">
       {/* Card Utama */}
       <div className="relative h-96 w-full overflow-hidden rounded-xl shadow-lg group">
         <img

@@ -110,6 +110,7 @@ export const Navbar = () => {
 
             let isActive = isPathActive || isAnchorActive;
 
+            //case spesial: jika di homepage dan ada hash aktif, maka link home tidak aktif
             if (pathname === "/" && activeHash !== "" && item.href === "/") {
               isActive = false;
             }

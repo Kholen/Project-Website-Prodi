@@ -27,7 +27,7 @@ function MyCard({ person }: { person: PersonData }) {
 
   const handleCollapse = () => {
     setExpanded(false);
-    setTimeout(() => setShowDetail(false), 500); // 700ms transition
+    setShowDetail(false);
   };
 
   return (
@@ -37,10 +37,10 @@ function MyCard({ person }: { person: PersonData }) {
       onClick={() => !expanded && handleExpand()}
     >
       <Card
-        className="w-[200px] h-auto overflow-hidden"
+        className="w-[300px] h-auto overflow-hidden"
         style={{
-          maxHeight: expanded ? 500 : 240,
-          transition: "max-height 0.5s",
+          maxHeight: expanded ? 500 : 280,
+          transition: "max-height 0.5s ease-in-out",
         }}
       >
         <CardHeader className="flex-col pt-5 relative">
@@ -72,14 +72,14 @@ function MyCard({ person }: { person: PersonData }) {
           <h3 className="font-bold text-large pb-2 break-words text-center">{person.name}</h3>
           <p className="text-tiny pb-2 break-words text-center">{person.job}</p>
           <p className="text-tiny text-default-500 pb-2 break-words text-center">{person.location}</p>
-          {showDetail && (
+          <div className={`${styles.detailWrapper} ${showDetail && expanded ? styles.detailVisible : ''}`}>
             <div className="mt-2 w-full px-2">
               <h2 className="mb-1">Expert In:</h2>
               <div className="flex flex-wrap gap-2 justify-center mb-3">
                 <MovingBorderDemo skills={person.skills} />
               </div>
             </div>
-          )}
+          </div>
         </CardBody>
       </Card>
     </div>
