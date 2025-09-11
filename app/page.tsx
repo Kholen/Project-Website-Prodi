@@ -256,16 +256,16 @@ export default function Home() {
             <h1 className="text-white text-center text-3xl p-5 underline underline-offset-10">Kerja Sama</h1>
             <CardBody className="pt-0">
               <div className="flex flex-wrap gap-11 justify-center mt-5 mb-5">
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="HeroUI hero Image" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
               </div>
             </CardBody>
           </Card>
@@ -288,8 +288,8 @@ export default function Home() {
                 <div className="text-white font-bold text-2xl text-center rounded-lg bg-blue-800 w-30 p-2 my-2 hover justify-self-start">Misi</div>
 
                 <div className="bg-white rounded-lg w-auto p-5 justify-content text-justify indent-8 ">
-                  Menjadikan Program studi Sistem Informasi STT Indonesia Tanjungpinang berkualitas dan unggul pada tahun 2025 dalam pengajaran,
-                  penelitian, dan pengabdian masyarakat bidang Big Data dan Data Science di Kepulauan Riau.
+                  Menjadikan Program studi Sistem Informasi STT Indonesia Tanjungpinang <b>berkualitas dan unggul</b> pada tahun 2025 dalam pengajaran,
+                  penelitian, dan pengabdian masyarakat bidang <b>Big Data dan Data Science</b> di Kepulauan Riau.
                 </div>
               </div>
 
