@@ -1,19 +1,35 @@
 export default function BlogPage() {
   const isiTable = [
     {
-      judul:
-        "Penelitian tentang Lorem ipsum dolor, sit amet consectetur adipisicing",
-      namaKP: "Muhammad Yuri Ferdinand Adinata",
-      tahun: "2025",
+      judul: "Penerapan QR Code dalam Aplikasi Monitoring Peralatan Kerja Berbasis Web Pada PT. Perusahaan Listrik Negara Gardu Induk Tanjung Uban",
+      namaKP: "Dwi Nurul Huda, ST., M.Kom",
+      tahun: "2022",
       url: "https://forum.upbatam.ac.id/index.php/prosiding/article/view/5202",
     },
     {
-      judul:
-        "Penelitian tentang Lorem ipsum dolor, sit amet consectetur adipisicing",
-      namaKP: "Ahmed",
-      tahun: "2025",
-      url: "https://forum.upbatam.ac.id/index.php/prosiding/article/view/5202",
+      judul: "Sistem Informasi Pengolahan Data Kepariwisataan Dinas Kebudayaan dan Pariwisata Kabupaten Bintan Berbasis Web",
+      namaKP: "Rahmad Abdul Rahmad",
+      tahun: "2023",
+      url: "https://journal.sttindonesia.ac.id/bangkitindonesia/article/view/226",
     },
+    {
+      judul: "Sistem Pakar Diagnosa Penyakit Trichomoniasis Menggunakan Metode Certainty Factor",
+      namaKP: "Dwi Nurul Huda, ST., M.Kom",
+      tahun: "2021",
+      url: "https://journal.sttindonesia.ac.id/bangkitindonesia/article/view/189"
+    },
+    {
+      judul: "Pengembangan Aplikasi E-Money Dengan Pemanfaatan Payment Gateway Berbasis Android (Studi Kasus Sekolah Tinggi Teknologi Indonesia Tanjungpinang)",
+      namaKP: "Dwi Nurul Huda, ST., M.Kom",
+      tahun: "2022",
+      url: "https://journal.sttindonesia.ac.id/bangkitindonesia/article/view/212"
+    },
+    {
+      judul: "Pemanfaatan Konsep Finite State Automata Pada Sistem Perparkiran Kendaraan Bermotor Bandara Raja Haji Fisabilillah Tanjungpinang",
+      namaKP: "Dwi Nurul Huda, ST., M.Kom",
+      tahun: "2023",
+      url: "https://journal.sttindonesia.ac.id/bangkitindonesia/article/view/245"
+    }
   ];
 
   return (
