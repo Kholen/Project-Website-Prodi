@@ -12,9 +12,10 @@ import { siteConfig } from "@/config/site";
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const [activeHash, setActiveHash] = useState(""); // State to track active hash
+  // State untuk menyimpan hash aktif
+  const [activeHash, setActiveHash] = useState(""); 
 
-  // Effect to handle scroll and update active hash
+  // Effect untuk mendeteksi scroll dan mengupdate hash aktif
   useEffect(() => {
     const handleScroll = () => {
       const sections = siteConfig.navItems
@@ -28,7 +29,7 @@ export const Navbar = () => {
 
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Check if the section is near the top of the viewport
+          // Check jika bagian atas elemen berada di dalam viewport
           if (rect.top <= 100 && rect.bottom >= 100) {
             currentSection = id;
             break;
@@ -36,7 +37,7 @@ export const Navbar = () => {
         }
       }
 
-      // If no section is active but we are at the top, clear the hash
+      // jika di paling atas dan tidak ada section yang aktif, reset hash
       if (window.scrollY < 200 && currentSection === "") {
         setActiveHash("");
       } else if (currentSection) {
@@ -44,7 +45,7 @@ export const Navbar = () => {
       }
     };
 
-    // Set initial hash
+    // Set inisial hash jika ada di URL
     if (window.location.hash) {
       setActiveHash(window.location.hash.substring(1));
     }
@@ -62,7 +63,7 @@ export const Navbar = () => {
       const element = document.getElementById(id);
 
       if (element) {
-        const navbarOffset = 80; // Adjust this value to your navbar's height
+        const navbarOffset = 80;
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - navbarOffset;
 
@@ -70,7 +71,7 @@ export const Navbar = () => {
           top: offsetPosition,
           behavior: "smooth",
         });
-        // Manually update hash in URL for better UX
+        // Update manual URL hash tanpa reload
         window.history.pushState(null, "", `/#${id}`);
         setActiveHash(id);
       }
@@ -80,7 +81,7 @@ export const Navbar = () => {
       window.history.pushState(null, "", "/");
       setActiveHash("");
     }
-    // For other cases, NextLink will handle navigation
+    // Untuk link ke halaman lain, biarkan default behavior
   };
 
   return (
@@ -99,12 +100,12 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="end">
         <ul className="hidden lg:flex gap-8 justify-start ml-2 main-nav">
           {siteConfig.navItems.map((item) => {
-            // Check if the item is an anchor link and if its hash is active
+            // Check jika item adalah anchor link dan hash-nya aktif
             const isAnchorActive =
               item.href.startsWith("/#") &&
               activeHash === item.href.substring(2);
 
-            // Check if the item is a regular page link and its path is active
+            // Check jika path sesuai
             const isPathActive = pathname === item.href;
 
             let isActive = isPathActive || isAnchorActive;
