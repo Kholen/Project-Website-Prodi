@@ -39,7 +39,7 @@ function MyCard({ person }: { person: PersonData }) {
       <Card
         className="w-[300px] h-auto overflow-hidden"
         style={{
-          maxHeight: expanded ? 500 : 280,
+          maxHeight: expanded ? 500 : 250,
           transition: "max-height 0.5s ease-in-out",
         }}
       >
@@ -69,7 +69,7 @@ function MyCard({ person }: { person: PersonData }) {
           </div>
         </CardHeader>
         <CardBody className="flex-col items-center pt-1 overflow-hidden">
-          <h3 className="font-bold text-large pb-2 break-words text-center">{person.name}</h3>
+          <h3 className="font-bold text-large pb-2 break-words text-center leading-[1.2]">{person.name}</h3>
           <p className="text-tiny pb-2 break-words text-center">{person.job}</p>
           <p className="text-tiny text-default-500 pb-2 break-words text-center">{person.location}</p>
           <div className={`${styles.detailWrapper} ${showDetail && expanded ? styles.detailVisible : ''}`}>

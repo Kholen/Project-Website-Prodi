@@ -37,8 +37,7 @@ export default function BlogPage() {
       <div className="w-full max-w-5xl mx-auto overflow-hidden rounded-lg shadow-md">
         <table className="w-full text-sm text-left text-gray-500">
           <thead
-            className="text-xs text-white uppercase"
-            style={{ backgroundColor: "#4A5568" }}
+            className="text-xs text-white uppercase mainColor"
           >
             <tr>
               <th className="py-3 px-6" scope="col">

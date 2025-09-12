@@ -171,7 +171,7 @@ export default function Home() {
         <Tab key="tentang" title="Tentang">
           <Card className="mainColor text-white mt-2">
             <div className="p-6">
-              <strong className="text-xl underline underline-offset-10">Sistem Informasi</strong>
+              <strong className="text-3xl underline underline-offset-10">Sistem Informasi</strong>
               <p className="mt-6 text-justify indent-8">
                 Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
                 yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah data
@@ -216,8 +216,8 @@ export default function Home() {
               <div className="flex-1">
                 {" "}
                 {/* Kolom ini mengambil 2/3 lebar */}
-                <h1 className="text-4xl font-bold text-center underline underline-offset-15">Prospek kerja</h1>
-                <p className="mt-10 text-justify indent-8">
+                <h1 className="text-3xl font-bold text-center underline underline-offset-10">Prospek kerja</h1>
+                <p className="mt-6 text-justify indent-8">
                   Lulusan Sistem Informasi memiliki prospek kerja yang sangat cerah dan luas. Hal ini karena mereka dibekali kemampuan unik yang
                   menjembatani dunia teknologi informasi (TI) dan bisnis. Mereka tidak hanya paham tentang teknologi seperti software, database, dan
                   jaringan, tetapi juga mengerti bagaimana teknologi tersebut dapat digunakan untuk memecahkan masalah bisnis dan meningkatkan
@@ -246,8 +246,8 @@ export default function Home() {
         <Tab key="programPendidikan" title="Program Pendidikan">
           <Card className="mainColor text-white mt-2">
             <CardBody className="p-6">
-              <h1 className="text-center underline underline-offset-10 pt-2 text-2xl">Program Pendidikan</h1>
-              <div className="flex flex-wrap justify-evenly items-center pt-10">
+              <h1 className="text-center underline underline-offset-10 text-3xl">Program Pendidikan</h1>
+              <div className="flex flex-wrap justify-evenly items-center pt-6">
                 <Card className="flex justify-center h-30 w-40">
                   <CardBody className="flex flex-col justify-center items-center text-center">
                     <FaUserGraduate className="text-3xl pb-2" />
@@ -310,8 +310,8 @@ export default function Home() {
                           khususnya dalam mendukung implementasi konsep <b>Smart City di Kepulauan Riau</b>.
                         </p>
                         <p className="mt-2">
-                          Melalui pendekatan kurikulum modern <b>Outcome-Based Education (OBE)</b>, proses pembelajaran kami memastikan setiap mahasiswa
-                          mencapai kompetensi yang telah ditetapkan, selaras dengan perkembangan teknologi terkini.
+                          Melalui pendekatan kurikulum modern <b>Outcome-Based Education (OBE)</b>, proses pembelajaran kami memastikan setiap
+                          mahasiswa mencapai kompetensi yang telah ditetapkan, selaras dengan perkembangan teknologi terkini.
                         </p>
                       </CardBody>
                     </Card>
@@ -348,19 +348,13 @@ export default function Home() {
         {/* Tab 4: Kerja Sama */}
         <Tab key="kerjaSama" title="Kerja Sama Prodi">
           <Card className="mainColor mt-2">
-            <h1 className="text-white text-center text-3xl p-5 underline underline-offset-10">Kerja Sama</h1>
+            <h1 className="text-white text-center text-3xl p-6 underline underline-offset-10">Kerja Sama</h1>
             <CardBody className="pt-0">
-              <div className="flex flex-wrap gap-11 justify-center mt-5 mb-5">
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={200} height={250} />
+              <div className="flex flex-wrap justify-evenly mb-5">
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
+                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
               </div>
             </CardBody>
           </Card>
@@ -383,8 +377,8 @@ export default function Home() {
                 <div className="text-white font-bold text-2xl text-center rounded-lg bg-blue-800 w-30 p-2 my-2 hover justify-self-start">Misi</div>
 
                 <div className="bg-white rounded-lg w-auto p-5 justify-content text-justify indent-8 ">
-                  Menjadikan Program studi Sistem Informasi STT Indonesia Tanjungpinang <b>berkualitas dan unggul</b> pada tahun 2025 dalam pengajaran,
-                  penelitian, dan pengabdian masyarakat bidang <b>Big Data dan Data Science</b> di Kepulauan Riau.
+                  Menjadikan Program studi Sistem Informasi STT Indonesia Tanjungpinang <b>berkualitas dan unggul</b> pada tahun 2025 dalam
+                  pengajaran, penelitian, dan pengabdian masyarakat bidang <b>Big Data dan Data Science</b> di Kepulauan Riau.
                 </div>
               </div>
 
