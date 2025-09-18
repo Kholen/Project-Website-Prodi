@@ -84,8 +84,10 @@ export const Navbar = () => {
     // Untuk link ke halaman lain, biarkan default behavior
   };
 
+    //agar tidak muncul pada sign in dan sign up
+      const isHidden = pathname === "/sign-in";
   return (
-    <HeroUINavbar className="" maxWidth="xl" position="sticky">
+    <HeroUINavbar className={`${isHidden && "hidden"}`} maxWidth="xl" position="sticky">
       <NavbarBrand as="li" className="gap-3 max-w-fit">
         <NextLink className="flex justify-start items-center gap-1" href="/">
           {/* <Logo /> */}
@@ -101,9 +103,7 @@ export const Navbar = () => {
         <ul className="hidden lg:flex gap-8 justify-start ml-2 main-nav">
           {siteConfig.navItems.map((item) => {
             // Check jika item adalah anchor link dan hash-nya aktif
-            const isAnchorActive =
-              item.href.startsWith("/#") &&
-              activeHash === item.href.substring(2);
+            const isAnchorActive = item.href.startsWith("/#") && activeHash === item.href.substring(2);
 
             // Check jika path sesuai
             const isPathActive = pathname === item.href;
@@ -123,7 +123,7 @@ export const Navbar = () => {
                     "transition-transform duration-300",
                     isActive
                       ? "text-black font-bold" // style jika aktif
-                      : "text-gray-600 font-medium hover:scale-110 hover:text-black", // style jika ga aktif
+                      : "text-gray-600 font-medium hover:scale-110 hover:text-black" // style jika ga aktif
                   )}
                   color="foreground"
                   href={item.href}
