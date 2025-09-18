@@ -9,6 +9,7 @@ import { MovingBorderDemo } from "./MovingBorderDemo";
 // Define a type for the person's data for better type-safety
 interface PersonData {
   name: string;
+  prodi: string;
   job: string;
   location: string;
   imageUrl: string;
@@ -39,7 +40,7 @@ function MyCard({ person }: { person: PersonData }) {
       <Card
         className="w-[300px] h-auto overflow-hidden"
         style={{
-          maxHeight: expanded ? 500 : 250,
+          maxHeight: expanded ? 500 : 300,
           transition: "max-height 0.5s ease-in-out",
         }}
       >
@@ -69,13 +70,14 @@ function MyCard({ person }: { person: PersonData }) {
           </div>
         </CardHeader>
         <CardBody className="flex-col items-center pt-1 overflow-hidden">
-          <h3 className="font-bold text-large pb-2 break-words text-center leading-[1.2]">{person.name}</h3>
+          <h3 className="font-bold text-large break-words text-center leading-[1.2] min-h-14 flex items-center justify-center">{person.name}</h3>
+          <p className="pb-2 break-words text-center">{person.prodi}</p>
           <p className="text-tiny pb-2 break-words text-center">{person.job}</p>
           <p className="text-tiny text-default-500 pb-2 break-words text-center">{person.location}</p>
           <div className={`${styles.detailWrapper} ${showDetail && expanded ? styles.detailVisible : ''}`}>
-            <div className="mt-2 w-full px-2">
-              <h2 className="mb-1">Expert In:</h2>
-              <div className="flex flex-wrap gap-2 justify-center mb-3">
+            <div className="mt-5 w-full px-2">
+              <h2 className="mb-2">Expert In:</h2>
+              <div className="flex flex-wrap gap-2 justify-center mb-5">
                 <MovingBorderDemo skills={person.skills} />
               </div>
             </div>
@@ -90,6 +92,7 @@ function MyCard({ person }: { person: PersonData }) {
 export default function App() {
   const person: PersonData[] = [{
     name: "ABDUL RAHMAD, M.Pd",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/abdul1x1.png",
@@ -97,13 +100,15 @@ export default function App() {
   },
   {
     name: "AURORA ELSA S. FREDERICK, S.E., M.B.A",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/elsa1x1.png",
-    skills: ["Mengajar"],
+    skills: ["Mengajar", "Manajemen", "Bisnis", "Pemasaran"],
   },
   {
     name: "DARMAWAN MEGA PERMANA, S.Pi., M.M",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/wp-content/uploads/2025/05/darmawan1x1.png",
@@ -111,6 +116,7 @@ export default function App() {
   },
   {
     name: "DWI NURUL HUDA, S.T., M.Kom",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/dwi1x1.png",
@@ -118,6 +124,7 @@ export default function App() {
   },
   {
     name: "ELVIANNA, M.M",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/elvi1x1.png",
@@ -125,6 +132,7 @@ export default function App() {
   },
   {
     name: "HENDI SETIAWAN, M.Kom",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/hendi1x1.png",
@@ -132,6 +140,7 @@ export default function App() {
   },
   {
     name: "ILIVIA, S.Kom., M.M",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/ilivia1x1.png",
@@ -139,6 +148,7 @@ export default function App() {
   },
   {
     name: "LARASATI INDRIASTUTI, S.E., M.Ak",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/larasati1x1.png",
@@ -146,6 +156,7 @@ export default function App() {
   },
   {
     name: "LEVA AFFRILLIANGGI FALIHAH, S.Kom., M.M",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/wp-content/uploads/2025/05/leva2_1x1.png",
@@ -153,6 +164,7 @@ export default function App() {
   },
   {
     name: "LISKEN SIRAIT, S.Sos., M.Pd",
+    prodi: "Sistem Informasi",
     job: "Dosen STTI",
     location: "Tanjungpinang",
     imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/lisken1x1.png",
