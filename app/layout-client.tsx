@@ -48,7 +48,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
         </svg>
         <main ref={mainRef} className="container mx-auto pt-10 px-6 flex-grow">{children}</main>
       </div>
-      <div className="">
+      <div>
         <ConditionalFooter />
       </div>
     </body>
