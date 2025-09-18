@@ -71,6 +71,7 @@ export const Banner = () => {
     visible: { opacity: 1, x: 0, transition: { delay: 2.1, duration: 0.8 } },
   };
 
+  //fungsi untuk menyembunyikan banner di halaman selain home
   const pathname = usePathname();
   const isHidden = pathname !== "/";
   return (
