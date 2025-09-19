@@ -6,6 +6,7 @@ import HomeIf from "@/components/HomeIf";
 import HomeSi from "@/components/HomeSi";
 import { HoverBorderSI } from "@/components/HoverBorderSI";
 import { HoverBorderIF } from "@/components/HoverBorderIF";
+import { useProdi } from "./context/ProdiContext";
 //table data
 
 export default function Home() {
@@ -145,18 +146,10 @@ export default function Home() {
   // ];
 
   //fungsi untuk mengganti IF dengan SI
-  const [isSelectedProdi, setIsSelectedProdi] = useState("IF");
+   const { prodi } = useProdi();
   return (
     <div>
-        <div className="flex justify-center items-center space-x-4 mt-4 p-5">
-          <button onClick={() => setIsSelectedProdi("IF")}>
-            <HoverBorderIF isSelected={isSelectedProdi === "IF"} />
-          </button>
-          <button onClick={() => setIsSelectedProdi("SI")}>
-            <HoverBorderSI isSelected={isSelectedProdi === "SI"} />
-          </button>
-        </div>
-      {isSelectedProdi === "IF" ? <HomeIf /> : <HomeSi />}
+        {prodi === "IF" ? <HomeIf /> : <HomeSi />}
     </div>
   );
 }

@@ -8,6 +8,8 @@ import { Banner } from "@/components/Banner";
 import { myFont } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import { ProdiProvider } from "./context/ProdiContext";
+
 
 export function LayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -38,6 +40,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
         <div className="w-screen sticky top-0 z-11 bg-black/10">
           <Navbar />
         </div>
+        <ProdiProvider>
         <Banner />
         <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -47,6 +50,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
           />
         </svg>
         <main ref={mainRef} className="container mx-auto pt-10 px-6 flex-grow">{children}</main>
+        </ProdiProvider>
       </div>
       <div>
         <ConditionalFooter />

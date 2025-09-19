@@ -7,9 +7,15 @@ import { motion, stagger, useAnimate, useInView } from "framer-motion";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
+import { useProdi } from "../app/context/ProdiContext";
+import { HoverBorderIF } from "./HoverBorderIF";
+import { HoverBorderSI } from "./HoverBorderSI";
+import { subtitle } from "./primitives";
+
 export const Banner = () => {
   const title = "Program Studi";
-  const subtitleText = "Sistem Informasi";
+  const cond = useProdi().prodi === "IF" ? "Teknik Informatika" : "Sistem Informasi";
+  const subtitleText = cond;
   const slogan = "Unggul dalam Inovasi, Berkarakter dalam Aksi.";
   const accreditation = "Sudah Terakreditasi baik.";
   const accreditation2 = "xxxxxxxxx";
@@ -74,6 +80,9 @@ export const Banner = () => {
   //fungsi untuk menyembunyikan banner di halaman selain home
   const pathname = usePathname();
   const isHidden = pathname !== "/";
+
+  const { prodi, setProdi } = useProdi();
+
   return (
     <div className={`relative w-full ${isHidden && "hidden"}`}>
       <div className="min-h-screen w-full relative bg-black">
@@ -122,6 +131,17 @@ export const Banner = () => {
             {slogan}
           </motion.p>
         </div>
+
+        
+       <div className="flex justify-center items-center space-x-4 mt-8">
+          <button onClick={() => setProdi("IF")}>
+            <HoverBorderIF isSelected={prodi === "IF"} />
+          </button>
+          <button onClick={() => setProdi("SI")}>
+            <HoverBorderSI isSelected={prodi === "SI"} />
+          </button>
+        </div>
+
         <div className="absolute bottom-15 right-0 p-6">
           <motion.p
             variants={accreditationVariant}
