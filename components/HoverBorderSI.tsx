@@ -8,7 +8,7 @@ export function HoverBorderSI({ isSelected }: { isSelected?: boolean }) {
       <HoverBorderGradient
         containerClassName="rounded-full"
         as="button"
-        className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+        className=" mainColor hover:bg-white/10 flex items-center space-x-2"
         isSelected={isSelected}
       >
         <span>Sistem Informasi</span>
@@ -19,7 +19,7 @@ export function HoverBorderSI({ isSelected }: { isSelected?: boolean }) {
 
 const AceternityLogo = () => {
   return (
-    <svg width="66" height="65" viewBox="0 0 66 65" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-black dark:text-white">
+    <svg width="66" height="65" viewBox="0 0 66 65" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-3 w-3">
       <path
         d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
         stroke="currentColor"

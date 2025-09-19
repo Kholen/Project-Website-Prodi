@@ -8,7 +8,7 @@ export function HoverBorderIF({ isSelected }: { isSelected?: boolean }) {
       <HoverBorderGradient
         containerClassName="rounded-full"
         as="button"
-        className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+        className="mainColor hover:bg-white/10 flex items-center space-x-2"
         isSelected={isSelected}
       >
         <span>Teknik Informatika</span>

@@ -54,11 +54,13 @@ body::-webkit-scrollbar {
 }
 
 .text-color-default {
-  color: #d1d5db;
+   
+  color: #8d8d8d;
   transition: color 0.5s ease-linear;
 }
 
 .text-color-active {
-  color: black;
+    background-color: #0d0c62;
+  color: white;
   transition: color 0.5s ease-linear;
 }
