@@ -112,9 +112,7 @@ export const Banner = () => {
   return (
     <div className={`relative w-full ${isHidden && "hidden"}`}>
       <div className="min-h-screen w-full relative bg-black">
-        <div className="min-h-screen w-full bg-[#0a0950] relative">
-          <Image alt="Banner" src="/b.png" width={1444} height={600} className="rounded-none object-cover border-b-4 border-white" />
-        </div>
+        <div className="min-h-screen w-full bg-[#0a0950] relative imgBanner h-screen bg-no-repeat bg-cover bg-center"></div>
       </div>
       <div className="absolute inset-0 flex flex-col justify-center z-10 ">
         <div className="text-center">

@@ -64,3 +64,8 @@ body::-webkit-scrollbar {
   color: white;
   transition: color 0.5s ease-linear;
 }
+
+.imgBanner {
+  background-image: url("/b.png");
+  border-bottom: 5px solid white;
+}
