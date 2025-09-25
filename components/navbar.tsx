@@ -84,8 +84,11 @@ export const Navbar = () => {
     // Untuk link ke halaman lain, biarkan default behavior
   };
 
-    //agar tidak muncul pada sign in dan sign up
-      const isHidden = pathname === "/sign-in";
+    //agar tidak muncul pada sign in dan dashboard
+      const pathsToHide = ["/sign-in", "/dashboard"];
+      const isHidden = pathsToHide.includes(pathname);
+//
+
   return (
     <HeroUINavbar className={`${isHidden && "hidden"}`} maxWidth="xl" position="sticky">
       <NavbarBrand as="li" className="gap-3 max-w-fit">
