@@ -1,12 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardBody, Image, Button } from "@heroui/react";
 
 import { CloseIcon } from "./CloseIcon";
 import styles from "./CardDrop.module.css";
 import { MovingBorderDemo } from "./MovingBorderDemo";
 
-// Define a type for the person's data for better type-safety
+// Tipe untuk data dari API
+interface ApiDosenData {
+  nama: string;
+  NUPTK: string;
+  kontak: string;
+  url: string;
+  nama_prodi: string;
+  daftar_skill: string;
+  daftar_jabatan: string;
+}
+
+// Tipe yang dibutuhkan oleh komponen MyCard
 interface PersonData {
   name: string;
   nuptk: string;
@@ -17,7 +28,6 @@ interface PersonData {
   skills: string[];
 }
 
-// MyCard now accepts a 'person' object as a prop
 function MyCard({ person }: { person: PersonData }) {
   const [expanded, setExpanded] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
@@ -90,104 +100,49 @@ function MyCard({ person }: { person: PersonData }) {
   );
 }
 
-//contoh
-export default function App() {
-  const person: PersonData[] = [{
-    name: "ABDUL RAHMAD, M.Pd",
-    prodi: "Sistem Informasi",
-    nuptk: "123456789",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/abdul1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "AURORA ELSA S. FREDERICK, S.E., M.B.A",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/elsa1x1.png",
-    skills: ["Mengajar", "Manajemen", "Bisnis", "Pemasaran"],
-  },
-  {
-    name: "DARMAWAN MEGA PERMANA, S.Pi., M.M",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/wp-content/uploads/2025/05/darmawan1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "DWI NURUL HUDA, S.T., M.Kom",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/dwi1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "ELVIANNA, M.M",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/elvi1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "HENDI SETIAWAN, M.Kom",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/hendi1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "ILIVIA, S.Kom., M.M",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/ilivia1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "LARASATI INDRIASTUTI, S.E., M.Ak",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/larasati1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "LEVA AFFRILLIANGGI FALIHAH, S.Kom., M.M",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/wp-content/uploads/2025/05/leva2_1x1.png",
-    skills: ["Mengajar"],
-  },
-  {
-    name: "LISKEN SIRAIT, S.Sos., M.Pd",
-    nuptk: "123456789",
-    prodi: "Sistem Informasi",
-    job: "Dosen STTI",
-    contact: "0812345678",
-    imageUrl: "https://sttindonesia.ac.id/Files/fotodosen/lisken1x1.png",
-    skills: ["Mengajar"],
-  },
-  
-];
+export default function CardDrop() {
+  const [dosenData, setDosenData] = useState<PersonData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/dosen');
+        if (!response.ok) {
+          throw new Error('Gagal mengambil data dari server');
+        }
+        const apiData: ApiDosenData[] = await response.json();
+
+        // Transformasi data dari format API ke format yang dibutuhkan komponen
+        const transformedData: PersonData[] = apiData.map(dosen => ({
+          name: dosen.nama,
+          nuptk: dosen.NUPTK,
+          prodi: dosen.nama_prodi,
+          job: dosen.daftar_jabatan,
+          contact: dosen.kontak,
+          imageUrl: dosen.url,
+          skills: dosen.daftar_skill.split(', ').filter(skill => skill), // split string menjadi array dan filter string kosong
+        }));
+        
+        setDosenData(transformedData);
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Terjadi kesalahan yang tidak diketahui');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) return <p className="text-center">Memuat data dosen...</p>;
+  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="grid grid-cols-5 items-start gap-5 justify-center">
-      {person.map((p, index) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-start gap-5 justify-center">
+      {dosenData.map((p, index) => (
         <MyCard key={index} person={p} />
       ))}
     </div>
