@@ -12,6 +12,9 @@ const ConditionalFooter = () => {
   }else if (pathname === "/sign-in") {
     return null;
   }
+  else if (pathname === "/dashboard") {
+    return null;
+  }
 
   return <Footer />;
 };
