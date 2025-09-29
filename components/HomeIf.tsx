@@ -28,8 +28,11 @@ interface PersonData {
   imageUrl: string;
   jobs: string[];
 }
-
-//mengatur isi accordion/content
+interface KerjasamaGroup {
+  prodi: string;
+  links: string[];
+}
+///mengatur isi accordion/content
 const defaultContent = [
   {
     judul: "Analis Sistem (System Analyst)",
@@ -135,15 +138,14 @@ const defaultContent = [
 
 export default function HomeIf() {
   const [dosenData, setDosenData] = useState<PersonData[]>([]);
+  const [kerjasamaList, setKerjasamaList] = useState<KerjasamaGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  //memfilter apakah ada dosen dengan prodi IF dengan jabatan kepala prodi
   const kepalaProdiList = dosenData.filter(
     (person) =>
-      person.prodi.toLowerCase() === "teknik informatika" &&
-      person.jobs.some(
-        (job) => job.toLowerCase() === "kepala prodi teknik informatika"
-      )
+      person.prodi.toLowerCase() === "teknik informatika" && person.jobs.some((job) => job.toLowerCase() === "kepala prodi teknik informatika")
   );
 
   const kepalaProdi = kepalaProdiList[0];
@@ -151,17 +153,37 @@ export default function HomeIf() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/dosen");
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data dari server");
-        }
-        const apiData: ApiDosenData[] = await response.json();
+        const [dosenResponse, kerjasamaResponse] = await Promise.all([fetch("/api/dosen"), fetch("/api/kerjasama")]);
 
-        // Transformasi data dari format API ke format yang dibutuhkan komponen yang kemudian dipecah atau disusun 
+        if (!dosenResponse.ok) {
+          let message = "Gagal mengambil data dosen dari server";
+          try {
+            const errorBody = await dosenResponse.json();
+            message = errorBody?.details ?? message;
+          } catch {
+            // abaikan jika respons error tidak berformat JSON
+          }
+          throw new Error(message);
+        }
+
+        if (!kerjasamaResponse.ok) {
+          let message = "Gagal mengambil data kerjasama dari server";
+          try {
+            const errorBody = await kerjasamaResponse.json();
+            message = errorBody?.details ?? message;
+          } catch {
+            // abaikan jika respons error tidak berformat JSON
+          }
+          throw new Error(message);
+        }
+
+        const apiData: ApiDosenData[] = await dosenResponse.json();
+        const kerjasamaData: { nama_prodi: string; daftar_kerjasama: string | null }[] = await kerjasamaResponse.json();
+        // Transformasi data dari format API ke format yang dibutuhkan komponen yang kemudian dipecah atau disusun
         const transformedData: PersonData[] = apiData.map((dosen) => {
           const jobs =
             dosen.daftar_jabatan
-              ?.split(',')
+              ?.split(",")
               .map((job) => job.trim())
               .filter(Boolean) ?? [];
 
@@ -177,7 +199,21 @@ export default function HomeIf() {
           };
         });
 
+        const groupedKerjasama: KerjasamaGroup[] = kerjasamaData.map(({ nama_prodi, daftar_kerjasama }) => {
+          const links =
+            daftar_kerjasama
+              ?.split(",")
+              .map((link) => link.trim())
+              .filter(Boolean) ?? [];
+
+          return {
+            prodi: nama_prodi,
+            links,
+          };
+        });
+
         setDosenData(transformedData);
+        setKerjasamaList(groupedKerjasama);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Terjadi kesalahan yang tidak diketahui");
       } finally {
@@ -188,7 +224,14 @@ export default function HomeIf() {
     fetchData();
   }, []);
 
-  if (loading) return <p className="text-center">Memuat data dosen...</p>;
+  const getKerjasamaLinksByProdi = (prodiName: string): string[] => {
+    const match = kerjasamaList.find((group) => group.prodi.trim().toLowerCase() === prodiName.trim().toLowerCase());
+    return match?.links ?? [];
+  };
+
+  const kerjasamaLinksSI = getKerjasamaLinksByProdi("Teknik Informatika");
+
+  if (loading) return <p className="text-center">Memuat data...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
@@ -397,12 +440,28 @@ export default function HomeIf() {
           <Card className="mainColor mt-2">
             <h1 className="text-white text-center text-3xl p-6 underline underline-offset-10">Kerja Sama</h1>
             <CardBody className="pt-0">
-              <div className="flex flex-wrap justify-evenly mb-5">
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
-                <Image alt="Kerja Sama Prodi" src="https://heroui.com/images/hero-card-complete.jpeg" width={221} height={334} />
-              </div>
+              {kerjasamaLinksSI.length === 0 ? (
+                <p className="text-white text-center pb-6">Belum ada data kerjasama yang dapat ditampilkan.</p>
+              ) : (
+                <div className="flex flex-wrap justify-evenly gap-4 mb-5">
+                  {kerjasamaLinksSI.map((link, index) => {
+                    const normalizedLink = link.trim();
+                    const isUrl = normalizedLink.startsWith("http://") || normalizedLink.startsWith("https://");
+                    const imageSrc = isUrl ? normalizedLink : "https://heroui.com/images/hero-card-complete.jpeg";
+
+                    return (
+                      <Image
+                        key={`kerjasama-si-${index}`}
+                        alt={`Kerja Sama ${index + 1}`}
+                        src={imageSrc}
+                        width={221}
+                        height={334}
+                        className="object-cover rounded-xl"
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </CardBody>
           </Card>
         </Tab>
