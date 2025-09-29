@@ -17,17 +17,18 @@ interface ApiDosenData {
   daftar_jabatan: string;
 }
 
-// Tipe yang dibutuhkan oleh komponen MyCard
-interface PersonData {
-  name: string;
-  nuptk: string;
-  prodi: string;
-  job: string;
-  contact: string;
-  imageUrl: string;
-  skills: string[];
-}
+  // Tipe yang dibutuhkan oleh card
+  interface PersonData {
+    name: string;
+    nuptk: string;
+    prodi: string;
+    job: string;
+    contact: string;
+    imageUrl: string;
+    skills: string[];
+  }
 
+//untuk membuat cardDrop detail
 function MyCard({ person }: { person: PersonData }) {
   const [expanded, setExpanded] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
@@ -114,7 +115,7 @@ export default function CardDrop() {
         }
         const apiData: ApiDosenData[] = await response.json();
 
-        // Transformasi data dari format API ke format yang dibutuhkan komponen
+        // Transformasi data dari format API ke yang dibutuhkan pada card
         const transformedData: PersonData[] = apiData.map(dosen => ({
           name: dosen.nama,
           nuptk: dosen.NUPTK,

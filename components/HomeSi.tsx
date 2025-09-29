@@ -1,4 +1,5 @@
 "use client";
+import {useState, useEffect } from "react"; 
 import React from "react";
 import { Card, CardFooter, Image, Button, User } from "@heroui/react";
 import { Tabs, Tab, CardBody, CardHeader } from "@heroui/react";
@@ -6,6 +7,27 @@ import { Accordion, AccordionItem } from "@heroui/react";
 import "../styles/globals.css";
 import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
 import { MdAccessTimeFilled } from "react-icons/md";
+
+// Tipe untuk data dari API
+interface ApiDosenData {
+  nama: string;
+  NUPTK: string;
+  kontak: string;
+  url: string;
+  nama_prodi: string;
+  daftar_jabatan: string;
+}
+
+// Tipe yang dibutuhkan oleh card
+interface PersonData {
+  name: string;
+  nuptk: string;
+  prodi: string;
+  job: string;
+  contact: string;
+  imageUrl: string;
+  jobs: string[];
+}
 
 //mengatur isi accordion/content
 const defaultContent = [
@@ -112,6 +134,63 @@ const defaultContent = [
 ];
 
 export default function HomeSI() {
+    const [dosenData, setDosenData] = useState<PersonData[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+  
+    const kepalaProdiList = dosenData.filter(
+      (person) =>
+        person.prodi.toLowerCase() === "sistem informasi" &&
+        person.jobs.some(
+          (job) => job.toLowerCase() === "kepala prodi sistem informasi"
+        )
+    );
+  
+    const kepalaProdi = kepalaProdiList[0];
+  
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          const response = await fetch("/api/dosen");
+          if (!response.ok) {
+            throw new Error("Gagal mengambil data dari server");
+          }
+          const apiData: ApiDosenData[] = await response.json();
+  
+          // Transformasi data dari format API ke format yang dibutuhkan komponen
+          const transformedData: PersonData[] = apiData.map((dosen) => {
+            const jobs =
+              dosen.daftar_jabatan
+                ?.split(',')
+                .map((job) => job.trim())
+                .filter(Boolean) ?? [];
+  
+            return {
+              //Transformasi data dari API ke yang dibutuhkan pada card
+              name: dosen.nama,
+              nuptk: dosen.NUPTK,
+              prodi: dosen.nama_prodi,
+              job: dosen.daftar_jabatan,
+              contact: dosen.kontak,
+              imageUrl: dosen.url,
+              jobs,
+            };
+          });
+  
+          setDosenData(transformedData);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Terjadi kesalahan yang tidak diketahui");
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+      fetchData();
+    }, []);
+  
+    if (loading) return <p className="text-center">Memuat data dosen...</p>;
+    if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+  
 return (
   <div className="container">
     <Tabs
@@ -128,7 +207,7 @@ return (
       <Tab key="tentang" title="Tentang">
         <Card className="mainColor text-white mt-2">
           <div className="p-6">
-            <strong className="text-3xl underline underline-offset-10">Sistem Informasi</strong>
+            <strong className="text-3xl underline underline-offset-10">{kepalaProdi.prodi}</strong>
             <p className="mt-6 text-justify indent-8">
               Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data yang
               mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah data mentah
@@ -136,27 +215,33 @@ return (
             </p>
 
             <div className="w-full mt-2 flex items-center">
-              <Image
-                alt="Foto Kepala Prodi"
-                src="https://heroui.com/images/hero-card-complete.jpeg"
-                width={200}
-                height={240}
-                className="rounded-lg object-cover"
-              />
-              <div className="ml-4 self-start">
-                <h3 className="text-xl font-bold">Kepala Prodi</h3>
-                <p className="mt-1 text-lg">Liza Safitri, S.T., M.Kom.</p>
-                <p className="mt-2">
-                  <strong>NUPTK: </strong>
-                  <br />
-                  123456789
-                </p>
-                <p className="mt-4">
-                  <strong>Alamat Kantor:</strong>
-                  <br />
-                  Jalan Pompa Air No. 28, Kec. Bukit Bestari, Kel. Tanjungpinang Timur -29122
-                </p>
-              </div>
+              {kepalaProdi ? (
+                <>
+                  <Image
+                    alt={"Foto " + kepalaProdi.prodi}
+                    src={kepalaProdi.imageUrl || "https://heroui.com/images/hero-card-complete.jpeg"}
+                    width={200}
+                    height={240}
+                    className="rounded-lg object-cover"
+                  />
+                  <div className="ml-4 self-start">
+                    <h3 className="text-xl font-bold">Kepala Prodi</h3>
+                    <p className="mt-1 text-lg">{kepalaProdi.name}</p>
+                    <p className="mt-2">
+                      <strong>NUPTK: </strong>
+                      <br />
+                      {kepalaProdi.nuptk}
+                    </p>
+                    <p className="mt-4">
+                      <strong>Nomor Telepon:</strong>
+                      <br />
+                      {kepalaProdi.contact}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <p className="mt-4">Data kepala prodi Teknik Informatika belum tersedia.</p>
+              )}
             </div>
           </div>
         </Card>
