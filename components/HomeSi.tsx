@@ -225,12 +225,8 @@ export default function HomeSI() {
     fetchData();
   }, []);
 
-  const getKerjasamaLinksByProdi = (prodiName: string): string[] => {
-    const match = kerjasamaList.find((group) => group.prodi.trim().toLowerCase() === prodiName.trim().toLowerCase());
-    return match?.links ?? [];
-  };
-
-  const kerjasamaLinksSI = getKerjasamaLinksByProdi("Sistem Informasi");
+  const kerjasamaProdi = kerjasamaList.filter((group) => group.prodi.trim().toLowerCase() == "sistem informasi");
+  const kerjasamaLinks = kerjasamaProdi.flatMap((group) => group.links);
 
   if (loading) return <p className="text-center">Memuat data...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
@@ -436,15 +432,15 @@ export default function HomeSI() {
           <Card className="mainColor mt-2">
             <h1 className="text-white text-center text-3xl p-6 underline underline-offset-10">Kerja Sama</h1>
             <CardBody className="pt-0">
-              {kerjasamaLinksSI.length === 0 ? (
+              {kerjasamaLinks.length === 0 ? (
                 <p className="text-white text-center pb-6">Belum ada data kerjasama yang dapat ditampilkan.</p>
               ) : (
                 <div className="flex flex-wrap justify-evenly gap-4 mb-5">
-                  {kerjasamaLinksSI.map((link, index) => {
-                    const normalizedLink = link.trim();
-                    const isUrl = normalizedLink.startsWith("http://") || normalizedLink.startsWith("https://");
-                    const imageSrc = isUrl ? normalizedLink : "https://heroui.com/images/hero-card-complete.jpeg";
-
+                  {/* pemetaan link, serta pengecekan link */}
+                  {kerjasamaLinks.map((link, index) => {
+                    const normalisasiLink = link.trim();
+                    const Url = normalisasiLink.startsWith("http://") || normalisasiLink.startsWith("https://");
+                    const imageSrc = Url ? normalisasiLink : "https://heroui.com/images/hero-card-complete.jpeg";
                     return (
                       <Image
                         key={`kerjasama-si-${index}`}
