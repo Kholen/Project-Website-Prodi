@@ -63,7 +63,7 @@ function MyCard({ person }: { person: PersonData }) {
               className="absolute top-2 left-2 size-10 text-gray-500 rounded-full z-10"
               variant="light"
               onClick={(e) => {
-                e.stopPropagation();
+                
                 handleCollapse();
               }}
             >
@@ -100,7 +100,7 @@ function MyCard({ person }: { person: PersonData }) {
   );
 }
 
-export default function CardDrop({ value }: { value: string }) {
+export default function CardDrop({ value, searchTerm = "" }: { value: string; searchTerm?: string }) {
   const [dosenData, setDosenData] = useState<PersonData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -111,18 +111,25 @@ export default function CardDrop({ value }: { value: string }) {
     si: "sistem informasi",
   };
 
+  const normalisasiSearch =searchTerm.toLocaleLowerCase().trim(); 
+
   //filter pengecekan pilihan user adalah all
   const filteredList = dosenData.filter((person) => {
+    const penyamaanSearch = normalisasiSearch === "" || person.name.toLowerCase().includes(normalisasiSearch);
     if (value === "ALL") {
-      return true;
+      return penyamaanSearch;
     }
 
     //filter pengecekan pilihan user 'IF' atau 'SI'
     const selectedProdi = prodiMap[value.toLowerCase()];
-    //pencocokan dengan data prodi dosen
-    return person.prodi.toLowerCase() === selectedProdi;
-  });
 
+    if(!selectedProdi){
+    return penyamaanSearch;
+    }
+
+    return person.prodi.toLowerCase()=== selectedProdi&& penyamaanSearch;
+  });
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -157,7 +164,7 @@ export default function CardDrop({ value }: { value: string }) {
   if (loading) return <p className="text-center">Memuat data dosen...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
   if (!filteredList.length) {
-    return <p className="text-center">Tidak ada dosen untuk prodi tersebut.</p>;
+    return <p className="text-center">Tidak ada dosen yang cocok dengan filter.</p>;
   }
 
   return (
