@@ -1,7 +1,6 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardBody, Image, Button } from "@heroui/react";
-
 import { CloseIcon } from "./CloseIcon";
 import styles from "./CardDrop.module.css";
 import { MovingBorderDemo } from "./MovingBorderDemo";
@@ -17,16 +16,16 @@ interface ApiDosenData {
   daftar_jabatan: string;
 }
 
-  // Tipe yang dibutuhkan oleh card
-  interface PersonData {
-    name: string;
-    nuptk: string;
-    prodi: string;
-    job: string;
-    contact: string;
-    imageUrl: string;
-    skills: string[];
-  }
+// Tipe yang dibutuhkan oleh card
+interface PersonData {
+  name: string;
+  nuptk: string;
+  prodi: string;
+  job: string;
+  contact: string;
+  imageUrl: string;
+  skills: string[];
+}
 
 //untuk membuat cardDrop detail
 function MyCard({ person }: { person: PersonData }) {
@@ -87,7 +86,7 @@ function MyCard({ person }: { person: PersonData }) {
           <p className="pb-1 break-words text-center">{person.prodi}</p>
           <p className="pb-2 text-tiny break-words text-center">{person.job}</p>
           <p className="text-tiny text-default-500 pb-2 break-words text-center">{person.contact}</p>
-          <div className={`${styles.detailWrapper} ${showDetail && expanded ? styles.detailVisible : ''}`}>
+          <div className={`${styles.detailWrapper} ${showDetail && expanded ? styles.detailVisible : ""}`}>
             <div className="mt-5 w-full px-2">
               <h2 className="mb-2">Expert In:</h2>
               <div className="flex flex-wrap gap-2 justify-center mb-5">
@@ -101,35 +100,52 @@ function MyCard({ person }: { person: PersonData }) {
   );
 }
 
-export default function CardDrop() {
+export default function CardDrop({ value }: { value: string }) {
   const [dosenData, setDosenData] = useState<PersonData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  //logika filter berdasarkan dengan prop'value'
+  const prodiMap: { [key: string]: string } = {
+    if: "teknik informatika",
+    si: "sistem informasi",
+  };
+
+  //filter pengecekan pilihan user adalah all
+  const filteredList = dosenData.filter((person) => {
+    if (value === "ALL") {
+      return true;
+    }
+
+    //filter pengecekan pilihan user 'IF' atau 'SI'
+    const selectedProdi = prodiMap[value.toLowerCase()];
+    //pencocokan dengan data prodi dosen
+    return person.prodi.toLowerCase() === selectedProdi;
+  });
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/dosen');
+        const response = await fetch("/api/dosen");
         if (!response.ok) {
-          throw new Error('Gagal mengambil data dari server');
+          throw new Error("Gagal mengambil data dari server");
         }
         const apiData: ApiDosenData[] = await response.json();
 
         // Transformasi data dari format API ke yang dibutuhkan pada card
-        const transformedData: PersonData[] = apiData.map(dosen => ({
+        const transformedData: PersonData[] = apiData.map((dosen) => ({
           name: dosen.nama,
           nuptk: dosen.NUPTK,
           prodi: dosen.nama_prodi,
           job: dosen.daftar_jabatan,
           contact: dosen.kontak,
           imageUrl: dosen.url,
-          skills: dosen.daftar_skill.split(', ').filter(skill => skill), // split string menjadi array dan filter string kosong
+          skills: dosen.daftar_skill.split(", ").filter((skill) => skill), // split string menjadi array dan filter string kosong
         }));
-        
-        setDosenData(transformedData);
 
+        setDosenData(transformedData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Terjadi kesalahan yang tidak diketahui');
+        setError(err instanceof Error ? err.message : "Terjadi kesalahan yang tidak diketahui");
       } finally {
         setLoading(false);
       }
@@ -140,10 +156,13 @@ export default function CardDrop() {
 
   if (loading) return <p className="text-center">Memuat data dosen...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+  if (!filteredList.length) {
+    return <p className="text-center">Tidak ada dosen untuk prodi tersebut.</p>;
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-start gap-5 justify-center">
-      {dosenData.map((p, index) => (
+      {filteredList.map((p, index) => (
         <MyCard key={index} person={p} />
       ))}
     </div>
