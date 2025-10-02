@@ -8,6 +8,9 @@
 .secondColor {
   background-color: #20307e;
 }
+.borderColor {
+  border:2px solid #0a0950 !important; 
+}
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
