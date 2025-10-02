@@ -1,7 +1,6 @@
 ﻿"use client";
 import CardDrop from "@/components/CardDrop";
 import Searchbar from "@/components/Searchbar";
-import { useState } from "react";
 import type { Selection } from "@heroui/react";
 import "@/styles/globals.css";
 import React from "react";
@@ -10,8 +9,10 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@
 export default function DaftarDosenPage() {
   //state untuk menyimpan nilai filter
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set(["ALL"]));
-
   const selectedValue = React.useMemo(() => Array.from(selectedKeys).join(", ").replace(/_/g, ""), [selectedKeys]);
+
+  //state untuk searchbar
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   return (
     <div className="container mx-auto">
@@ -19,7 +20,7 @@ export default function DaftarDosenPage() {
 
       <div className="grid grid-cols-[auto_78px] justify-stretch mt-6 mb-6">
         {/* searchbar */}
-        <Searchbar />
+        <Searchbar value={searchTerm} onValueChange={setSearchTerm} onClear={() => setSearchTerm("")} isClearable placeholder="Cari nama dosen?" />
 
         {/* filter menggunakan dropdown */}
         <Dropdown>
@@ -43,7 +44,10 @@ export default function DaftarDosenPage() {
         </Dropdown>
       </div>
 
-      <CardDrop value={selectedValue} />
+      <CardDrop value={selectedValue} searchTerm={searchTerm} />
     </div>
   );
 }
+
+
+
