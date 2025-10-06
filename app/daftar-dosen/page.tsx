@@ -18,7 +18,7 @@ export default function DaftarDosenPage() {
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold text-center">Daftar Dosen</h1>
 
-      <div className="grid grid-cols-[auto_78px] justify-stretch mt-6 mb-6">
+      <div className="grid grid-cols-[auto_78px] gap-3 mt-6 mb-6">
         {/* searchbar */}
         <Searchbar value={searchTerm} onValueChange={setSearchTerm} onClear={() => setSearchTerm("")} isClearable placeholder="Cari nama dosen?" />
 
