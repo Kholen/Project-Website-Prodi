@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Pagination } from "@heroui/react";
-
+import { Pagination, Spinner } from "@heroui/react";
 interface RisetRecord {
   id: number;
   nama_ketua: string | null;
@@ -99,9 +98,12 @@ export default function RisetPublikasiPage() {
     }
   }, [page, totalPages]);
 
-  if (loading) {
-    return <p className="text-center">Memuat data riset...</p>;
-  }
+  if (loading)   return (
+        <div className="flex justify-center py-10">
+          <Spinner variant="dots" label="Memuat data Riset dan Publikasi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+        </div>
+      );
+  
 
   if (error) {
     return <p className="text-center text-red-500">{error}</p>;
@@ -143,9 +145,7 @@ export default function RisetPublikasiPage() {
               <td className="px-4 py-3 font-medium text-gray-900 align-top border border-gray-200" scope="row">
                 {item.judul}
               </td>
-              <td className="px-4 py-3 align-top border border-gray-200">
-                {formatPublishedAt(item.published_at, item.tahun)}
-              </td>
+              <td className="px-4 py-3 align-top border border-gray-200">{formatPublishedAt(item.published_at, item.tahun)}</td>
               <td className="px-4 py-3 align-top border border-gray-200">{item.journal_name ?? "Tidak tersedia"}</td>
               <td className="px-4 py-3 align-top border border-gray-200">{item.nama_ketua ?? "Tidak tersedia"}</td>
               <td className="px-4 py-3 text-center align-top border border-gray-200">
@@ -163,9 +163,24 @@ export default function RisetPublikasiPage() {
       </table>
       {totalPages > 1 && (
         <div className="flex justify-center px-4 py-4 border border-t-0 border-gray-200">
-          <Pagination showControls page={currentPage} total={totalPages} onChange={setPage} />
+          <Pagination
+            showControls
+            page={currentPage}
+            total={totalPages}
+            onChange={setPage}
+            classNames={{
+              cursor: "!bg-[#0a0950]",
+            }}
+          />
         </div>
       )}
     </div>
   );
 }
+
+
+
+
+
+
+

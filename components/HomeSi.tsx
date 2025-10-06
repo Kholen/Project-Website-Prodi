@@ -1,12 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import React from "react";
-import { Card, CardFooter, Image, Button, User } from "@heroui/react";
-import { Tabs, Tab, CardBody, CardHeader } from "@heroui/react";
-import { Accordion, AccordionItem } from "@heroui/react";
-import "../styles/globals.css";
+import { Card, Image, Spinner, Tabs, Tab, CardBody, Accordion, AccordionItem } from "@heroui/react";
 import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
 import { MdAccessTimeFilled } from "react-icons/md";
+import "../styles/globals.css";
 
 // Tipe untuk data dari API
 interface ApiDosenData {
@@ -228,7 +226,12 @@ export default function HomeSI() {
   const kerjasamaProdi = kerjasamaList.filter((group) => group.prodi.trim().toLowerCase() == "sistem informasi");
   const kerjasamaLinks = kerjasamaProdi.flatMap((group) => group.links);
 
-  if (loading) return <p className="text-center">Memuat data...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner variant="dots" label="Memuat data Kepala Prodi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (

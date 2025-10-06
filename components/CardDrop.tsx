@@ -1,6 +1,6 @@
 ﻿"use client";
 import { useState, useEffect } from "react";
-import { Card, CardHeader, CardBody, Image, Button } from "@heroui/react";
+import { Card, CardHeader, CardBody, Image, Button,   Spinner } from "@heroui/react";
 import { CloseIcon } from "./CloseIcon";
 import styles from "./CardDrop.module.css";
 import { MovingBorderDemo } from "./MovingBorderDemo";
@@ -63,7 +63,6 @@ function MyCard({ person }: { person: PersonData }) {
               className="absolute top-2 left-2 size-10 text-gray-500 rounded-full z-10"
               variant="light"
               onClick={(e) => {
-                
                 handleCollapse();
               }}
             >
@@ -111,7 +110,7 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
     si: "sistem informasi",
   };
 
-  const normalisasiSearch =searchTerm.toLocaleLowerCase().trim(); 
+  const normalisasiSearch = searchTerm.toLocaleLowerCase().trim();
 
   //filter pengecekan pilihan user adalah all
   const filteredList = dosenData.filter((person) => {
@@ -123,13 +122,13 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
     //filter pengecekan pilihan user 'IF' atau 'SI'
     const selectedProdi = prodiMap[value.toLowerCase()];
 
-    if(!selectedProdi){
-    return penyamaanSearch;
+    if (!selectedProdi) {
+      return penyamaanSearch;
     }
 
-    return person.prodi.toLowerCase()=== selectedProdi&& penyamaanSearch;
+    return person.prodi.toLowerCase() === selectedProdi && penyamaanSearch;
   });
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -161,7 +160,12 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
     fetchData();
   }, []);
 
-  if (loading) return <p className="text-center">Memuat data dosen...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner variant="dots" label="Memuat data Dosen..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
   if (!filteredList.length) {
     return <p className="text-center">Tidak ada dosen yang cocok dengan filter.</p>;
