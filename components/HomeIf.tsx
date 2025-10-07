@@ -6,14 +6,27 @@ import { MdAccessTimeFilled } from "react-icons/md";
 import { useState, useEffect } from "react";
 import "../styles/globals.css";
 
+interface SimpleRelasi {
+  id: number;
+  nama_skill?: string;
+  nama_jabatan?: string;
+  nama_prodi?: string;
+}
+
+interface ImageUrl {
+  id: number;
+  url: string;
+}
+
 // Tipe untuk data dari API
 interface ApiDosenData {
   nama: string;
   NUPTK: string;
   kontak: string;
-  url: string;
-  nama_prodi: string;
-  daftar_jabatan: string;
+  skills: SimpleRelasi[];
+  jabatans: SimpleRelasi[];
+  prodis: SimpleRelasi[];
+  image_url: ImageUrl[];
 }
 
 // Tipe yang dibutuhkan oleh card
@@ -179,21 +192,16 @@ export default function HomeIf() {
         const kerjasamaData: { nama_prodi: string; daftar_kerjasama: string | null }[] = await kerjasamaResponse.json();
         // Transformasi data dari format API ke format yang dibutuhkan komponen yang kemudian dipecah atau disusun
         const transformedData: PersonData[] = apiData.map((dosen) => {
-          const jobs =
-            dosen.daftar_jabatan
-              ?.split(",")
-              .map((job) => job.trim())
-              .filter(Boolean) ?? [];
+          const jobList = dosen.jabatans.map(j => j.nama_jabatan).filter(Boolean) as string[];
 
           return {
-            //Transformasi data dari API ke yang dibutuhkan pada card
             name: dosen.nama,
             nuptk: dosen.NUPTK,
-            prodi: dosen.nama_prodi,
-            job: dosen.daftar_jabatan,
+            prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
+            job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
             contact: dosen.kontak,
-            imageUrl: dosen.url,
-            jobs,
+            imageUrl: dosen.image_url?.[0]?.url ?? '',
+            jobs: jobList, // Simpan dalam bentuk array
           };
         });
 
