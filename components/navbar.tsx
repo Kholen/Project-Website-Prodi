@@ -85,8 +85,8 @@ export const Navbar = () => {
   };
 
     //agar tidak muncul pada sign in dan dashboard
-      const pathsToHide = ["/sign-in", "/dashboard"];
-      const isHidden = pathsToHide.includes(pathname);
+      const adminPathname = pathname.startsWith("/dashboard")
+      const isHidden = pathname === "/sign-in" || adminPathname;
 //
 
   return (
