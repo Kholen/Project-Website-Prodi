@@ -1,16 +1,17 @@
 ﻿"use client";
-import { useState, useEffect } from "react";
-import { Card, CardHeader, CardBody, Image, Button,   Spinner } from "@heroui/react";
+
+import { useEffect, useMemo, useState } from "react";
+import { Button, Card, CardBody, CardHeader, Image, Spinner } from "@heroui/react";
+
 import { CloseIcon } from "./CloseIcon";
 import styles from "./CardDrop.module.css";
 import { MovingBorderDemo } from "./MovingBorderDemo";
 
-// --- TIPE DATA BARU YANG SUDAH DIPERBAIKI ---
-interface SimpleRelasi {
+interface SimpleRelation {
   id: number;
   nama_skill?: string;
   nama_jabatan?: string;
-  nama_prodi?:string;
+  nama_prodi?: string;
 }
 
 interface ImageUrl {
@@ -22,14 +23,13 @@ interface ApiDosenData {
   id: number;
   nama: string;
   NUPTK: string;
-  kontak: string;
-  prodis: SimpleRelasi[];
-  skills: SimpleRelasi[];
-  jabatans: SimpleRelasi[];
+  kontak: string | null;
+  prodis: SimpleRelation[];
+  skills: SimpleRelation[];
+  jabatans: SimpleRelation[];
   image_url: ImageUrl[];
 }
 
-// Tipe yang dibutuhkan oleh card
 interface PersonData {
   name: string;
   nuptk: string;
@@ -39,9 +39,7 @@ interface PersonData {
   imageUrl: string;
   skills: string[];
 }
-// ---------------------------------------------
 
-//untuk membuat cardDrop detail
 function MyCard({ person }: { person: PersonData }) {
   const [expanded, setExpanded] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
@@ -65,7 +63,7 @@ function MyCard({ person }: { person: PersonData }) {
       <Card
         className="w-[300px] h-auto overflow-hidden"
         style={{
-          maxHeight: expanded ? 500 : 290,
+          maxHeight: expanded ? 500 : 300,
           transition: "max-height 0.5s ease-in-out",
         }}
       >
@@ -94,15 +92,15 @@ function MyCard({ person }: { person: PersonData }) {
           </div>
         </CardHeader>
         <CardBody className="flex-col items-center pt-1 overflow-hidden">
-          <h3 className="font-bold text-large break-words text-center leading-[1.2] min-h-14 flex items-center justify-center">{person.name}</h3>
-          <p className="pb-1 text-medium break-words text-center">{person.nuptk}</p>
-          <p className="pb-1 break-words text-center">{person.prodi}</p>
-          <p className="pb-2 text-tiny break-words text-center">{person.job}</p>
-          <p className="text-tiny text-default-500 pb-2 break-words text-center">{person.contact}</p>
+          <h3 className="font-bold text-large break-words text-center leading-[1.2] flex items-center justify-center">{person.name}</h3>
+          <p className="text-medium break-words text-center">{person.nuptk}</p>
+          <p className="break-words text-center">{person.prodi}</p>
+          <p className="text-tiny break-words text-center">{person.job || ""}</p>
+          <p className="text-tiny text-default-500 break-words text-center">{person.contact}</p>
           <div className={`${styles.detailWrapper} ${showDetail && expanded ? styles.detailVisible : ""}`}>
             <div className="mt-5 w-full px-2">
               <h2 className="mb-2">Expert In:</h2>
-              <div className="flex flex-wrap gap-2 justify-center mb-5">
+              <div className="flex flex-wrap gap-2 justify-center mb-3">
                 <MovingBorderDemo skills={person.skills} />
               </div>
             </div>
@@ -118,53 +116,71 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  //logika filter berdasarkan dengan prop'value'
-  const prodiMap: { [key: string]: string } = {
+  const prodiMap: Record<string, string> = {
+    all: "",
     if: "teknik informatika",
     si: "sistem informasi",
   };
 
-  const normalisasiSearch = searchTerm.toLocaleLowerCase().trim();
+  const normalisasiSearch = searchTerm.trim().toLowerCase();
 
-  //filter pengecekan pilihan user adalah all
-  const filteredList = dosenData.filter((person) => {
-    const penyamaanSearch = normalisasiSearch === "" || person.name.toLowerCase().includes(normalisasiSearch);
-    if (value === "ALL") {
-      return penyamaanSearch;
-    }
+  const filteredList = useMemo(() => {
+    return dosenData.filter((person) => {
+      const matchesSearch = !normalisasiSearch || person.name.toLowerCase().includes(normalisasiSearch);
 
-    //filter pengecekan pilihan user 'IF' atau 'SI'
-    const selectedProdi = prodiMap[value.toLowerCase()];
+      if (value === "ALL") {
+        return matchesSearch;
+      }
 
-    if (!selectedProdi) {
-      return penyamaanSearch;
-    }
+      const selectedProdi = prodiMap[value.toLowerCase()];
+      if (!selectedProdi) {
+        return matchesSearch;
+      }
 
-    return person.prodi.toLowerCase() === selectedProdi && penyamaanSearch;
-  });
+      return matchesSearch && person.prodi.toLowerCase() === selectedProdi;
+    });
+  }, [dosenData, normalisasiSearch, value]);
 
   useEffect(() => {
+    let active = true;
+
     async function fetchData() {
       try {
-        // Alamat API sekarang menggunakan URL lengkap
-        const response = await fetch('http://localhost:8000/api/dosen');
+        const response = await fetch("/api/dosen", { cache: "no-store" });
+
         if (!response.ok) {
           throw new Error("Gagal mengambil data dari server");
         }
+
         const apiData: ApiDosenData[] = await response.json();
 
-        // Transformasi data dari format API ke yang dibutuhkan pada card
-        const transformedData: PersonData[] = apiData.map(dosen => ({
-          name: dosen.nama,
-          nuptk: dosen.NUPTK,
-          prodi: dosen.prodis?.[0]?.nama_prodi ?? '',
-          job: dosen.jabatans.map(j => j.nama_jabatan).join(', '),
-          contact: dosen.kontak,
-          imageUrl: dosen.image_url?.[0]?.url ?? '', 
-          skills: dosen.skills.map(s => s.nama_skill ?? ''),
-        }));
+        if (!active) {
+          return;
+        }
 
-        setDosenData(transformedData);
+        const transformed: PersonData[] = apiData.map((dosen) => {
+          const prodiName = dosen.prodis?.[0]?.nama_prodi ?? "";
+          const jobs = (dosen.jabatans ?? [])
+            .map((jabatan) => jabatan.nama_jabatan)
+            .filter(Boolean)
+            .join(", ");
+          const skills = (dosen.skills ?? [])
+            .map((skill) => skill.nama_skill)
+            .filter((skill): skill is string => Boolean(skill));
+          const imageUrl = dosen.image_url?.[0]?.url ?? "";
+
+          return {
+            name: dosen.nama,
+            nuptk: dosen.NUPTK,
+            prodi: prodiName,
+            job: jobs,
+            contact: dosen.kontak ?? "Tidak tersedia",
+            imageUrl,
+            skills,
+          };
+        });
+
+        setDosenData(transformed);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Terjadi kesalahan yang tidak diketahui");
       } finally {
@@ -173,23 +189,32 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
     }
 
     fetchData();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center py-10">
         <Spinner variant="dots" label="Memuat data Dosen..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
       </div>
     );
-  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-red-500">Error: {error}</p>;
+  }
+
   if (!filteredList.length) {
     return <p className="text-center">Tidak ada dosen yang cocok dengan filter.</p>;
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-start gap-5 justify-center">
-      {filteredList.map((p, index) => (
-        <MyCard key={index} person={p} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 items-start gap-5 justify-items-stretch">
+      {filteredList.map((person) => (
+        <MyCard key={`${person.nuptk}-${person.name}`} person={person} />
       ))}
     </div>
   );
