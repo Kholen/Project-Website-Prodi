@@ -6,18 +6,29 @@ import { CloseIcon } from "./CloseIcon";
 import styles from "./CardDrop.module.css";
 import { MovingBorderDemo } from "./MovingBorderDemo";
 
-// Tipe untuk data dari API
+// --- TIPE DATA BARU YANG SUDAH DIPERBAIKI ---
+interface SimpleRelasi {
+  id: number;
+  nama_skill?: string;
+  nama_jabatan?: string;
+}
+
+interface ImageUrl {
+  id: number;
+  url: string;
+}
+
 interface ApiDosenData {
+  id: number;
   nama: string;
   NUPTK: string;
   kontak: string;
-  url: string;
   nama_prodi: string;
-  daftar_skill: string;
-  daftar_jabatan: string;
+  skills: SimpleRelasi[];
+  jabatans: SimpleRelasi[];
+  image_url: ImageUrl[];
 }
 
-// Tipe yang dibutuhkan oleh komponen MyCard
 interface PersonData {
   name: string;
   nuptk: string;
@@ -27,6 +38,7 @@ interface PersonData {
   imageUrl: string;
   skills: string[];
 }
+// ---------------------------------------------
 
 function MyCard({ person }: { person: PersonData }) {
   const [expanded, setExpanded] = useState(false);
@@ -108,21 +120,22 @@ export default function CardDrop() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/dosen');
+        // Alamat API sekarang menggunakan URL lengkap
+        const response = await fetch('http://localhost:8000/api/dosen');
         if (!response.ok) {
           throw new Error('Gagal mengambil data dari server');
         }
         const apiData: ApiDosenData[] = await response.json();
 
-        // Transformasi data dari format API ke format yang dibutuhkan komponen
+        // ▼▼▼ LOGIKA TRANSFORMASI YANG SUDAH DIPERBAIKI ▼▼▼
         const transformedData: PersonData[] = apiData.map(dosen => ({
           name: dosen.nama,
           nuptk: dosen.NUPTK,
           prodi: dosen.nama_prodi,
-          job: dosen.daftar_jabatan,
+          job: dosen.jabatans.map(j => j.nama_jabatan).join(', '),
           contact: dosen.kontak,
-          imageUrl: dosen.url,
-          skills: dosen.daftar_skill.split(', ').filter(skill => skill), // split string menjadi array dan filter string kosong
+          imageUrl: dosen.image_url?.[0]?.url ?? '', 
+          skills: dosen.skills.map(s => s.nama_skill ?? ''),
         }));
         
         setDosenData(transformedData);
