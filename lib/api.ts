@@ -1,10 +1,19 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const tokenStorageKey = "jwt_token";
 
-interface AuthResponse {
+const API_BASE_URL = (() => {
+  const base = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+  return base.endsWith("/") ? base.slice(0, -1) : base;
+})();
+
+interface RegisterSuccess {
+  success: boolean;
+  user: unknown;
+}
+
+interface LoginSuccess {
+  success: boolean;
   token: string;
-  token_type: string;
-  expires_in: number;
-  user: any; // You might want to define a more specific User interface
+  user: unknown;
 }
 
 interface ErrorResponse {
@@ -12,110 +21,117 @@ interface ErrorResponse {
   errors?: Record<string, string[]>;
 }
 
-export async function register(userData: any): Promise<AuthResponse | ErrorResponse> {
-  const response = await fetch(`${API_BASE_URL}/register`, {
-    method: 'POST',
+async function parseJson(response: Response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : {};
+}
+
+export async function register(userData: unknown): Promise<RegisterSuccess | ErrorResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/register`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify(userData),
   });
 
-  const data = await response.json();
+  const data = await parseJson(response);
 
   if (!response.ok) {
-    return { message: data.message || 'Registration failed', errors: data.errors };
+    return { message: data.message ?? "Registration failed", errors: data.errors };
   }
 
   return data;
 }
 
-export async function login(credentials: any): Promise<AuthResponse | ErrorResponse> {
-  const response = await fetch(`${API_BASE_URL}/login`, {
-    method: 'POST',
+export async function login(credentials: unknown): Promise<LoginSuccess | ErrorResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/login`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify(credentials),
   });
 
-  const data = await response.json();
+  const data = await parseJson(response);
 
   if (!response.ok) {
-    return { message: data.message || 'Login failed', errors: data.errors };
+    return { message: data.message ?? "Login failed", errors: data.errors };
   }
 
-  // Store the token
   if (data.token) {
-    localStorage.setItem('jwt_token', data.token);
+    localStorage.setItem(tokenStorageKey, data.token);
   }
 
   return data;
 }
 
-export async function getUser(): Promise<any | ErrorResponse> {
-  const token = localStorage.getItem('jwt_token');
+export async function getUser(): Promise<unknown | ErrorResponse> {
+  const token = localStorage.getItem(tokenStorageKey);
 
   if (!token) {
-    return { message: 'No authentication token found.' };
+    return { message: "No authentication token found." };
   }
 
-  const response = await fetch(`${API_BASE_URL}/user`, {
-    method: 'GET',
+  const response = await fetch(`${API_BASE_URL}/api/user`, {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
-  const data = await response.json();
+  const data = await parseJson(response);
 
   if (!response.ok) {
-    // If token is expired or invalid, clear it
     if (response.status === 401) {
-      localStorage.removeItem('jwt_token');
+      localStorage.removeItem(tokenStorageKey);
     }
-    return { message: data.message || 'Failed to fetch user data.' };
+
+    return { message: data.message ?? "Failed to fetch user data." };
   }
 
   return data;
 }
 
 export function getAuthToken(): string | null {
-  return localStorage.getItem('jwt_token');
+  return localStorage.getItem(tokenStorageKey);
 }
 
 export function removeAuthToken(): void {
-  localStorage.removeItem('jwt_token');
+  localStorage.removeItem(tokenStorageKey);
 }
 
-export async function getLecturers(): Promise<any | ErrorResponse> {
-  const token = localStorage.getItem('jwt_token');
+export async function getLecturers(): Promise<unknown | ErrorResponse> {
+  const token = localStorage.getItem(tokenStorageKey);
 
   if (!token) {
-    return { message: 'No authentication token found.' };
+    return { message: "No authentication token found." };
   }
 
-  const response = await fetch(`${API_BASE_URL}/dosen`, {
-    method: 'GET',
+  const response = await fetch(`${API_BASE_URL}/api/dosen`, {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
-  const data = await response.json();
+  const data = await parseJson(response);
 
   if (!response.ok) {
     if (response.status === 401) {
-      localStorage.removeItem('jwt_token');
+      localStorage.removeItem(tokenStorageKey);
     }
-    return { message: data.message || 'Failed to fetch lecturer data.' };
+
+    return { message: data.message ?? "Failed to fetch lecturer data." };
   }
 
   return data;
 }
+
+export const TOKEN_STORAGE_KEY = tokenStorageKey;

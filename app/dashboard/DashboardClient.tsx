@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { TOKEN_STORAGE_KEY } from "@/lib/api";
+
 export default function DashboardClient() {
   const router = useRouter();
   // Tambahkan loading state untuk mencegah "kedipan" konten
@@ -11,7 +13,7 @@ export default function DashboardClient() {
   // 2. Pindahkan semua logika side-effect ke dalam useEffect
   useEffect(() => {
     // Kode di sini hanya berjalan di browser, setelah render awal
-    const token = localStorage.getItem("authToken");
+    const token = typeof window !== "undefined" ? localStorage.getItem(TOKEN_STORAGE_KEY) : null;
 
     if (!token) {
       // Jika tidak ada token, lakukan redirect

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button, Input, Checkbox, Link, Form } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { BackgroundGradient } from "./ui/background-gradient";
-import { login } from "../lib/api"; // Adjust the path as needed
+import { login, TOKEN_STORAGE_KEY } from "../lib/api";
 
 export default function Component() {
   const [isVisible, setIsVisible] = useState(false);
@@ -14,23 +14,21 @@ export default function Component() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const toggleVisibility = () => setIsVisible((prev) => !prev);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null); // Hapus error sebelumnya
+    setError(null);
 
     try {
       const result = await login({ username, password });
-      console.log("Login API result:", result);
 
-      if ("token" in result) {
-        localStorage.setItem("authToken", result.token);
-        console.log("Login successful, redirecting...");
-        router.push("/dashboard"); // Arahkan ke halaman utama atau dashboard
+      if ("token" in result && result.token) {
+        localStorage.setItem(TOKEN_STORAGE_KEY, result.token);
+        router.push("/dashboard");
       } else {
-        // Login gagal, tampilkan pesan error
-        setError(result.message || "Login failed. Please check your credentials.");
+        const errorMessage = "message" in result ? result.message ?? "Login failed. Please check your credentials." : "Login failed. Please check your credentials.";
+        setError(errorMessage);
       }
     } catch (err) {
       setError("Terjadi kesalahan tak terduga. Silakan coba lagi.");
@@ -54,7 +52,7 @@ export default function Component() {
               type="text"
               variant="bordered"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(event) => setUsername(event.target.value)}
             />
             <Input
               isRequired
@@ -74,7 +72,7 @@ export default function Component() {
               type={isVisible ? "text" : "password"}
               variant="bordered"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <div className="flex w-full items-center justify-between px-1 py-2">
               <Checkbox defaultSelected name="remember" size="sm">
