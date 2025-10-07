@@ -270,7 +270,7 @@ export default function HomeSI() {
                 {kepalaProdi ? (
                   <>
                     <Image
-                      alt={"Foto " + kepalaProdi.prodi}
+                      alt={`Foto ${kepalaProdi.name}`}
                       src={kepalaProdi.imageUrl || "https://heroui.com/images/hero-card-complete.jpeg"}
                       width={200}
                       height={240}
@@ -287,7 +287,7 @@ export default function HomeSI() {
                       <p className="mt-4">
                         <strong>Nomor Telepon:</strong>
                         <br />
-                        {kepalaProdi.contact}
+                        {kepalaProdi?.contact ?? "Tidak tersedia"}
                       </p>
                     </div>
                   </>
