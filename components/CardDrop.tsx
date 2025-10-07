@@ -153,8 +153,6 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
         const apiData: ApiDosenData[] = await response.json();
 
         // Transformasi data dari format API ke yang dibutuhkan pada card
-        const transformedData: PersonData[] = apiData.map((dosen) => ({
-        // ▼▼▼ LOGIKA TRANSFORMASI YANG SUDAH DIPERBAIKI ▼▼▼
         const transformedData: PersonData[] = apiData.map(dosen => ({
           name: dosen.nama,
           nuptk: dosen.NUPTK,
