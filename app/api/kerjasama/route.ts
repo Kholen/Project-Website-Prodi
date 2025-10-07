@@ -4,7 +4,7 @@ const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8000
 
 export async function GET() {
   try {
-    const response = await fetch(`${backendUrl}/api/dosen`, { cache: 'no-store' });
+    const response = await fetch(`${backendUrl}/api/kerjasama`, { cache: 'no-store' });
 
     if (!response.ok) {
       let message = `Failed to fetch data from backend: ${response.status}`;

@@ -4,16 +4,16 @@ const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:8000
 
 export async function GET() {
   try {
-    const response = await fetch(`${backendUrl}/api/dosen`, { cache: 'no-store' });
+    const response = await fetch(`${backendUrl}/api/riset`, { cache: 'no-store' });
 
     if (!response.ok) {
       let message = `Failed to fetch data from backend: ${response.status}`;
 
       try {
         const errorData = await response.json();
-        message = `${message} - ${errorData?.details ?? response.statusText}`;
+        message = `${message} - ${errorData?.detail ?? errorData?.details ?? response.statusText}`;
       } catch {
-        // Abaikan jika body error tidak berformat JSON
+        // ignore non-JSON error body
       }
 
       throw new Error(message);
