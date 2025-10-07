@@ -166,7 +166,7 @@ export const Banner = () => {
           variants={buttonVariant}
           initial="hidden"
           animate={buttonControls}
-          className="flex justify-end items-center space-x-4 mt-5 mb-30 me-43"
+          className="flex justify-end items-center space-x-4 mt-5  me-43"
         >
           <button onClick={() => handleProdiChange("IF")}>
             <HoverBorderIF isSelected={prodi === "IF"} />
@@ -176,7 +176,7 @@ export const Banner = () => {
           </button>
         </motion.div>
 
-        <div className="absolute bottom-15 right-0 p-6">
+        <div className="absolute -bottom-1 right-0 p-6">
           <motion.p
             variants={accreditationVariant}
             initial="hidden"
