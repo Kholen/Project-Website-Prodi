@@ -65,7 +65,7 @@ function MyCard({ person }: { person: PersonData }) {
       <Card
         className="w-[300px] h-auto overflow-hidden"
         style={{
-          maxHeight: expanded ? 500 : 310,
+          maxHeight: expanded ? 500 : 290,
           transition: "max-height 0.5s ease-in-out",
         }}
       >

@@ -15,7 +15,7 @@ export default function DaftarDosenPage() {
   const [searchTerm, setSearchTerm] = React.useState("");
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-7">
       <h1 className="text-3xl font-bold text-center">Daftar Dosen</h1>
 
       <div className="grid grid-cols-[auto_78px] gap-3 mt-6 mb-6">
