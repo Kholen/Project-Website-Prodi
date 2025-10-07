@@ -10,6 +10,7 @@ interface SimpleRelasi {
   id: number;
   nama_skill?: string;
   nama_jabatan?: string;
+  nama_prodi?:string;
 }
 
 interface ImageUrl {
@@ -22,7 +23,7 @@ interface ApiDosenData {
   nama: string;
   NUPTK: string;
   kontak: string;
-  nama_prodi: string;
+  prodis: SimpleRelasi[];
   skills: SimpleRelasi[];
   jabatans: SimpleRelasi[];
   image_url: ImageUrl[];
@@ -156,7 +157,7 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
         const transformedData: PersonData[] = apiData.map(dosen => ({
           name: dosen.nama,
           nuptk: dosen.NUPTK,
-          prodi: dosen.nama_prodi,
+          prodi: dosen.prodis?.[0]?.nama_prodi ?? '',
           job: dosen.jabatans.map(j => j.nama_jabatan).join(', '),
           contact: dosen.kontak,
           imageUrl: dosen.image_url?.[0]?.url ?? '', 

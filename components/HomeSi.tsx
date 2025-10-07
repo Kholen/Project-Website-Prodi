@@ -6,14 +6,28 @@ import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
 import { MdAccessTimeFilled } from "react-icons/md";
 import "../styles/globals.css";
 
+interface SimpleRelasi {
+  id: number;
+  nama_skill?: string;
+  nama_jabatan?: string;
+  nama_prodi?: string;
+}
+
+interface ImageUrl {
+  id: number;
+  url: string;
+}
+
 // Tipe untuk data dari API
 interface ApiDosenData {
+  id:string;
   nama: string;
   NUPTK: string;
   kontak: string;
-  url: string;
-  nama_prodi: string;
-  daftar_jabatan: string;
+  skills: SimpleRelasi[];
+  jabatans: SimpleRelasi[];
+  prodis: SimpleRelasi[];
+  image_url: ImageUrl[];
 }
 
 // Tipe yang dibutuhkan oleh card
@@ -151,7 +165,7 @@ export default function HomeSI() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [dosenResponse, kerjasamaResponse] = await Promise.all([fetch("/api/dosen"), fetch("/api/kerjasama")]);
+        const [dosenResponse, kerjasamaResponse] = await Promise.all([fetch("http://localhost:8000/api/dosen"), fetch("http://localhost:8000/api/kerjasama")]);
 
         if (!dosenResponse.ok) {
           let message = "Gagal mengambil data dosen dari server";
@@ -179,22 +193,17 @@ export default function HomeSI() {
         const kerjasamaData: { nama_prodi: string; daftar_kerjasama: string | null }[] = await kerjasamaResponse.json();
 
         // Transformasi data dari format API ke format yang dibutuhkan yang kemudian dipecah atau mapping
-        const transformedData: PersonData[] = apiData.map((dosen) => {
-          const jobs =
-            dosen.daftar_jabatan
-              ?.split(",")
-              .map((job) => job.trim())
-              .filter(Boolean) ?? [];
+       const transformedData: PersonData[] = apiData.map((dosen) => {
+          const jobList = dosen.jabatans.map(j => j.nama_jabatan).filter(Boolean) as string[];
 
           return {
-            //Transformasi data dari API ke yang dibutuhkan pada card
             name: dosen.nama,
             nuptk: dosen.NUPTK,
-            prodi: dosen.nama_prodi,
-            job: dosen.daftar_jabatan,
+            prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
+            job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
             contact: dosen.kontak,
-            imageUrl: dosen.url,
-            jobs,
+            imageUrl: dosen.image_url?.[0]?.url ?? '',
+            jobs: jobList, // Simpan dalam bentuk array
           };
         });
 
