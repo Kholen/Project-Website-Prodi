@@ -23,7 +23,7 @@ interface ApiDosenData {
   id: number;
   nama: string;
   NUPTK: string;
-  kontak: string | null;
+  email: string | null;
   prodis: SimpleRelation[];
   skills: SimpleRelation[];
   jabatans: SimpleRelation[];
@@ -174,7 +174,7 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
             nuptk: dosen.NUPTK,
             prodi: prodiName,
             job: jobs,
-            contact: dosen.kontak ?? "Tidak tersedia",
+            contact: dosen.email ?? "Tidak tersedia",
             imageUrl,
             skills,
           };

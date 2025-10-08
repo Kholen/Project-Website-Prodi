@@ -22,7 +22,7 @@ interface ImageUrl {
 interface ApiDosenData {
   nama: string;
   NUPTK: string;
-  kontak: string;
+  email: string;
   skills: SimpleRelasi[];
   jabatans: SimpleRelasi[];
   prodis: SimpleRelasi[];
@@ -199,7 +199,7 @@ export default function HomeIf() {
             nuptk: dosen.NUPTK,
             prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
             job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
-            contact: dosen.kontak,
+            contact: dosen.email,
             imageUrl: dosen.image_url?.[0]?.url ?? '',
             jobs: jobList, // Simpan dalam bentuk array
           };
@@ -287,7 +287,7 @@ export default function HomeIf() {
                         {kepalaProdi.job}
                       </p>
                       <p className="mt-4">
-                        <strong>Kontak:</strong>
+                        <strong>email:</strong>
                         <br />
                         {kepalaProdi.contact ?? "Tidak tersedia"}
                       </p>

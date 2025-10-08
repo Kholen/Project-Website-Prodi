@@ -23,7 +23,7 @@ interface ApiDosenData {
   id:string;
   nama: string;
   NUPTK: string;
-  kontak: string;
+  email: string;
   skills: SimpleRelasi[];
   jabatans: SimpleRelasi[];
   prodis: SimpleRelasi[];
@@ -201,7 +201,7 @@ export default function HomeSI() {
             nuptk: dosen.NUPTK,
             prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
             job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
-            contact: dosen.kontak,
+            contact: dosen.email,
             imageUrl: dosen.image_url?.[0]?.url ?? '',
             jobs: jobList, // Simpan dalam bentuk array
           };

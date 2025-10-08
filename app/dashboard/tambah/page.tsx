@@ -27,7 +27,7 @@ export default function TambahDosenPage() {
   const [formData, setFormData] = useState({
     nama: '',
     NUPTK: '',
-    kontak: '',
+    email: '',
     image_url: ''
   });
   
@@ -178,8 +178,8 @@ export default function TambahDosenPage() {
             <Input name="NUPTK" value={formData.NUPTK} onChange={handleChange} variant="bordered" placeholder="Masukkan 16 digit NUPTK" />
           </div>
           <div>
-            <label className="font-bold">Kontak:</label>
-            <Input name="kontak" value={formData.kontak} onChange={handleChange} variant="bordered" placeholder="Contoh: 081234567890" />
+            <label className="font-bold">email:</label>
+            <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" placeholder="Contoh: 081234567890" />
           </div>
           <div>
             <label className="font-bold">Url Image Dosen:</label>

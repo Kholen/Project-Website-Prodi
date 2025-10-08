@@ -29,7 +29,7 @@ interface Dosen {
   id: number;
   nama: string;
   NUPTK: string;
-  kontak: string;
+  email: string;
   image_url: ImageUrl[];
   prodis: SimpleRelasi[];
   jabatans: SimpleRelasi[];
@@ -42,7 +42,7 @@ export default function UpdateDosenPage() {
   const params = useParams();
 
   // State untuk data form utama
-  const [formData, setFormData] = useState({ nama: '', NUPTK: '', kontak: '', image_url:'' });
+  const [formData, setFormData] = useState({ nama: '', NUPTK: '', email: '', image_url:'' });
   
   // State untuk mengelola daftar relasi yang sudah ditambahkan
   const [selectedJabatans, setSelectedJabatans] = useState<SimpleRelasi[]>([]);
@@ -81,7 +81,7 @@ export default function UpdateDosenPage() {
         const jabatansData: SimpleRelasi[] = await jabatansRes.json();
         const skillsData: SimpleRelasi[] = await skillsRes.json();
         
-        setFormData({ nama: dosenData.nama, NUPTK: dosenData.NUPTK, kontak: dosenData.kontak,  image_url: dosenData.image_url?.[0]?.url ?? '' });
+        setFormData({ nama: dosenData.nama, NUPTK: dosenData.NUPTK, email: dosenData.email,  image_url: dosenData.image_url?.[0]?.url ?? '' });
         
         // ▼▼▼ PERBAIKAN: Pastikan state selalu array dengan fallback '|| []' ▼▼▼
         setSelectedJabatans(dosenData.jabatans || []);
@@ -210,8 +210,8 @@ export default function UpdateDosenPage() {
             <Input name="NUPTK" value={formData.NUPTK} onChange={handleChange} variant="bordered" />
           </div>
           <div>
-            <label className="font-bold">Kontak:</label>
-            <Input name="kontak" value={formData.kontak} onChange={handleChange} variant="bordered" />
+            <label className="font-bold">email:</label>
+            <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" />
           </div>
           <div>
             <label className="font-bold">Url Image Dosen:</label>
