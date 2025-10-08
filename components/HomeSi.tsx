@@ -165,7 +165,7 @@ export default function HomeSI() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [dosenResponse, kerjasamaResponse] = await Promise.all([fetch("http://localhost:8000/api/dosen"), fetch("http://localhost:8000/api/kerjasama")]);
+        const [dosenResponse, kerjasamaResponse] = await Promise.all([fetch("/api/dosen"), fetch("/api/kerjasama")]);
 
         if (!dosenResponse.ok) {
           let message = "Gagal mengambil data dosen dari server";
