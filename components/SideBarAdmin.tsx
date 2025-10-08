@@ -29,7 +29,7 @@ type NavItem = {
 const mainNavItems: NavItem[] = [
   { href: "/dashboard", label: "Data Dosen", icon: RiDashboardLine },
   { href: "/dashboard/data-riset", label: "Data Riset", icon: RiBookReadFill },
-  { href: "/dashboard/berita-mahasiswa", label: "Data Berita Mahasiswa", icon: RiNewspaperFill },
+  { href: "/dashboard/berita-mahasiswa", label: "Data Berita", icon: RiNewspaperFill },
 ];
 
 const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
@@ -43,7 +43,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
 
   return (
     <aside
-      className={`relative flex-shrink-0 bg-[#1a0050] text-white flex flex-col transition-[width] duration-300 ease-in-out ${
+      className={`relative flex-shrink-0 bg-white text-black flex flex-col transition-[width] duration-300 ease-in-out ${
         isOpen ? "w-72 p-6" : "w-24 p-4"
       }`}
     >
@@ -62,7 +62,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
       </div>
 
       <div className={`flex items-center mb-10 pb-5 border-b border-white/20 ${!isOpen && "justify-center"}`}>
-        <div className="w-12 h-12 rounded-full bg-[#6a00ff] flex-shrink-0">
+        <div className="w-12 h-12 rounded-full bg-gray-500 flex-shrink-0">
           <RiAccountCircleFill className="text-5xl" />
         </div>
         <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full" : "w-0"}`}>

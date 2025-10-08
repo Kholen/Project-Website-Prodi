@@ -1,17 +1,23 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Image, Spinner } from "@heroui/react";
 import { RiEdit2Line, RiDeleteBin6Line } from "react-icons/ri";
-import { VscAccount } from "react-icons/vsc";
-import { Input, Button, Image } from "@heroui/react";
-
+import React, { useState, useEffect, useMemo } from "react";
+import { FaPlus } from "react-icons/fa";
 import DashboardClient from "./DashboardClient";
+import Searchbar from "@/components/Searchbar";
+import { VscAccount } from "react-icons/vsc";
+import Link from "next/link";
+import type { Selection } from "@heroui/react";
 
 interface ImageUrl {
   id: number;
   url: string;
+}
+
+interface RelasiProdi {
+  id: number;
+  nama_prodi?: string;
 }
 
 interface Dosen {
@@ -19,6 +25,7 @@ interface Dosen {
   image_url: ImageUrl[];
   nama: string;
   NUPTK: string;
+  prodis?: RelasiProdi[];
 }
 
 export default function PageDataDosen() {
@@ -26,12 +33,11 @@ export default function PageDataDosen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [allDosen, setAllDosen] = useState<Dosen[]>([]);
   const [filteredDosen, setFilteredDosen] = useState<Dosen[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["ALL"]));
+  const selectedValue = useMemo(() => Array.from(selectedKeys).join(", ").replace(/_/g, ""), [selectedKeys]);
 
-  // Pastikan elemen tertentu baru dirender setelah proses hydration
-  useEffect(() => { setIsHydrated(true); }, []);
   // useEffect untuk mengambil data awal (hanya sekali)
   useEffect(() => {
     async function fetchData() {
@@ -58,11 +64,24 @@ export default function PageDataDosen() {
   // useEffect ini akan berjalan setiap kali "searchTerm" atau "allDosen" berubah
   useEffect(() => {
     const search = searchTerm.trim().toLowerCase();
-    const results = allDosen.filter((dosen) =>
-      dosen.nama.toLowerCase().includes(search) || dosen.NUPTK.toLowerCase().includes(search)
-    );
+    const selectedProdi = Array.from(selectedKeys)[0]?.toString() ?? "ALL";
+
+    const results = allDosen.filter((dosen) => {
+      const nama = dosen.nama?.toLowerCase() ?? "";
+      const nuptk = dosen.NUPTK?.toLowerCase() ?? "";
+      const matchesSearch = nama.includes(search) || nuptk.includes(search);
+
+      const prodiList = (dosen.prodis ?? []).map((prodi) => prodi.nama_prodi?.toLowerCase() ?? "");
+      const matchesProdi =
+        selectedProdi === "ALL" ||
+        (selectedProdi === "IF" && prodiList.some((prodi) => prodi.includes("teknik informatika"))) ||
+        (selectedProdi === "SI" && prodiList.some((prodi) => prodi.includes("sistem informasi")));
+
+      return matchesSearch && matchesProdi;
+    });
+
     setFilteredDosen(results);
-  }, [searchTerm, allDosen]);
+  }, [searchTerm, allDosen, selectedKeys]);
 
   const handleDelete = async (id: number, nama: string) => {
     // Langkah 1: Minta konfirmasi
@@ -94,46 +113,39 @@ export default function PageDataDosen() {
     <>
       <DashboardClient />
 
-      <div className="w-full p-4 bg-[#0a0950] text-white rounded-lg mb-10 text-center">
-        <h1 className="text-2xl">Daftar Dosen STTI Tanjungpinang</h1>
+      <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center shadow-xl">
+        <h1 className="text-2xl font-bold">Daftar Dosen STTI Tanjungpinang</h1>
       </div>
 
-      <div className="w-full p-4 bg-[#0a0950] rounded-lg flex flex-col gap-3 sm:flex-row sm:items-center mb-5">
-        <h1 className="text-white">Cari Dosen:</h1>
-        {/* --- LANGKAH 2: HUBUNGKAN INPUT DENGAN STATE --- */}
-        {isHydrated ? (
-          <Input
-            isClearable
-            className="flex-1"
-            classNames={{
-              input: ["bg-white", "text-black/90"],
-              inputWrapper: ["shadow-sm", "!cursor-text"],
-            }}
-            placeholder="Ketik nama atau NUPTK..."
-            radius="lg"
-            startContent={<FaSearch className="text-slate-400 pointer-events-none" />}
-            value={searchTerm}
-            onValueChange={setSearchTerm}
-            onClear={() => setSearchTerm("")}
-          />
-        ) : (
-          <div className="flex-1">
-            <div className="shadow-sm flex items-center gap-3 rounded-lg bg-white px-3 py-2 text-black/90">
-              <FaSearch className="text-slate-400 pointer-events-none" />
-              <input
-                className="flex-1 bg-transparent outline-none"
-                placeholder="Ketik nama atau NUPTK..."
-                value={searchTerm}
-                readOnly
-              />
-            </div>
-          </div>
-        )}
+      <div className="grid grid-cols-[auto_78px] gap-3 mt-6 mb-6">
+        {/* searchbar */}
+        <Searchbar value={searchTerm} onValueChange={setSearchTerm} onClear={() => setSearchTerm("")} isClearable placeholder="Cari nama dosen?" />
+
+        {/* filter menggunakan dropdown */}
+        <Dropdown>
+          <DropdownTrigger>
+            <Button className="capitalize text-white mainColor h-auto" variant="bordered">
+              {selectedValue}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            disallowEmptySelection
+            aria-label="Single selection"
+            selectedKeys={selectedKeys}
+            selectionMode="single"
+            variant="flat"
+            onSelectionChange={setSelectedKeys}
+          >
+            <DropdownItem key="ALL">Semua Prodi</DropdownItem>
+            <DropdownItem key="IF">Teknik Informatika</DropdownItem>
+            <DropdownItem key="SI">Sistem Informasi</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
 
-      <div className="w-full p-5 bg-[#0a0950] rounded-lg text-white">
+      <div className="w-full p-5 bg-white rounded-lg text-white shadow-xl">
         <div className="flex flex-row justify-between items-center mb-5">
-          <h2 className="text-xl">Data Dosen:</h2>
+          <h2 className="text-xl text-black">Data Dosen:</h2>
           <Link href="/dashboard/tambah">
             <Button color="primary" endContent={<FaPlus />}>
               Tambah Dosen
@@ -142,26 +154,23 @@ export default function PageDataDosen() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {isLoading && <p className="col-span-full text-center">Loading data dosen...</p>}
+          {isLoading && (
+            <Spinner variant="dots" label="Memuat data Riset dan Publikasi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+          )}
           {error && <p className="col-span-full text-center text-red-500">Error: {error}</p>}
 
           {/* --- LANGKAH 4: TAMPILKAN DATA YANG SUDAH DIFILTER --- */}
-          {!isLoading && !error &&
+          {!isLoading &&
+            !error &&
             filteredDosen.map((dosen) => (
               <div
                 key={dosen.id}
-                className="h-24 bg-white rounded-lg flex items-center p-3 justify-between"
+                className="h-24 bg-gray-200 rounded-lg flex items-center p-3 justify-between object-cover transition-all duration-300 ease-in-out shadow-lg hover:shadow-gray-500/50 hover:scale-102"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-16 h-16 rounded-full flex flex-shrink-0 items-center justify-center bg-[#20307e] overflow-hidden">
+                  <div className="w-16 h-16 rounded-full flex flex-shrink-0 items-center justify-center bg-gray-200 overflow-hidden">
                     {dosen.image_url && dosen.image_url.length > 0 ? (
-                      <Image
-                        alt={`Foto ${dosen.nama}`}
-                        src={dosen.image_url[0].url}
-                        width={64}
-                        height={64}
-                        className="object-cover w-full h-full"
-                      />
+                      <Image alt={`Foto ${dosen.nama}`} src={dosen.image_url[0].url} width={64} height={64} className="object-cover w-full h-full" />
                     ) : (
                       <VscAccount className="w-14 h-14" />
                     )}
@@ -173,9 +182,9 @@ export default function PageDataDosen() {
                 </div>
 
                 <div className="flex flex-row gap-2 ml-10">
-                  <div className="w-10 h-10 bg-[#0a0950] rounded-md flex items-center justify-center">
+                  <div className="w-10 h-10 bg-warning rounded-md flex items-center justify-center">
                     <Link className="cursor-pointer" href={`/dashboard/${dosen.id}`}>
-                      <RiEdit2Line className="w-8 h-8 text-white" />
+                      <RiEdit2Line className="w-5 h-5 text-white" />
                     </Link>
                   </div>
                   <div className="w-10 h-10 bg-red-900 rounded-md flex items-center justify-center">
@@ -185,7 +194,7 @@ export default function PageDataDosen() {
                       aria-label={`Hapus ${dosen.nama}`}
                       className="cursor-pointer"
                     >
-                      <RiDeleteBin6Line className="w-8 h-8 text-white" />
+                      <RiDeleteBin6Line className="w-5 h-5 text-white" />
                     </button>
                   </div>
                 </div>
@@ -193,16 +202,9 @@ export default function PageDataDosen() {
             ))}
 
           {/* Tambahkan pesan jika hasil pencarian kosong */}
-          {!isLoading && !error && filteredDosen.length === 0 && (
-            <p className="col-span-full text-center text-gray-400">
-              Dosen tidak ditemukan.
-            </p>
-          )}
+          {!isLoading && !error && filteredDosen.length === 0 && <p className="col-span-full text-center text-gray-400">Dosen tidak ditemukan.</p>}
         </div>
       </div>
     </>
   );
 }
-
-
-
