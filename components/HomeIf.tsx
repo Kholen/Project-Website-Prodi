@@ -241,20 +241,21 @@ export default function HomeIf() {
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="container">
+    <div className="container px-6 mx-auto">
       <Tabs
-        className="w-full max-w-8xl mx-auto"
+        className="w-full"
         aria-label="Dynamic tabs"
         placement="top"
         classNames={{
           tabList: "w-full p-2 mainColor",
-          tab: "w-full text-center px-3 py-5 font-bold",
+          tab: "flex-1 text-center px-3 py-5 font-bold",
           tabContent: "text-white group-data-[selected=true]:text-black",
+          panel: "w-full",
         }}
       >
         {/* Tab 1: Tentang */}
-        <Tab key="tentang" title="Tentang">
-          <Card className="mainColor text-white mt-2">
+        <Tab key="tentang" title="Tentang" className="w-full">
+          <Card className="mainColor text-white mt-2 w-full">
             <div className="p-6">
               <strong className="text-3xl underline underline-offset-10">{kepalaProdi.name}</strong>
               <p className="mt-6 text-justify indent-8">
@@ -302,8 +303,8 @@ export default function HomeIf() {
         </Tab>
 
         {/* Tab 2: Prospek Kerja */}
-        <Tab key="prospek-kerja" title="Prospek Kerja">
-          <Card className="mainColor text-white">
+        <Tab key="prospek-kerja" title="Prospek Kerja" className="w-full">
+          <Card className="mainColor text-white w-full">
             {/* Menggunakan flexbox untuk membuat layout 2 kolom */}
             <CardBody className="flex flex-row gap-4 justify-center items-center p-6">
               {" "}
@@ -339,8 +340,8 @@ export default function HomeIf() {
         </Tab>
 
         {/* Tab 3: Program Pendidikan */}
-        <Tab key="programPendidikan" title="Program Pendidikan">
-          <Card className="mainColor text-white mt-2">
+        <Tab key="programPendidikan" title="Program Pendidikan" className="w-full">
+          <Card className="mainColor text-white mt-2 w-full">
             <CardBody className="p-6">
               <h1 className="text-center underline underline-offset-10 text-3xl">Program Pendidikan</h1>
               <div className="flex flex-wrap justify-evenly items-center pt-6">
@@ -379,7 +380,7 @@ export default function HomeIf() {
               <div className="flex w-full flex-col pt-4">
                 <Tabs
                   aria-label="Options"
-                  className="w-full max-w-8xl mx-auto line-bawah"
+                  className="w-full line-bawah"
                   classNames={{
                     // Menghapus latar belakang abu-abu dan menambahkan garis batas bawah
 
@@ -390,14 +391,16 @@ export default function HomeIf() {
                     // Anda bisa ganti bg-primary dengan warna lain, mis: bg-blue-500
 
                     // Menyesuaikan padding pada setiap tab jika perlu
-                    tab: " h-12",
+                    tab: "h-12 flex-1",
 
                     // Mengubah warna teks dari tab yang aktif
                     tabContent: "group-data-[selected=true]:text-white",
+        
+                    panel: "w-full",
                   }}
                 >
-                  <Tab key="photos" title="Deskripsi Program" className="pb-0 ps-0">
-                    <Card>
+                  <Tab key="photos" title="Deskripsi Program" className="pb-0 ps-0 w-full">
+                    <Card className="w-full">
                       <CardBody className=" text-justify indent-8">
                         <p>
                           Program studi ini dirancang untuk mencetak para ahli dan pemimpin masa depan di era ekonomi digital yang berfokus pada
@@ -412,8 +415,8 @@ export default function HomeIf() {
                       </CardBody>
                     </Card>
                   </Tab>
-                  <Tab key="videos" title="Keunggulan Prodi" className="pb-0 ps-0">
-                    <Card>
+                  <Tab key="videos" title="Keunggulan Prodi" className="pb-0 ps-0 w-full">
+                    <Card className="w-full">
                       <CardBody className=" text-justify">
                         <p className="indent-8">
                           Keunggulan utama program studi ini terletak pada <b>kurikulumnya yang sangat terfokus </b>pada bidang paling dicari saat
@@ -442,8 +445,8 @@ export default function HomeIf() {
         </Tab>
 
         {/* Tab 4: Kerja Sama */}
-        <Tab key="kerjaSama" title="Kerja Sama Prodi">
-          <Card className="mainColor mt-2">
+        <Tab key="kerjaSama" title="Kerja Sama Prodi" className="w-full">
+          <Card className="mainColor mt-2 w-full">
             <h1 className="text-white text-center text-3xl p-6 underline underline-offset-10">Kerja Sama</h1>
             <CardBody className="pt-0">
               {kerjasamaLinks.length === 0 ? (
@@ -540,3 +543,4 @@ export default function HomeIf() {
     </div>
   );
 }
+
