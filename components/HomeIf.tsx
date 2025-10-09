@@ -257,7 +257,7 @@ export default function HomeIf() {
         <Tab key="tentang" title="Tentang" className="w-full">
           <Card className="mainColor text-white mt-2 w-full">
             <div className="p-6">
-              <strong className="text-3xl underline underline-offset-10">{kepalaProdi.name}</strong>
+              <strong className="text-3xl underline underline-offset-10">{kepalaProdi.prodi}</strong>
               <p className="mt-6 text-justify indent-8">
                 Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
                 yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah data
