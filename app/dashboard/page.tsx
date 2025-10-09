@@ -113,7 +113,7 @@ export default function PageDataDosen() {
     <>
       <DashboardClient />
 
-      <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center shadow-xl">
+      <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center">
         <h1 className="text-2xl font-bold">Daftar Dosen STTI Tanjungpinang</h1>
       </div>
 
@@ -124,7 +124,7 @@ export default function PageDataDosen() {
         {/* filter menggunakan dropdown */}
         <Dropdown>
           <DropdownTrigger>
-            <Button className="capitalize text-white mainColor h-auto" variant="bordered">
+            <Button className="capitalize text-black h-auto" variant="bordered">
               {selectedValue}
             </Button>
           </DropdownTrigger>
@@ -143,7 +143,7 @@ export default function PageDataDosen() {
         </Dropdown>
       </div>
 
-      <div className="w-full p-5 bg-white rounded-lg text-white shadow-xl">
+      <div className="w-full p-5 bg-white rounded-lg text-white">
         <div className="flex flex-row justify-between items-center mb-5">
           <h2 className="text-xl text-black">Data Dosen:</h2>
           <Link href="/dashboard/tambah">
@@ -156,7 +156,7 @@ export default function PageDataDosen() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {isLoading && (
             <div className="col-span-full items-center justify-center flex w-full">
-              <Spinner variant="dots" label="Memuat Data Dosen..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }}/>
+              <Spinner variant="dots" label="Memuat Data Dosen..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
             </div>
           )}
           {error && <p className="col-span-full text-center text-red-500">Error: {error}</p>}
@@ -167,7 +167,7 @@ export default function PageDataDosen() {
             filteredDosen.map((dosen) => (
               <div
                 key={dosen.id}
-                className="h-24 bg-gray-200 rounded-lg flex items-center p-3 justify-between object-cover transition-all duration-300 ease-in-out shadow-lg hover:shadow-gray-500/50 hover:scale-102"
+                className="h-24 bg-white rounded-lg flex items-center p-3 justify-between object-cover transition-all duration-300 ease-in-out border-2 border-[#eeeeee] hover:shadow-lg hover:shadow-gray-500/50 hover:scale-102"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 rounded-full flex flex-shrink-0 items-center justify-center bg-gray-200 overflow-hidden">
@@ -184,19 +184,19 @@ export default function PageDataDosen() {
                 </div>
 
                 <div className="flex flex-row gap-2 ml-10">
-                  <div className="w-10 h-10 bg-warning rounded-md flex items-center justify-center">
+                  <div className="w-10 h-10 border-[#eeeeee] border-2 rounded-lg flex items-center justify-center">
                     <Link className="cursor-pointer" href={`/dashboard/${dosen.id}`}>
-                      <RiEdit2Line className="w-5 h-5 text-white" />
+                      <RiEdit2Line className="w-5 h-5 text-warning" />
                     </Link>
                   </div>
-                  <div className="w-10 h-10 bg-red-900 rounded-md flex items-center justify-center">
+                  <div className="w-10 h-10 border-[#eeeeee] border-2 rounded-lg flex items-center justify-center">
                     <button
                       type="button"
                       onClick={() => handleDelete(dosen.id, dosen.nama)}
                       aria-label={`Hapus ${dosen.nama}`}
                       className="cursor-pointer"
                     >
-                      <RiDeleteBin6Line className="w-5 h-5 text-white" />
+                      <RiDeleteBin6Line className="w-5 h-5 text-danger" />
                     </button>
                   </div>
                 </div>

@@ -53,7 +53,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
         </div>
         <button
           onClick={toggle}
-          className="p-1 rounded-full hover:bg-white/20 transition-colors flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+          className="p-1 rounded-full hover:bg-white/20 transition-colors flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-200"
           aria-label={isOpen ? "Tutup menu" : "Buka menu"}
           type="button"
         >
@@ -81,8 +81,9 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
                 } ${pathname === item.href ? "bg-white/20 font-bold" : "hover:bg-white/10"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
               >
                 <item.icon
-                  size={20}
-                  className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
+                  size={30}
+                  className="transition-transform durat                  size={20}
+ flex-shrink-0"
                 />
                 <div className={`overflow-hidden transition-all duration-0 ease-in-out ${
                   isOpen ? "w-full ml-4" : "w-0 ml-0"
