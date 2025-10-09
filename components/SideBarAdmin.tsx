@@ -81,7 +81,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
                 } ${pathname === item.href ? "bg-white/20 font-bold" : "hover:bg-white/10"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
               >
                 <item.icon
-                  size={30}
+                  size={20}
                   className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
                 />
                 <div className={`overflow-hidden transition-all duration-0 ease-in-out ${

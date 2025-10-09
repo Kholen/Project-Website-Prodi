@@ -155,7 +155,9 @@ export default function PageDataDosen() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {isLoading && (
-            <Spinner variant="dots" label="Memuat data Riset dan Publikasi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+            <div className="col-span-full items-center justify-center flex w-full">
+              <Spinner variant="dots" label="Memuat Data Dosen..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }}/>
+            </div>
           )}
           {error && <p className="col-span-full text-center text-red-500">Error: {error}</p>}
 
