@@ -153,8 +153,9 @@ export default function UpdateDosenPage() {
 
   if (isLoading)
     return (
-      <div className="col-span-full flex min-h-screen items-center justify-center w-full">
-        <Spinner variant="dots" label="Memuat Data Dosen..." classNames={{ label: " text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      <div className="flex items-center justify-center gap-2 py-6 min-h-screen">
+        <Spinner size="sm" />
+        <span className="text-small text-default-500">Memuat data dosen...</span>
       </div>
     );
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;

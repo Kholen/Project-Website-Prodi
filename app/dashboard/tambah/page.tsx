@@ -3,15 +3,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import DashboardClient from "@/app/dashboard/DashboardClient"; // Sesuaikan path jika perlu
-import { 
-    Input, 
-    Button, 
-    Dropdown, 
-    DropdownItem, 
-    DropdownMenu, 
-    DropdownTrigger, 
-    Selection 
-} from "@heroui/react";
+import { Input, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Selection, Spinner } from "@heroui/react";
 
 // Tipe Data (bisa ditaruh di file terpisah agar bisa di-import)
 interface SimpleRelasi {
@@ -25,26 +17,26 @@ export default function TambahDosenPage() {
 
   // State untuk form dimulai dalam keadaan kosong
   const [formData, setFormData] = useState({
-    nama: '',
-    NUPTK: '',
-    email: '',
-    image_url: ''
+    nama: "",
+    NUPTK: "",
+    email: "",
+    image_url: "",
   });
-  
+
   // State untuk mengelola daftar relasi
   const [selectedJabatans, setSelectedJabatans] = useState<SimpleRelasi[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<SimpleRelasi[]>([]);
   const [selectedProdiIds, setSelectedProdiIds] = useState<number[]>([]); // State untuk prodi
-  
+
   // State untuk menampung semua pilihan dari database
   const [allJabatans, setAllJabatans] = useState<SimpleRelasi[]>([]);
   const [allSkills, setAllSkills] = useState<SimpleRelasi[]>([]);
   const [allProdis, setAllProdis] = useState<SimpleRelasi[]>([]); // State untuk semua prodi
 
   // State untuk input dropdown saat ini
-  const [currentJabatanId, setCurrentJabatanId] = useState<string>('');
-  const [currentSkillId, setCurrentSkillId] = useState<string>('');
-  
+  const [currentJabatanId, setCurrentJabatanId] = useState<string>("");
+  const [currentSkillId, setCurrentSkillId] = useState<string>("");
+
   // State untuk loading dan error
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +48,7 @@ export default function TambahDosenPage() {
         const [jabatansRes, skillsRes, prodisRes] = await Promise.all([
           fetch(`http://localhost:8000/api/jabatans`),
           fetch(`http://localhost:8000/api/skills`),
-          fetch(`http://localhost:8000/api/prodi`) // Asumsi endpoint ini ada
+          fetch(`http://localhost:8000/api/prodi`), // Asumsi endpoint ini ada
         ]);
 
         if (!jabatansRes.ok || !skillsRes.ok || !prodisRes.ok) {
@@ -66,11 +58,10 @@ export default function TambahDosenPage() {
         const jabatansData = await jabatansRes.json();
         const skillsData = await skillsRes.json();
         const prodisData = await prodisRes.json();
-        
+
         setAllJabatans(jabatansData);
         setAllSkills(skillsData);
         setAllProdis(prodisData);
-
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -83,35 +74,35 @@ export default function TambahDosenPage() {
 
   // --- Event Handlers ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleAddJabatan = () => {
     if (!currentJabatanId) return;
-    const jabatanToAdd = allJabatans.find(j => j.id === parseInt(currentJabatanId));
-    if (jabatanToAdd && !selectedJabatans.some(j => j.id === jabatanToAdd.id)) {
-      setSelectedJabatans(prev => [...prev, jabatanToAdd]);
+    const jabatanToAdd = allJabatans.find((j) => j.id === parseInt(currentJabatanId));
+    if (jabatanToAdd && !selectedJabatans.some((j) => j.id === jabatanToAdd.id)) {
+      setSelectedJabatans((prev) => [...prev, jabatanToAdd]);
     }
-    setCurrentJabatanId('');
+    setCurrentJabatanId("");
   };
 
   const handleRemoveJabatan = (idToRemove: number) => {
-    setSelectedJabatans(prev => prev.filter(j => j.id !== idToRemove));
+    setSelectedJabatans((prev) => prev.filter((j) => j.id !== idToRemove));
   };
-  
+
   const handleAddSkill = () => {
     if (!currentSkillId) return;
-    const skillToAdd = allSkills.find(s => s.id === parseInt(currentSkillId));
-    if (skillToAdd && !selectedSkills.some(s => s.id === skillToAdd.id)) {
-      setSelectedSkills(prev => [...prev, skillToAdd]);
+    const skillToAdd = allSkills.find((s) => s.id === parseInt(currentSkillId));
+    if (skillToAdd && !selectedSkills.some((s) => s.id === skillToAdd.id)) {
+      setSelectedSkills((prev) => [...prev, skillToAdd]);
     }
-    setCurrentSkillId('');
+    setCurrentSkillId("");
   };
 
   const handleRemoveSkill = (idToRemove: number) => {
-    setSelectedSkills(prev => prev.filter(s => s.id !== idToRemove));
+    setSelectedSkills((prev) => prev.filter((s) => s.id !== idToRemove));
   };
-  
+
   // --- Submit Logic ---
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -120,14 +111,14 @@ export default function TambahDosenPage() {
     const payload = {
       ...formData,
       prodi_ids: selectedProdiIds,
-      jabatan_ids: selectedJabatans.map(j => j.id),
-      skill_ids: selectedSkills.map(s => s.id),
+      jabatan_ids: selectedJabatans.map((j) => j.id),
+      skill_ids: selectedSkills.map((s) => s.id),
     };
 
     try {
       const response = await fetch(`http://localhost:8000/api/dosen`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -135,27 +126,32 @@ export default function TambahDosenPage() {
         const errorData = await response.json();
         // Menampilkan error validasi dari Laravel
         if (response.status === 422) {
-            const validationErrors = Object.values(errorData.errors).flat().join('\n');
-            throw new Error(`Gagal validasi:\n${validationErrors}`);
+          const validationErrors = Object.values(errorData.errors).flat().join("\n");
+          throw new Error(`Gagal validasi:\n${validationErrors}`);
         }
         throw new Error(errorData.message || "Gagal menyimpan data.");
       }
-      
-      alert("Dosen baru berhasil ditambahkan!");
-      router.push('/dashboard'); // Sesuaikan dengan path halaman daftar Anda
 
+      alert("Dosen baru berhasil ditambahkan!");
+      router.push("/dashboard"); // Sesuaikan dengan path halaman daftar Anda
     } catch (err: any) {
       alert(`Error: ${err.message}`);
     }
   };
 
-  if (isLoading) return <p className="text-center">Memuat data...</p>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center gap-2 py-6 min-h-screen">
+        <Spinner size="sm" />
+        <span className="text-small text-default-500">Memuat data dosen...</span>
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   // Variabel untuk menampilkan nama di tombol dropdown
-  const selectedJabatanName = allJabatans.find(j => j.id === parseInt(currentJabatanId))?.nama_jabatan || "Pilih Jabatan";
-  const selectedSkillName = allSkills.find(s => s.id === parseInt(currentSkillId))?.nama_skill || "Pilih Skill";
-  const selectedProdiName = allProdis.find(p => p.id === selectedProdiIds[0])?.nama_prodi || "Pilih Program Studi";
+  const selectedJabatanName = allJabatans.find((j) => j.id === parseInt(currentJabatanId))?.nama_jabatan || "Pilih Jabatan";
+  const selectedSkillName = allSkills.find((s) => s.id === parseInt(currentSkillId))?.nama_skill || "Pilih Skill";
+  const selectedProdiName = allProdis.find((p) => p.id === selectedProdiIds[0])?.nama_prodi || "Pilih Program Studi";
 
   // --- Tampilan JSX ---
   return (
@@ -177,7 +173,7 @@ export default function TambahDosenPage() {
         </div>
         <div>
           <label className="font-bold">email:</label>
-          <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" placeholder="Contoh: 081234567890" />
+          <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" placeholder="Contoh: sttindonesia@gmail.com" />
         </div>
         <div>
           <label className="font-bold">Url Image Dosen:</label>
