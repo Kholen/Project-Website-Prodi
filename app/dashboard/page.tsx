@@ -1,14 +1,31 @@
 "use client";
 
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Image, Spinner } from "@heroui/react";
-import { RiEdit2Line, RiDeleteBin6Line } from "react-icons/ri";
-import React, { useState, useEffect, useMemo } from "react";
-import { FaPlus } from "react-icons/fa";
-import DashboardClient from "./DashboardClient";
-import Searchbar from "@/components/Searchbar";
-import { VscAccount } from "react-icons/vsc";
+import type {SVGProps} from "react";
+import type {Selection, SortDescriptor} from "@heroui/react";
+
+import React, {useState, useEffect, useMemo, useCallback} from "react";
 import Link from "next/link";
-import type { Selection } from "@heroui/react";
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Input,
+  Button,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Chip,
+  User,
+  Pagination,
+  Spinner,
+} from "@heroui/react";
+import {RiEdit2Line, RiDeleteBin6Line} from "react-icons/ri";
+
+import DashboardClient from "./DashboardClient";
 
 interface ImageUrl {
   id: number;
@@ -28,69 +45,174 @@ interface Dosen {
   prodis?: RelasiProdi[];
 }
 
+type IconSvgProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+};
+
+type ColumnKey = "name" | "nuptk" | "prodi" | "actions";
+
+type ColumnDefinition = {
+  name: string;
+  uid: ColumnKey;
+  sortable?: boolean;
+};
+
+const columns: ColumnDefinition[] = [
+  {name: "Nama", uid: "name", sortable: true},
+  {name: "NUPTK", uid: "nuptk", sortable: true},
+  {name: "Program Studi", uid: "prodi"},
+  {name: "Aksi", uid: "actions"},
+];
+
+type DosenRow = {
+  id: number;
+  name: string;
+  nuptk: string;
+  prodi: string[];
+  dosen: Dosen;
+};
+
+const INITIAL_VISIBLE_COLUMNS: ColumnKey[] = ["name", "nuptk", "prodi", "actions"];
+
+const prodiOptions = [
+  {name: "Semua Prodi", uid: "ALL"},
+  {name: "Teknik Informatika", uid: "IF"},
+  {name: "Sistem Informasi", uid: "SI"},
+];
+
+const PlusIcon = ({size = 24, width, height, ...props}: IconSvgProps) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height={size || height}
+      role="presentation"
+      viewBox="0 0 24 24"
+      width={size || width}
+      {...props}
+    >
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+      >
+        <path d="M6 12h12" />
+        <path d="M12 18V6" />
+      </g>
+    </svg>
+  );
+};
+
+const SearchIcon = (props: IconSvgProps) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height="1em"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="1em"
+      {...props}
+    >
+      <path
+        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+      <path
+        d="M22 22L20 20"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+};
+
+const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}: IconSvgProps) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height="1em"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="1em"
+      {...otherProps}
+    >
+      <path
+        d="m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+        strokeWidth={strokeWidth}
+      />
+    </svg>
+  );
+};
+
 export default function PageDataDosen() {
-  // --- LANGKAH 1: PERBARUI STATE ---
-  const [searchTerm, setSearchTerm] = useState("");
   const [allDosen, setAllDosen] = useState<Dosen[]>([]);
-  const [filteredDosen, setFilteredDosen] = useState<Dosen[]>([]);
+  const [filterValue, setFilterValue] = useState("");
+  const [prodiFilter, setProdiFilter] = useState<Selection>(new Set(["ALL"]));
+  const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "name",
+    direction: "ascending",
+  });
+  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["ALL"]));
-  const selectedValue = useMemo(() => Array.from(selectedKeys).join(", ").replace(/_/g, ""), [selectedKeys]);
 
-  // useEffect untuk mengambil data awal (hanya sekali)
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchData() {
       try {
+        setError(null);
         const response = await fetch("http://localhost:8000/api/dosen");
         if (!response.ok) {
           throw new Error("Gagal mengambil data dari server");
         }
         const data = await response.json();
-        setAllDosen(data);
-        setFilteredDosen(data);
+        if (isMounted) {
+          setAllDosen(data);
+        }
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Terjadi kesalahan";
-        setError(message);
+        if (isMounted) {
+          const message = err instanceof Error ? err.message : "Terjadi kesalahan";
+          setError(message);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // --- LANGKAH 3: LOGIKA FILTER ---
-  // useEffect ini akan berjalan setiap kali "searchTerm" atau "allDosen" berubah
-  useEffect(() => {
-    const search = searchTerm.trim().toLowerCase();
-    const selectedProdi = Array.from(selectedKeys)[0]?.toString() ?? "ALL";
-
-    const results = allDosen.filter((dosen) => {
-      const nama = dosen.nama?.toLowerCase() ?? "";
-      const nuptk = dosen.NUPTK?.toLowerCase() ?? "";
-      const matchesSearch = nama.includes(search) || nuptk.includes(search);
-
-      const prodiList = (dosen.prodis ?? []).map((prodi) => prodi.nama_prodi?.toLowerCase() ?? "");
-      const matchesProdi =
-        selectedProdi === "ALL" ||
-        (selectedProdi === "IF" && prodiList.some((prodi) => prodi.includes("teknik informatika"))) ||
-        (selectedProdi === "SI" && prodiList.some((prodi) => prodi.includes("sistem informasi")));
-
-      return matchesSearch && matchesProdi;
-    });
-
-    setFilteredDosen(results);
-  }, [searchTerm, allDosen, selectedKeys]);
-
-  const handleDelete = async (id: number, nama: string) => {
-    // Langkah 1: Minta konfirmasi
+  const handleDelete = useCallback(async (id: number, nama: string) => {
     if (!window.confirm(`Apakah Anda yakin ingin menghapus data dosen: ${nama}?`)) {
       return;
     }
 
     try {
-      // Langkah 2: Kirim request DELETE ke API
       const response = await fetch(`http://localhost:8000/api/dosen/${id}`, {
         method: "DELETE",
       });
@@ -100,112 +222,411 @@ export default function PageDataDosen() {
         throw new Error(errorData.message || "Gagal menghapus data.");
       }
 
-      // Langkah 3: Update state untuk menghapus item dari UI
       setAllDosen((prev) => prev.filter((dosen) => dosen.id !== id));
       alert("Data berhasil dihapus.");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Terjadi kesalahan";
       alert(`Error: ${message}`);
     }
-  };
+  }, []);
+
+  const selectedProdiKey = useMemo(() => {
+    if (prodiFilter === "all") {
+      return "ALL";
+    }
+
+    const keys = Array.from(prodiFilter);
+    return keys[0]?.toString() ?? "ALL";
+  }, [prodiFilter]);
+
+  const filteredDosen = useMemo(() => {
+    const search = filterValue.trim().toLowerCase();
+
+    return allDosen.filter((dosen) => {
+      const nama = dosen.nama?.toLowerCase() ?? "";
+      const nuptk = dosen.NUPTK?.toLowerCase() ?? "";
+      const matchesSearch = !search || nama.includes(search) || nuptk.includes(search);
+
+      const prodiList = (dosen.prodis ?? []).map((prodi) => prodi.nama_prodi?.toLowerCase() ?? "");
+      const matchesProdi =
+        selectedProdiKey === "ALL" ||
+        (selectedProdiKey === "IF" && prodiList.some((prodi) => prodi.includes("teknik informatika"))) ||
+        (selectedProdiKey === "SI" && prodiList.some((prodi) => prodi.includes("sistem informasi")));
+
+      return matchesSearch && matchesProdi;
+    });
+  }, [allDosen, filterValue, selectedProdiKey]);
+
+  const pages = Math.max(1, Math.ceil(filteredDosen.length / rowsPerPage));
+
+  useEffect(() => {
+    if (page > pages) {
+      setPage(pages);
+    }
+  }, [page, pages]);
+
+  const sortedDosen = useMemo(() => {
+    if (!sortDescriptor.column) {
+      return filteredDosen;
+    }
+
+    const column = sortDescriptor.column as ColumnKey;
+    if (!column || column === "actions") {
+      return filteredDosen;
+    }
+
+    return [...filteredDosen].sort((a, b) => {
+      const getValue = (dosen: Dosen): string => {
+        switch (column) {
+          case "name":
+            return dosen.nama ?? "";
+          case "nuptk":
+            return dosen.NUPTK ?? "";
+          case "prodi":
+            return (dosen.prodis ?? [])
+              .map((prodi) => prodi.nama_prodi ?? "")
+              .filter(Boolean)
+              .join(", ");
+          default:
+            return "";
+        }
+      };
+
+      const firstValue = getValue(a).toLocaleLowerCase("id");
+      const secondValue = getValue(b).toLocaleLowerCase("id");
+      const cmp = firstValue.localeCompare(secondValue, "id", {sensitivity: "base"});
+
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [filteredDosen, sortDescriptor]);
+
+  const paginatedDosen = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return sortedDosen.slice(start, end);
+  }, [sortedDosen, page, rowsPerPage]);
+
+  const tableItems = useMemo(() => {
+    return paginatedDosen.map((dosen) => ({
+      id: dosen.id,
+      name: dosen.nama ?? "-",
+      nuptk: dosen.NUPTK ?? "-",
+      prodi: (dosen.prodis ?? [])
+        .map((prodi) => prodi.nama_prodi ?? "")
+        .filter((name) => name.trim().length > 0),
+      dosen,
+    }));
+  }, [paginatedDosen]);
+
+  const headerColumns = useMemo((): ColumnDefinition[] => {
+    if (visibleColumns === "all") {
+      return [...columns];
+    }
+
+    const columnSet = new Set(Array.from(visibleColumns, (key) => key.toString()));
+    return columns.filter((column) => columnSet.has(column.uid));
+  }, [visibleColumns]);
+
+  const prodiDropdownItems = useMemo(
+    () =>
+      prodiOptions.map((option) => (
+        <DropdownItem key={option.uid} className="capitalize">
+          {option.name}
+        </DropdownItem>
+      )),
+    [],
+  );
+
+  const columnDropdownItems = useMemo(
+    () =>
+      columns.map((column) => (
+        <DropdownItem key={column.uid} className="capitalize">
+          {column.name}
+        </DropdownItem>
+      )),
+    [],
+  );
+
+  const prodiLabel = useMemo(() => {
+    if (prodiFilter === "all") {
+      return "Semua Prodi";
+    }
+
+    const keys = Array.from(prodiFilter);
+    const selected = prodiOptions.find((option) => option.uid === keys[0]);
+    return selected?.name ?? "Semua Prodi";
+  }, [prodiFilter]);
+
+  const onRowsPerPageChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(Number(event.target.value));
+    setPage(1);
+  }, []);
+
+  const onSearchChange = useCallback((value?: string) => {
+    setFilterValue(value ?? "");
+    setPage(1);
+  }, []);
+
+  const onProdiSelectionChange = useCallback((keys: Selection) => {
+    if (keys === "all" || Array.from(keys).length === 0) {
+      setProdiFilter(new Set(["ALL"]));
+    } else {
+      setProdiFilter(keys);
+    }
+    setPage(1);
+  }, []);
+
+  const renderCell = useCallback(
+    (item: DosenRow, columnKey: React.Key): React.ReactNode => {
+      const key = columnKey as ColumnKey;
+
+      switch (key) {
+        case "name":
+          return (
+            <User
+              avatarProps={{
+                radius: "full",
+                size: "sm",
+                src: item.dosen.image_url?.[0]?.url,
+              }}
+              classNames={{description: "text-default-500"}}
+              description={item.nuptk || "-"}
+              name={item.name}
+            >
+              {item.nuptk || "-"}
+            </User>
+          );
+        case "nuptk":
+          return <span className="text-small text-default-600">{item.nuptk || "-"}</span>;
+        case "prodi":
+          if (item.prodi.length === 0) {
+            return <span className="text-default-400 text-small">-</span>;
+          }
+
+          return (
+            <div className="flex flex-wrap gap-1">
+              {item.prodi.map((prodiName: string) => (
+                <Chip key={`${item.id}-${prodiName}`} size="sm" variant="flat" className="capitalize">
+                  {prodiName}
+                </Chip>
+              ))}
+            </div>
+          );
+        case "actions":
+          return (
+            <div className="flex justify-end gap-2">
+              <Button
+                as={Link}
+                href={`/dashboard/${item.id}`}
+                isIconOnly
+                size="sm"
+                variant="light"
+              >
+                <RiEdit2Line className="h-4 w-4" />
+              </Button>
+              <Button
+                color="danger"
+                isIconOnly
+                size="sm"
+                variant="light"
+                onPress={() => handleDelete(item.id, item.name)}
+              >
+                <RiDeleteBin6Line className="h-4 w-4" />
+              </Button>
+            </div>
+          );
+        default:
+          return null;
+      }
+    },
+    [handleDelete],
+  );
+
+  const classNames = useMemo(
+    () => ({
+      wrapper: ["max-h-[600px]", "overflow-auto"],
+      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
+      td: [
+        "first:group-data-[first=true]/tr:before:rounded-none",
+        "last:group-data-[first=true]/tr:before:rounded-none",
+        "group-data-[middle=true]/tr:before:rounded-none",
+        "first:group-data-[last=true]/tr:before:rounded-none",
+        "last:group-data-[last=true]/tr:before:rounded-none",
+      ],
+    }),
+    [],
+  );
+
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <Input
+            isClearable
+            classNames={{
+              base: "w-full sm:max-w-[44%]",
+              inputWrapper: "border-1",
+            }}
+            placeholder="Cari nama atau NUPTK..."
+            size="sm"
+            startContent={<SearchIcon className="text-default-300" />}
+            value={filterValue}
+            variant="bordered"
+            onClear={() => onSearchChange("")}
+            onValueChange={onSearchChange}
+          />
+          <div className="flex flex-wrap gap-3">
+            <Dropdown>
+              <DropdownTrigger className="hidden sm:flex">
+                <Button
+                  endContent={<ChevronDownIcon className="text-small" />}
+                  size="sm"
+                  variant="flat"
+                >
+                  {prodiLabel}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Filter Program Studi"
+                disallowEmptySelection
+                selectedKeys={prodiFilter}
+                selectionMode="single"
+                onSelectionChange={onProdiSelectionChange}
+              >{prodiDropdownItems}</DropdownMenu>
+            </Dropdown>
+            <Dropdown>
+              <DropdownTrigger className="hidden sm:flex">
+                <Button
+                  endContent={<ChevronDownIcon className="text-small" />}
+                  size="sm"
+                  variant="flat"
+                >
+                  Kolom
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Kolom tabel"
+                closeOnSelect={false}
+                disallowEmptySelection
+                selectedKeys={visibleColumns}
+                selectionMode="multiple"
+                onSelectionChange={setVisibleColumns}
+              >{columnDropdownItems}</DropdownMenu>
+            </Dropdown>
+            <Button
+              as={Link}
+              className="bg-[#0a0950] text-white"
+              endContent={<PlusIcon className="text-small" />}
+              href="/dashboard/tambah"
+              size="sm"
+            >
+              Tambah Dosen
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-default-400 text-small">Total {filteredDosen.length} data dosen</span>
+          <label className="flex items-center gap-2 text-default-400 text-small">
+            Baris per halaman:
+            <select
+              className="bg-transparent text-default-400 outline-solid outline-transparent text-small"
+              value={rowsPerPage}
+              onChange={onRowsPerPageChange}
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    );
+  }, [
+    filterValue,
+    prodiLabel,
+    prodiFilter,
+    visibleColumns,
+    filteredDosen.length,
+    rowsPerPage,
+    onSearchChange,
+    onRowsPerPageChange,
+    onProdiSelectionChange,
+    prodiDropdownItems,
+    columnDropdownItems,
+  ]);
+
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="flex items-center justify-end px-2 py-2">
+        <Pagination
+          showControls
+          classNames={{cursor: "bg-foreground text-background"}}
+          color="default"
+          isDisabled={pages <= 1 || tableItems.length === 0}
+          page={page}
+          total={pages}
+          variant="light"
+          onChange={setPage}
+        />
+      </div>
+    );
+  }, [tableItems.length, page, pages]);
 
   return (
     <>
       <DashboardClient />
 
-      <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center">
+
+      {error && <p className="mb-4 text-center text-red-500">Error: {error}</p>}
+
+      <div className="w-full p-5 bg-white rounded-lg text-black">
+      <div className="w-full mb-5 text-black rounded-lg text-center">
         <h1 className="text-2xl font-bold">Daftar Dosen STTI Tanjungpinang</h1>
       </div>
-
-      <div className="grid grid-cols-[auto_78px] gap-3 mt-6 mb-6">
-        {/* searchbar */}
-        <Searchbar value={searchTerm} onValueChange={setSearchTerm} onClear={() => setSearchTerm("")} isClearable placeholder="Cari nama dosen?" />
-
-        {/* filter menggunakan dropdown */}
-        <Dropdown>
-          <DropdownTrigger>
-            <Button className="capitalize text-black h-auto" variant="bordered">
-              {selectedValue}
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            disallowEmptySelection
-            aria-label="Single selection"
-            selectedKeys={selectedKeys}
-            selectionMode="single"
-            variant="flat"
-            onSelectionChange={setSelectedKeys}
-          >
-            <DropdownItem key="ALL">Semua Prodi</DropdownItem>
-            <DropdownItem key="IF">Teknik Informatika</DropdownItem>
-            <DropdownItem key="SI">Sistem Informasi</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
-
-      <div className="w-full p-5 bg-white rounded-lg text-white">
-        <div className="flex flex-row justify-between items-center mb-5">
-          <h2 className="text-xl text-black">Data Dosen:</h2>
-          <Link href="/dashboard/tambah">
-            <Button color="primary" endContent={<FaPlus />}>
-              Tambah Dosen
-            </Button>
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {isLoading && (
-            <div className="col-span-full items-center justify-center flex w-full">
-              <Spinner variant="dots" label="Memuat Data Dosen..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
-            </div>
-          )}
-          {error && <p className="col-span-full text-center text-red-500">Error: {error}</p>}
-
-          {/* --- LANGKAH 4: TAMPILKAN DATA YANG SUDAH DIFILTER --- */}
-          {!isLoading &&
-            !error &&
-            filteredDosen.map((dosen) => (
-              <div
-                key={dosen.id}
-                className="h-24 bg-white rounded-lg flex items-center p-3 justify-between object-cover transition-all duration-300 ease-in-out border-2 border-[#eeeeee] hover:shadow-lg hover:shadow-gray-500/50 hover:scale-102"
+        <Table
+          aria-label="Tabel data dosen"
+          bottomContent={bottomContent}
+          bottomContentPlacement="outside"
+          classNames={classNames}
+          isCompact
+          removeWrapper
+          sortDescriptor={sortDescriptor}
+          topContent={topContent}
+          topContentPlacement="outside"
+          onSortChange={setSortDescriptor}
+        >
+          <TableHeader columns={headerColumns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+                allowsSorting={Boolean(column.sortable)}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-16 h-16 rounded-full flex flex-shrink-0 items-center justify-center bg-gray-200 overflow-hidden">
-                    {dosen.image_url && dosen.image_url.length > 0 ? (
-                      <Image alt={`Foto ${dosen.nama}`} src={dosen.image_url[0].url} width={64} height={64} className="object-cover w-full h-full" />
-                    ) : (
-                      <VscAccount className="w-14 h-14" />
-                    )}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-black font-semibold text-sm">{dosen.nama}</span>
-                    <span className="text-gray-500 text-xs">{dosen.NUPTK}</span>
-                  </div>
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody
+            emptyContent={
+              isLoading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Spinner size="sm" />
+                  <span className="text-small text-default-500">Memuat data dosen...</span>
                 </div>
-
-                <div className="flex flex-row gap-2 ml-10">
-                  <div className="w-10 h-10 border-[#eeeeee] border-2 rounded-lg flex items-center justify-center">
-                    <Link className="cursor-pointer" href={`/dashboard/${dosen.id}`}>
-                      <RiEdit2Line className="w-5 h-5 text-warning" />
-                    </Link>
-                  </div>
-                  <div className="w-10 h-10 border-[#eeeeee] border-2 rounded-lg flex items-center justify-center">
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(dosen.id, dosen.nama)}
-                      aria-label={`Hapus ${dosen.nama}`}
-                      className="cursor-pointer"
-                    >
-                      <RiDeleteBin6Line className="w-5 h-5 text-danger" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-          {/* Tambahkan pesan jika hasil pencarian kosong */}
-          {!isLoading && !error && filteredDosen.length === 0 && <p className="col-span-full text-center text-gray-400">Dosen tidak ditemukan.</p>}
-        </div>
+              ) : (
+                "Data dosen tidak ditemukan"
+              )
+            }
+            items={tableItems}
+          >
+            {(item) => (
+              <TableRow key={item.id}>
+                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </>
   );
