@@ -117,7 +117,7 @@ const MyInput = forwardRef<HTMLInputElement, MyInputProps>((props, ref) => {
   }, [startContent, end, getInputProps, getInnerWrapperProps]);
 
   return (
-    <div className="w-[auto] h-[44px]  rounded-xl flex justify-center items-center border-gray-200 border-2  text-white shadow-lg">
+    <div className="w-[auto] h-[44px]  rounded-xl flex justify-center items-center border-gray-200 border-2  text-white">
       <Component {...getBaseProps()}>
         {shouldLabelBeOutside ? labelContent : null}
         <div

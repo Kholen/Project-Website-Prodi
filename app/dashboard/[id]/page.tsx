@@ -3,16 +3,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 import DashboardClient from "@/app/dashboard/DashboardClient"; // Sesuaikan path jika perlu
-import { 
-    Input, 
-    Button, 
-    Image, 
-    Dropdown, 
-    DropdownItem, 
-    DropdownMenu, 
-    DropdownTrigger, 
-    Selection 
-} from "@heroui/react";
+import { Input, Button, Image, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Selection, Spinner } from "@heroui/react";
 import { FaImage } from "react-icons/fa6";
 
 interface ImageUrl {
@@ -42,20 +33,20 @@ export default function UpdateDosenPage() {
   const params = useParams();
 
   // State untuk data form utama
-  const [formData, setFormData] = useState({ nama: '', NUPTK: '', email: '', image_url:'' });
-  
+  const [formData, setFormData] = useState({ nama: "", NUPTK: "", email: "", image_url: "" });
+
   // State untuk mengelola daftar relasi yang sudah ditambahkan
   const [selectedJabatans, setSelectedJabatans] = useState<SimpleRelasi[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<SimpleRelasi[]>([]);
-  
+
   // State untuk menampung semua pilihan dari database
   const [allJabatans, setAllJabatans] = useState<SimpleRelasi[]>([]);
   const [allSkills, setAllSkills] = useState<SimpleRelasi[]>([]);
 
   // State untuk input dropdown saat ini
-  const [currentJabatanId, setCurrentJabatanId] = useState<string>('');
-  const [currentSkillId, setCurrentSkillId] = useState<string>('');
-  
+  const [currentJabatanId, setCurrentJabatanId] = useState<string>("");
+  const [currentSkillId, setCurrentSkillId] = useState<string>("");
+
   // State untuk loading dan error
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,16 +71,15 @@ export default function UpdateDosenPage() {
         const dosenData: Dosen = await dosenRes.json();
         const jabatansData: SimpleRelasi[] = await jabatansRes.json();
         const skillsData: SimpleRelasi[] = await skillsRes.json();
-        
-        setFormData({ nama: dosenData.nama, NUPTK: dosenData.NUPTK, email: dosenData.email,  image_url: dosenData.image_url?.[0]?.url ?? '' });
-        
+
+        setFormData({ nama: dosenData.nama, NUPTK: dosenData.NUPTK, email: dosenData.email, image_url: dosenData.image_url?.[0]?.url ?? "" });
+
         // ▼▼▼ PERBAIKAN: Pastikan state selalu array dengan fallback '|| []' ▼▼▼
         setSelectedJabatans(dosenData.jabatans || []);
         setSelectedSkills(dosenData.skills || []);
-        
+
         setAllJabatans(jabatansData);
         setAllSkills(skillsData);
-
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -102,35 +92,35 @@ export default function UpdateDosenPage() {
 
   // --- Event Handlers ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleAddJabatan = () => {
     if (!currentJabatanId) return;
-    const jabatanToAdd = allJabatans.find(j => j.id === parseInt(currentJabatanId));
-    if (jabatanToAdd && !selectedJabatans.some(j => j.id === jabatanToAdd.id)) {
-      setSelectedJabatans(prev => [...prev, jabatanToAdd]);
+    const jabatanToAdd = allJabatans.find((j) => j.id === parseInt(currentJabatanId));
+    if (jabatanToAdd && !selectedJabatans.some((j) => j.id === jabatanToAdd.id)) {
+      setSelectedJabatans((prev) => [...prev, jabatanToAdd]);
     }
-    setCurrentJabatanId('');
+    setCurrentJabatanId("");
   };
 
   const handleRemoveJabatan = (idToRemove: number) => {
-    setSelectedJabatans(prev => prev.filter(j => j.id !== idToRemove));
+    setSelectedJabatans((prev) => prev.filter((j) => j.id !== idToRemove));
   };
-  
+
   const handleAddSkill = () => {
     if (!currentSkillId) return;
-    const skillToAdd = allSkills.find(s => s.id === parseInt(currentSkillId));
-    if (skillToAdd && !selectedSkills.some(s => s.id === skillToAdd.id)) {
-      setSelectedSkills(prev => [...prev, skillToAdd]);
+    const skillToAdd = allSkills.find((s) => s.id === parseInt(currentSkillId));
+    if (skillToAdd && !selectedSkills.some((s) => s.id === skillToAdd.id)) {
+      setSelectedSkills((prev) => [...prev, skillToAdd]);
     }
-    setCurrentSkillId('');
+    setCurrentSkillId("");
   };
 
   const handleRemoveSkill = (idToRemove: number) => {
-    setSelectedSkills(prev => prev.filter(s => s.id !== idToRemove));
+    setSelectedSkills((prev) => prev.filter((s) => s.id !== idToRemove));
   };
-  
+
   // --- Submit Logic ---
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -138,14 +128,14 @@ export default function UpdateDosenPage() {
 
     const payload = {
       ...formData,
-      jabatan_ids: selectedJabatans.map(j => j.id),
-      skill_ids: selectedSkills.map(s => s.id),
+      jabatan_ids: selectedJabatans.map((j) => j.id),
+      skill_ids: selectedSkills.map((s) => s.id),
     };
 
     try {
       const response = await fetch(`http://localhost:8000/api/dosen/${params.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -153,144 +143,147 @@ export default function UpdateDosenPage() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Gagal memperbarui data.");
       }
-      
-      alert("Data berhasil diperbarui!");
-      router.push('/dashboard');
 
+      alert("Data berhasil diperbarui!");
+      router.push("/dashboard");
     } catch (err: any) {
       alert(`Error: ${err.message}`);
     }
   };
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="col-span-full flex min-h-screen items-center justify-center w-full">
+        <Spinner variant="dots" label="Memuat Data Dosen..." classNames={{ label: " text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   // Variabel untuk menampilkan nama di tombol dropdown
-  const selectedJabatanName = allJabatans.find(j => j.id === parseInt(currentJabatanId))?.nama_jabatan || "Pilih Jabatan";
-  const selectedSkillName = allSkills.find(s => s.id === parseInt(currentSkillId))?.nama_skill || "Pilih Skill";
+  const selectedJabatanName = allJabatans.find((j) => j.id === parseInt(currentJabatanId))?.nama_jabatan || "Pilih Jabatan";
+  const selectedSkillName = allSkills.find((s) => s.id === parseInt(currentSkillId))?.nama_skill || "Pilih Skill";
 
   // --- Tampilan JSX ---
   return (
     <>
       <DashboardClient />
-      <div className="w-full p-4 bg-[#0a0950] text-white rounded-lg mb-10 text-center">
-        <h1 className="text-2xl">Update Data Dosen: {formData.nama}</h1>
+      <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center">
+        <h1 className="text-2xl font-bold">Update Data Dosen: {formData.nama}</h1>
       </div>
-      
-      <form onSubmit={handleSubmit} className="w-full p-5 bg-[#0a0950] rounded-lg text-white">
-        <div className="w-full p-6 rounded-lg bg-white text-black space-y-4">
 
+      <form onSubmit={handleSubmit} className="w-full p-5  bg-white rounded-lg text-black">
         <div className="mx-auto w-fit">
           {/* Gunakan ternary operator (if-else) */}
           {formData.image_url ? (
             // JIKA ADA URL, tampilkan gambar
-            <Image
-              alt={`Foto ${formData.nama}`}
-              src={formData.image_url}
-              width={300}
-              className="rounded-lg object-cover"
-            />
+            <Image alt={`Foto ${formData.nama}`} src={formData.image_url} width={300} className="rounded-lg object-cover" />
           ) : (
             // JIKA TIDAK ADA URL, tampilkan wadah kosong ini
-            <div 
-              className="w-[300px] h-[300px] bg-gray-200 rounded-lg flex items-center justify-center"
-              aria-label="Placeholder gambar"
-            >
-              <FaImage className="w-35 h-35 text-gray-400" /> 
+            <div className="w-[300px] h-[300px] bg-gray-200 rounded-lg flex items-center justify-center" aria-label="Placeholder gambar">
+              <FaImage className="w-35 h-35 text-gray-400" />
             </div>
           )}
         </div>
-          
-          <div>
-            <label className="font-bold">Nama:</label>
-            <Input name="nama" value={formData.nama} onChange={handleChange} variant="bordered" />
-          </div>
-          <div>
-            <label className="font-bold">NUPTK:</label>
-            <Input name="NUPTK" value={formData.NUPTK} onChange={handleChange} variant="bordered" />
-          </div>
-          <div>
-            <label className="font-bold">email:</label>
-            <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" />
-          </div>
-          <div>
-            <label className="font-bold">Url Image Dosen:</label>
-            <Input name="image_url" value={formData.image_url} onChange={handleChange} variant="bordered" />
-          </div>
 
-          <hr className="my-6"/>
+        <div>
+          <label className="font-bold">Nama:</label>
+          <Input name="nama" value={formData.nama} onChange={handleChange} variant="bordered" />
+        </div>
+        <div>
+          <label className="font-bold">NUPTK:</label>
+          <Input name="NUPTK" value={formData.NUPTK} onChange={handleChange} variant="bordered" />
+        </div>
+        <div>
+          <label className="font-bold">email:</label>
+          <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" />
+        </div>
+        <div>
+          <label className="font-bold">Url Image Dosen:</label>
+          <Input name="image_url" value={formData.image_url} onChange={handleChange} variant="bordered" />
+        </div>
 
-          {/* Bagian Jabatan */}
-          <div>
-            <label className="font-bold">Jabatan</label>
-            <div className="flex items-center gap-2 mt-1">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button variant="bordered" className="capitalize w-full justify-start">
-                    {selectedJabatanName}
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label="Pilih Jabatan"
-                  selectionMode="single"
-                  onSelectionChange={(keys: Selection) => setCurrentJabatanId(String(Array.from(keys)[0]))}
-                >
-                  {allJabatans.map((jabatan) => (
-                    <DropdownItem key={jabatan.id}>{jabatan.nama_jabatan}</DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-              <Button type="button" color="primary" onClick={handleAddJabatan}>Tambah</Button>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {/* ▼▼▼ PERBAIKAN: Render kondisional untuk mencegah error map ▼▼▼ */}
-              {Array.isArray(selectedJabatans) && selectedJabatans.map(jabatan => (
-                <div key={jabatan.id} className="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded flex items-center gap-2">
-                  {jabatan.nama_jabatan}
-                  <button type="button" onClick={() => handleRemoveJabatan(jabatan.id)} className="text-blue-800 font-bold">x</button>
-                </div>
-              ))}
-            </div>
-          </div>
+        <hr className="my-4" />
 
-          {/* Bagian Skill */}
-          <div>
-            <label className="font-bold">Skill</label>
-            <div className="flex items-center gap-2 mt-1">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button variant="bordered" className="capitalize w-full justify-start">
-                    {selectedSkillName}
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label="Pilih Skill"
-                  selectionMode="single"
-                  onSelectionChange={(keys: Selection) => setCurrentSkillId(String(Array.from(keys)[0]))}
-                >
-                  {allSkills.map((skill) => (
-                    <DropdownItem key={skill.id}>{skill.nama_skill}</DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-              <Button type="button" color="primary" onClick={handleAddSkill}>Tambah</Button>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {/* ▼▼▼ PERBAIKAN: Render kondisional untuk mencegah error map ▼▼▼ */}
-              {Array.isArray(selectedSkills) && selectedSkills.map(skill => (
-                <div key={skill.id} className="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded flex items-center gap-2">
-                  {skill.nama_skill}
-                  <button type="button" onClick={() => handleRemoveSkill(skill.id)} className="text-green-800 font-bold">x</button>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="mt-8 flex justify-end">
-            <Button color="success" type="submit" className="font-bold text-white">
-              Simpan Perubahan
+        {/* Bagian Jabatan */}
+        <div>
+          <label className="font-bold">Jabatan</label>
+          <div className="flex items-center gap-2 mt-1">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="bordered" className="capitalize w-full justify-start">
+                  {selectedJabatanName}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Pilih Jabatan"
+                selectionMode="single"
+                onSelectionChange={(keys: Selection) => setCurrentJabatanId(String(Array.from(keys)[0]))}
+              >
+                {allJabatans.map((jabatan) => (
+                  <DropdownItem key={jabatan.id}>{jabatan.nama_jabatan}</DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+            <Button type="button" color="primary" onClick={handleAddJabatan}>
+              Tambah
             </Button>
           </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {/* ▼▼▼ PERBAIKAN: Render kondisional untuk mencegah error map ▼▼▼ */}
+            {Array.isArray(selectedJabatans) &&
+              selectedJabatans.map((jabatan) => (
+                <div key={jabatan.id} className="bg-blue-100 text-primary text-sm font-medium px-2.5 py-0.5 rounded flex items-center gap-2">
+                  {jabatan.nama_jabatan}
+                  <button type="button" onClick={() => handleRemoveJabatan(jabatan.id)} className="text-primary font-bold">
+                    x
+                  </button>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* Bagian Skill */}
+        <div>
+          <label className="font-bold">Skill</label>
+          <div className="flex items-center gap-2 mt-1">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="bordered" className="capitalize w-full justify-start">
+                  {selectedSkillName}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Pilih Skill"
+                selectionMode="single"
+                onSelectionChange={(keys: Selection) => setCurrentSkillId(String(Array.from(keys)[0]))}
+              >
+                {allSkills.map((skill) => (
+                  <DropdownItem key={skill.id}>{skill.nama_skill}</DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+            <Button type="button" color="primary" onClick={handleAddSkill}>
+              Tambah
+            </Button>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {/* ▼▼▼ PERBAIKAN: Render kondisional untuk mencegah error map ▼▼▼ */}
+            {Array.isArray(selectedSkills) &&
+              selectedSkills.map((skill) => (
+                <div key={skill.id} className="bg-green-100 text-success text-sm font-medium px-2.5 py-0.5 rounded flex items-center gap-2">
+                  {skill.nama_skill}
+                  <button type="button" onClick={() => handleRemoveSkill(skill.id)} className="text-success font-bold">
+                    x
+                  </button>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        <div className="mt-8 flex justify-end">
+          <Button color="success" type="submit" className="font-bold text-white">
+            Simpan Perubahan
+          </Button>
         </div>
       </form>
     </>
