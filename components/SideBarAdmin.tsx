@@ -36,7 +36,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
   return (
     <aside
       className={`relative flex-shrink-0 bg-white text-black flex flex-col transition-[width] duration-300 ease-in-out ${
-        isOpen ? "w-60 p-6" : "w-24 p-4"
+        isOpen ? "w-60 p-4" : "w-24 p-4"
       }`}
     >
       <div className={`flex w-full items-center mb-5 ${isOpen ? "justify-between" : "justify-center"}`}>
@@ -65,14 +65,14 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
       </div>
 
       <nav className="flex-grow mt-4">
-        <ul>
+        <ul className="space-y-2">
           {mainNavItems.map((item) => (
-            <li key={item.label}>
+            <li key={item.label} className="w-full">
               <Link
                 href={item.href}
-                className={`flex items-center h-12 rounded-md transition-colors duration-200 group ${
-                  isOpen ? "justify-start" : "justify-center"
-                } ${pathname === item.href ? "bg-white/20 font-bold" : "hover:bg-white/10"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
+                className={`flex w-full items-center h-16 rounded-md transition-colors duration-200 group ${
+                  isOpen ? "px-5 justify-start" : "justify-center"
+                } ${pathname === item.href ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
               >
                 <item.icon
                   size={25}
@@ -91,8 +91,8 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
         <button
           type="button"
           onClick={handleLogout}
-          className={`flex items-center h-12 rounded-md transition-colors duration-200 group text-red-400 hover:bg-red-500/20 ${
-            isOpen ? "justify-center pr-4" : "justify-center"
+          className={`flex items-center h-16 rounded-md transition-colors duration-200 group text-red-400 hover:bg-red-500/20 ${
+            isOpen ? "justify-start px-5" : "justify-center"
           } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400`}
         >
           <FiLogOut size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
