@@ -72,7 +72,7 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
       alert('Terjadi kesalahan saat menghapus data.');
     }
   };
-
+  
   // --- Memoized Logic untuk Filtering dan Paginasi ---
   const filteredItems = useMemo(() => {
     let filteredRiset = [...risetData];
@@ -134,7 +134,7 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
           <div className="relative flex items-center gap-2">
             <Tooltip content="Edit riset">
               {/* Link ke halaman edit dinamis */}
-              <Link href={`/dashboard/riset/edit/${riset.id}`}>
+              <Link href={`/dashboard/data-riset/${riset.id}`}>
                 <Button isIconOnly variant="light" size="sm">
                   <FiEdit className="text-lg text-default-500" />
                 </Button>
