@@ -72,7 +72,7 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
       alert('Terjadi kesalahan saat menghapus data.');
     }
   };
-
+  
   // --- Memoized Logic untuk Filtering dan Paginasi ---
   const filteredItems = useMemo(() => {
     let filteredRiset = [...risetData];
@@ -134,7 +134,7 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
           <div className="relative flex items-center gap-2">
             <Tooltip content="Edit riset">
               {/* Link ke halaman edit dinamis */}
-              <Link href={`/dashboard/riset/edit/${riset.id}`}>
+              <Link href={`/dashboard/data-riset/${riset.id}`}>
                 <Button isIconOnly variant="light" size="sm">
                   <FiEdit className="text-lg text-default-500" />
                 </Button>
@@ -160,14 +160,19 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
+            classNames={{
+              base: "w-full sm:max-w-[44%]",
+              inputWrapper: "border-1",
+            }}
             placeholder="Cari berdasarkan judul atau nama ketua..."
-            startContent={<IoSearchSharp />}
+            size="sm"
+            startContent={<IoSearchSharp className="text-default-300" />}
             value={filterValue}
+            variant="bordered"
             onClear={onClear}
             onValueChange={onSearchChange}
           />
-          <Link href="/dashboard/riset/tambah">
+          <Link href="/dashboard/data-riset/tambah">
             <Button color="primary" endContent={<FaPlus />}>
               Tambah Baru
             </Button>

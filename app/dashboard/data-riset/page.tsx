@@ -40,11 +40,11 @@ export default async function RisetPage() {
   return (
     <section className="">
       <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center shadow-xl">
-        <h1 className="text-2xl font-bold">Daftar Riset STTI Tanjungpinang</h1>
-      </div>
+        <h1 className="text-2xl font-bold mb-5">Daftar Riset STTI Tanjungpinang</h1>
       
       {/* Teruskan data awal sebagai prop ke komponen client */}
       <RisetTable initialData={initialRisetData} />
+      </div>
     </section>
   );
 }
