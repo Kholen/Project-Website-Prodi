@@ -1,15 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
 type TentangMhsItem = {
@@ -113,13 +106,14 @@ export default function TentangMhs() {
     };
   }, [api]);
 
+  const snapCount = pageContent.length;
+  const indicators = useMemo(() => Math.max(1, Math.max(0, snapCount - 2)), [snapCount]);
+
   return (
     <section className="container space-y-6 px-6 py-10">
       <div className="flex flex-col gap-2 text-center">
         <h2 className="text-2xl font-bold sm:text-3xl">Tentang Mahasiswa</h2>
-        <p className="text-sm text-neutral-500">
-          Sorotan aktivitas dan berita terbaru mahasiswa STTI Tanjungpinang.
-        </p>
+        <p className="text-sm text-neutral-500">Sorotan aktivitas dan berita terbaru mahasiswa STTI Tanjungpinang.</p>
       </div>
 
       <Carousel className="w-full" setApi={setApi}>
@@ -135,16 +129,13 @@ export default function TentangMhs() {
       </Carousel>
 
       <div className="flex justify-center gap-2">
-        {pageContent.map((_, index) => (
+        {Array.from({ length: indicators }).map((_, index) => (
           <button
             key={index}
             type="button"
             onClick={() => api?.scrollTo(index)}
-            className={cn(
-              "h-2 rounded-full transition-all",
-              currentIndex === index ? "w-5 bg-[#0a0950]" : "w-2 bg-neutral-300 dark:bg-neutral-700"
-            )}
-            aria-label={`Slide ${index - 1}`}
+            className={cn("h-2 rounded-full transition-all", currentIndex === index ? "w-5 bg-[#0a0950]" : "w-2 bg-neutral-300 dark:bg-neutral-700")}
+            aria-label={`Slide ${index + 1}`}
             aria-current={currentIndex === index}
           />
         ))}
@@ -152,9 +143,3 @@ export default function TentangMhs() {
     </section>
   );
 }
-
-
-
-
-
-
