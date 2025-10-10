@@ -160,10 +160,15 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
-            className="w-full sm:max-w-[44%]"
+            classNames={{
+              base: "w-full sm:max-w-[44%]",
+              inputWrapper: "border-1",
+            }}
             placeholder="Cari berdasarkan judul atau nama ketua..."
-            startContent={<IoSearchSharp />}
+            size="sm"
+            startContent={<IoSearchSharp className="text-default-300" />}
             value={filterValue}
+            variant="bordered"
             onClear={onClear}
             onValueChange={onSearchChange}
           />
