@@ -167,7 +167,7 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
             onClear={onClear}
             onValueChange={onSearchChange}
           />
-          <Link href="/dashboard/riset/tambah">
+          <Link href="/dashboard/data-riset/tambah">
             <Button color="primary" endContent={<FaPlus />}>
               Tambah Baru
             </Button>
