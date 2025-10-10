@@ -23,8 +23,7 @@ import {
   Pagination,
   Spinner,
 } from "@heroui/react";
-import {RiEdit2Line, RiDeleteBin6Line} from "react-icons/ri";
-
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import DashboardClient from "./DashboardClient";
 
 interface ImageUrl {
@@ -416,23 +415,11 @@ export default function PageDataDosen() {
         case "actions":
           return (
             <div className="flex justify-end gap-2">
-              <Button
-                as={Link}
-                href={`/dashboard/${item.id}`}
-                isIconOnly
-                size="sm"
-                variant="light"
-              >
-                <RiEdit2Line className="h-4 w-4" />
+              <Button color="warning" as={Link} href={`/dashboard/${item.id}`} isIconOnly size="sm" variant="light">
+                <FiEdit className="h-4 w-4" />
               </Button>
-              <Button
-                color="danger"
-                isIconOnly
-                size="sm"
-                variant="light"
-                onPress={() => handleDelete(item.id, item.name)}
-              >
-                <RiDeleteBin6Line className="h-4 w-4" />
+              <Button color="danger" isIconOnly size="sm" variant="light" onPress={() => handleDelete(item.id, item.name)}>
+                <FiTrash2  className="h-4 w-4" />
               </Button>
             </div>
           );
@@ -516,7 +503,7 @@ export default function PageDataDosen() {
             </Dropdown>
             <Button
               as={Link}
-              className="bg-[#0a0950] text-white"
+              className="bg-primary  text-white"
               endContent={<PlusIcon className="text-small" />}
               href="/dashboard/tambah"
               size="sm"
@@ -558,7 +545,7 @@ export default function PageDataDosen() {
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="flex items-center justify-end px-2 py-2">
+      <div className="flex items-center justify-center px-2 py-2">
         <Pagination
           showControls
           classNames={{cursor: "bg-foreground text-background"}}
