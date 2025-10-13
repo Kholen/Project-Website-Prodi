@@ -20,7 +20,7 @@ const pageContent: TentangMhsItem[] = [
     content:
       "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
     img: "/example.jpg",
-    link: "berita/1",
+    link: "tentang-mahasiswa/berita",
   },
   {
     title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
@@ -28,7 +28,7 @@ const pageContent: TentangMhsItem[] = [
     content:
       "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
     img: "/example.jpg",
-    link: "berita/1",
+    link: "tentang-mahasiswa/berita",
   },
   {
     title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
@@ -36,7 +36,7 @@ const pageContent: TentangMhsItem[] = [
     content:
       "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
     img: "/example.jpg",
-    link: "berita/1",
+    link: "tentang-mahasiswa/berita",
   },
   {
     title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
@@ -44,7 +44,7 @@ const pageContent: TentangMhsItem[] = [
     content:
       "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
     img: "/example.jpg",
-    link: "berita/1",
+    link: "tentang-mahasiswa/berita",
   },
   {
     title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
@@ -52,7 +52,7 @@ const pageContent: TentangMhsItem[] = [
     content:
       "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
     img: "/example.jpg",
-    link: "berita/1",
+    link: "tentang-mahasiswa/berita",
   },
 ];
 
