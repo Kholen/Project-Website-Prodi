@@ -35,7 +35,7 @@ type Riset = {
 
 // --- Konfigurasi Kolom ---
 const columns = [
-  { name: "ID", uid: "id" },
+  { name: "NO", uid: "no" },
   { name: "JUDUL RISET", uid: "judul" },
   { name: "NAMA KETUA", uid: "nama_ketua" },
   { name: "TAHUN", uid: "tahun" },
@@ -120,8 +120,12 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
   const renderCell = useCallback((riset: Riset, columnKey: React.Key) => {
     const cellValue = riset[columnKey as keyof Riset];
     switch (columnKey) {
-      case "id":
-        return <span className="font-semibold text-gray-800">{riset.id}</span>;
+      case "no":
+      // Membuat nomor urut berdasarkan halaman dan posisi di halaman
+      const index = paginatedItems.findIndex(item => item.id === riset.id);
+      // Hitung nomor urut global berdasarkan halaman
+      const rowNumber = (page - 1) * rowsPerPage + index + 1;
+      return <span className="font-semibold text-gray-800">{rowNumber}</span>;
       case "judul":
         return (
           <div>
