@@ -30,8 +30,8 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
 
     return () => clearTimeout(timer);
   }, [pathname]);
-  const hiddenRoutes = ["/dashboard","/tentang-mahasiswa/berita"];
-  const isPathname = hiddenRoutes.includes(pathname);
+  const hiddenRoutes = [pathname.startsWith("/dashboard"), pathname.startsWith("/tentang-mahasiswa/berita")];
+  const isPathname = hiddenRoutes;
 
   return (
     <div className="relative flex min-h-screen flex-col">

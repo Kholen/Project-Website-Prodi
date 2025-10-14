@@ -7,16 +7,18 @@ import FooterHome from "@/components/FooterHome";
 const ConditionalFooter = () => {
   const pathname = usePathname();
 
+  const dashboardPath = pathname.startsWith("/dashboard");
+  const beritaPath = pathname.startsWith("/berita");
   if (pathname === "/") {
     return <FooterHome />;
   }
   if (pathname === "/sign-in") {
     return null;
   }
-  if (pathname === "/tentang-mahasiswa/berita") {
+  if (beritaPath) {
     return null;
   }
-  if (pathname === "/dashboard"  ) {
+  if (dashboardPath) {
     return null;
   }
   return <Footer />;
