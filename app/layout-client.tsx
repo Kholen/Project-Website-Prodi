@@ -30,7 +30,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
 
     return () => clearTimeout(timer);
   }, [pathname]);
-  const hiddenRoutes = [pathname.startsWith("/dashboard"), pathname.startsWith("/tentang-mahasiswa/berita")];
+  const hiddenRoutes = pathname.startsWith("/dashboard") || pathname.startsWith("/tentang-mahasiswa/berita");
   const isPathname = hiddenRoutes;
 
   return (
