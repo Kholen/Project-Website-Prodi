@@ -4,63 +4,34 @@ import { useEffect, useMemo, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
+import { Spinner } from "@heroui/react";
 
-type TentangMhsItem = {
+interface TentangMhsItem {
+  nomor: number;
   title: string;
-  tanggal: string;
-  content: string;
-  img: string;
   link: string;
-};
-
-const pageContent: TentangMhsItem[] = [
-  {
-    title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
-    tanggal: "Senin, 10-10-2025",
-    content:
-      "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
-    img: "/example.jpg",
-    link: "tentang-mahasiswa/berita",
-  },
-  {
-    title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
-    tanggal: "Senin, 10-10-2025",
-    content:
-      "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
-    img: "/example.jpg",
-    link: "tentang-mahasiswa/berita",
-  },
-  {
-    title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
-    tanggal: "Senin, 10-10-2025",
-    content:
-      "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
-    img: "/example.jpg",
-    link: "tentang-mahasiswa/berita",
-  },
-  {
-    title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
-    tanggal: "Senin, 10-10-2025",
-    content:
-      "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
-    img: "/example.jpg",
-    link: "tentang-mahasiswa/berita",
-  },
-  {
-    title: "Organisasi Mahasiswa STTI Tanjungpinang 2025 / 2026   ",
-    tanggal: "Senin, 10-10-2025",
-    content:
-      "ipsum dolor Lorem, ipsum dolor sit amet consectetur adipisicing elit. ipsum dolor sit amet consectetur adipisicing elit. Eligendi corrupti fugit excepturi aut rerum. Lorem ipsum dolor, sit amet consectetur.",
-    img: "/example.jpg",
-    link: "tentang-mahasiswa/berita",
-  },
-];
+  tanggal: string;
+  gambar: string;
+  kepalaBerita: string;
+  isiBerita: string;
+  ekorBerita: string;
+}
+interface ApiBerita {
+  id: number;
+  judul: string;
+  slug: string;
+  gambar_berita: string;
+  kepala_berita: string;
+  tubuh_berita: string;
+  ekor_berita: string;
+  created_at: string;
+}
 
 function TentangMhsCard({ item }: { item: TentangMhsItem }) {
   return (
     <div className="group relative aspect-[19/20] w-full overflow-hidden rounded-2xl shadow-lg">
       <img
-        src={item.img}
+        src={item.gambar ? `http://localhost:8000/storage/${item.gambar}` : "/default-image.jpg"}
         alt={item.title}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
       />
@@ -72,7 +43,7 @@ function TentangMhsCard({ item }: { item: TentangMhsItem }) {
         </div>
         <div className="mt-1 grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out group-hover:grid-rows-[1fr]">
           <div className="flex translate-y-3 transform flex-col gap-3 overflow-hidden text-sm leading-relaxed opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
-            <p className="indent-8 text-justify">{item.content}</p>
+            <p className="indent-8 text-justify">{item.kepalaBerita}</p>
             <a
               href={item.link}
               className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors duration-300 hover:text-blue-400"
@@ -88,8 +59,50 @@ function TentangMhsCard({ item }: { item: TentangMhsItem }) {
 }
 
 export default function TentangMhs() {
+  const [pageContent, setPageContent] = useState<TentangMhsItem[]>([]);
   const [api, setApi] = useState<CarouselApi | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    let active = true;
+    async function fetchData() {
+      try {
+        const response = await fetch("http://localhost:8000/api/berita", { cache: "no-store" });
+
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data dari server");
+        }
+
+        const data: ApiBerita[] = await response.json();
+
+        if (!active) {
+          return;
+        }
+
+        const mapped = data.map((item) => ({
+          nomor: item.id,
+          title: item.judul,
+          link: `/tentang-mahasiswa/berita/${item.slug}`,
+          tanggal: new Date(item.created_at).toLocaleDateString("id-ID"),
+          gambar: item.gambar_berita,
+          kepalaBerita: item.kepala_berita,
+          isiBerita: item.tubuh_berita,
+          ekorBerita: item.ekor_berita,
+        }));
+        setPageContent(mapped);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Terjadi kesalahan tak terduga.";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!api) return;
@@ -108,6 +121,17 @@ export default function TentangMhs() {
 
   const snapCount = pageContent.length;
   const indicators = useMemo(() => Math.max(1, Math.max(0, snapCount - 2)), [snapCount]);
+
+  if (loading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner variant="dots" label="Memuat Informasi Tentang Mahasiswa..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      </div>
+    );
+
+  if (error) {
+    return <p className="text-center text-red-500">{error}</p>;
+  }
 
   return (
     <section className="container space-y-6 px-6 py-10">
