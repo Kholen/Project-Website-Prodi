@@ -131,7 +131,7 @@ export default function BeritaTable({ initialData }: { initialData: Berita[] }) 
           <div className="relative flex items-center gap-2">
             <Tooltip content="Edit berita">
               {/* Tautan ke halaman edit berita */}
-              <Link href={`/dashboard/data-berita/${berita.id}`}>
+              <Link href={`/dashboard/berita-mahasiswa/${berita.id}`}>
                 <Button isIconOnly variant="light" size="sm">
                   <FiEdit className="text-lg text-default-500" />
                 </Button>
