@@ -8,7 +8,7 @@ const ConditionalFooter = () => {
   const pathname = usePathname();
 
   const dashboardPath = pathname.startsWith("/dashboard");
-  const beritaPath = pathname.startsWith("/berita");
+  const beritaPath = pathname.startsWith("/tentang-mahasiswa/berita");
   if (pathname === "/") {
     return <FooterHome />;
   }
