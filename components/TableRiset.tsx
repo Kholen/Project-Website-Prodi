@@ -136,11 +136,11 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Edit riset">
+            <Tooltip content="Edit riset" color="warning" className="text-white">
               {/* Link ke halaman edit dinamis */}
               <Link href={`/dashboard/data-riset/${riset.id}`}>
-                <Button isIconOnly variant="light" size="sm">
-                  <FiEdit className="text-lg text-default-500" />
+                <Button isIconOnly variant="light" size="sm" color="warning">
+                  <FiEdit className="text-lg text-warning" />
                 </Button>
               </Link>
             </Tooltip>
@@ -208,7 +208,8 @@ export default function RisetTable({ initialData }: { initialData: Riset[] }) {
           isCompact
           showControls
           showShadow
-          color="primary"
+          classNames={{ cursor: "bg-foreground text-background" }}
+          color="default"
           page={page}
           total={pages}
           onChange={setPage}

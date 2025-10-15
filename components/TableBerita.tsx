@@ -139,7 +139,7 @@ export default function BeritaTable({ initialData }: { initialData: Berita[] }) 
         case "actions":
           return (
             <div className="relative flex items-center gap-2">
-              <Tooltip color="warning" content="Edit berita">
+              <Tooltip color="warning" content="Edit berita" className="text-white">
                 <Link href={`/dashboard/berita-mahasiswa/${berita.slug}`}>
                   <Button isIconOnly variant="light" size="sm" color="warning">
                     <FiEdit className="text-lg text-warning" />
@@ -203,7 +203,16 @@ export default function BeritaTable({ initialData }: { initialData: Berita[] }) 
   const bottomContent = useMemo(
     () => (
       <div className="py-2 px-2 flex justify-center items-center">
-        <Pagination isCompact showControls showShadow color="primary" page={page} total={pages} onChange={setPage} />
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="default"
+          page={page}
+          total={pages}
+          classNames={{ cursor: "bg-foreground text-background" }}
+          onChange={setPage}
+        />
       </div>
     ),
     [page, pages]
