@@ -1,9 +1,9 @@
 "use client";
 
-import type {SVGProps} from "react";
-import type {Selection, SortDescriptor} from "@heroui/react";
-
-import React, {useState, useEffect, useMemo, useCallback} from "react";
+import type { SVGProps } from "react";
+import type { Selection, SortDescriptor } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   Table,
@@ -57,10 +57,10 @@ type ColumnDefinition = {
 };
 
 const columns: ColumnDefinition[] = [
-  {name: "Nama", uid: "name", sortable: true},
-  {name: "NUPTK", uid: "nuptk", sortable: true},
-  {name: "Program Studi", uid: "prodi"},
-  {name: "Aksi", uid: "actions"},
+  { name: "Nama", uid: "name", sortable: true },
+  { name: "NUPTK", uid: "nuptk", sortable: true },
+  { name: "Program Studi", uid: "prodi" },
+  { name: "Aksi", uid: "actions" },
 ];
 
 type DosenRow = {
@@ -74,12 +74,12 @@ type DosenRow = {
 const INITIAL_VISIBLE_COLUMNS: ColumnKey[] = ["name", "nuptk", "prodi", "actions"];
 
 const prodiOptions = [
-  {name: "Semua Prodi", uid: "ALL"},
-  {name: "Teknik Informatika", uid: "IF"},
-  {name: "Sistem Informasi", uid: "SI"},
+  { name: "Semua Prodi", uid: "ALL" },
+  { name: "Teknik Informatika", uid: "IF" },
+  { name: "Sistem Informasi", uid: "SI" },
 ];
 
-const PlusIcon = ({size = 24, width, height, ...props}: IconSvgProps) => {
+const PlusIcon = ({ size = 24, width, height, ...props }: IconSvgProps) => {
   return (
     <svg
       aria-hidden="true"
@@ -91,13 +91,7 @@ const PlusIcon = ({size = 24, width, height, ...props}: IconSvgProps) => {
       width={size || width}
       {...props}
     >
-      <g
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-      >
+      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}>
         <path d="M6 12h12" />
         <path d="M12 18V6" />
       </g>
@@ -107,16 +101,7 @@ const PlusIcon = ({size = 24, width, height, ...props}: IconSvgProps) => {
 
 const SearchIcon = (props: IconSvgProps) => {
   return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height="1em"
-      role="presentation"
-      viewBox="0 0 24 24"
-      width="1em"
-      {...props}
-    >
+    <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" {...props}>
       <path
         d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
         stroke="currentColor"
@@ -124,29 +109,14 @@ const SearchIcon = (props: IconSvgProps) => {
         strokeLinejoin="round"
         strokeWidth="2"
       />
-      <path
-        d="M22 22L20 20"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
+      <path d="M22 22L20 20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
     </svg>
   );
 };
 
-const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}: IconSvgProps) => {
+const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => {
   return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height="1em"
-      role="presentation"
-      viewBox="0 0 24 24"
-      width="1em"
-      {...otherProps}
-    >
+    <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" viewBox="0 0 24 24" width="1em" {...otherProps}>
       <path
         d="m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
         stroke="currentColor"
@@ -293,7 +263,7 @@ export default function PageDataDosen() {
 
       const firstValue = getValue(a).toLocaleLowerCase("id");
       const secondValue = getValue(b).toLocaleLowerCase("id");
-      const cmp = firstValue.localeCompare(secondValue, "id", {sensitivity: "base"});
+      const cmp = firstValue.localeCompare(secondValue, "id", { sensitivity: "base" });
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
@@ -311,9 +281,7 @@ export default function PageDataDosen() {
       id: dosen.id,
       name: dosen.nama ?? "-",
       nuptk: dosen.NUPTK ?? "-",
-      prodi: (dosen.prodis ?? [])
-        .map((prodi) => prodi.nama_prodi ?? "")
-        .filter((name) => name.trim().length > 0),
+      prodi: (dosen.prodis ?? []).map((prodi) => prodi.nama_prodi ?? "").filter((name) => name.trim().length > 0),
       dosen,
     }));
   }, [paginatedDosen]);
@@ -334,7 +302,7 @@ export default function PageDataDosen() {
           {option.name}
         </DropdownItem>
       )),
-    [],
+    []
   );
 
   const columnDropdownItems = useMemo(
@@ -344,7 +312,7 @@ export default function PageDataDosen() {
           {column.name}
         </DropdownItem>
       )),
-    [],
+    []
   );
 
   const prodiLabel = useMemo(() => {
@@ -389,7 +357,7 @@ export default function PageDataDosen() {
                 size: "sm",
                 src: item.dosen.image_url?.[0]?.url,
               }}
-              classNames={{description: "text-default-500"}}
+              classNames={{ description: "text-default-500" }}
               description={item.nuptk || "-"}
               name={item.name}
             >
@@ -415,19 +383,23 @@ export default function PageDataDosen() {
         case "actions":
           return (
             <div className="flex justify-end gap-2">
-              <Button color="warning" as={Link} href={`/dashboard/${item.id}`} isIconOnly size="sm" variant="light">
-                <FiEdit className="h-4 w-4" />
-              </Button>
-              <Button color="danger" isIconOnly size="sm" variant="light" onPress={() => handleDelete(item.id, item.name)}>
-                <FiTrash2  className="h-4 w-4" />
-              </Button>
+              <Tooltip color="warning" content="Edit berita" className="text-white">
+                <Button color="warning" as={Link} href={`/dashboard/${item.id}`} isIconOnly size="sm" variant="light">
+                  <FiEdit className="h-4 w-4" />
+                </Button>
+              </Tooltip>
+              <Tooltip color="danger" content="Hapus berita">
+                <Button color="danger" isIconOnly size="sm" variant="light" onPress={() => handleDelete(item.id, item.name)}>
+                  <FiTrash2 className="h-4 w-4" />
+                </Button>
+              </Tooltip>
             </div>
           );
         default:
           return null;
       }
     },
-    [handleDelete],
+    [handleDelete]
   );
 
   const classNames = useMemo(
@@ -442,7 +414,7 @@ export default function PageDataDosen() {
         "last:group-data-[last=true]/tr:before:rounded-none",
       ],
     }),
-    [],
+    []
   );
 
   const topContent = useMemo(() => {
@@ -466,11 +438,7 @@ export default function PageDataDosen() {
           <div className="flex flex-wrap gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
-                  variant="flat"
-                >
+                <Button endContent={<ChevronDownIcon className="text-small" />} size="sm" variant="flat">
                   {prodiLabel}
                 </Button>
               </DropdownTrigger>
@@ -480,15 +448,13 @@ export default function PageDataDosen() {
                 selectedKeys={prodiFilter}
                 selectionMode="single"
                 onSelectionChange={onProdiSelectionChange}
-              >{prodiDropdownItems}</DropdownMenu>
+              >
+                {prodiDropdownItems}
+              </DropdownMenu>
             </Dropdown>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
-                  variant="flat"
-                >
+                <Button endContent={<ChevronDownIcon className="text-small" />} size="sm" variant="flat">
                   Kolom
                 </Button>
               </DropdownTrigger>
@@ -499,15 +465,11 @@ export default function PageDataDosen() {
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
                 onSelectionChange={setVisibleColumns}
-              >{columnDropdownItems}</DropdownMenu>
+              >
+                {columnDropdownItems}
+              </DropdownMenu>
             </Dropdown>
-            <Button
-              as={Link}
-              className="bg-primary  text-white"
-              endContent={<PlusIcon className="text-small" />}
-              href="/dashboard/tambah"
-              size="sm"
-            >
+            <Button as={Link} className="bg-primary  text-white" endContent={<PlusIcon className="text-small" />} href="/dashboard/tambah" size="sm">
               Tambah Dosen
             </Button>
           </div>
@@ -548,7 +510,7 @@ export default function PageDataDosen() {
       <div className="flex items-center justify-center px-2 py-2">
         <Pagination
           showControls
-          classNames={{cursor: "bg-foreground text-background"}}
+          classNames={{ cursor: "bg-foreground text-background" }}
           color="default"
           isDisabled={pages <= 1 || tableItems.length === 0}
           page={page}
@@ -564,13 +526,12 @@ export default function PageDataDosen() {
     <>
       <DashboardClient />
 
-
       {error && <p className="mb-4 text-center text-red-500">Error: {error}</p>}
 
       <div className="w-full p-5 bg-white rounded-lg text-black">
-      <div className="w-full mb-5 text-black rounded-lg text-center">
-        <h1 className="text-2xl font-bold">Daftar Dosen STTI Tanjungpinang</h1>
-      </div>
+        <div className="w-full mb-5 text-black rounded-lg text-center">
+          <h1 className="text-2xl font-bold">Daftar Dosen STTI Tanjungpinang</h1>
+        </div>
         <Table
           aria-label="Tabel data dosen"
           bottomContent={bottomContent}
@@ -585,11 +546,7 @@ export default function PageDataDosen() {
         >
           <TableHeader columns={headerColumns}>
             {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-                allowsSorting={Boolean(column.sortable)}
-              >
+              <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} allowsSorting={Boolean(column.sortable)}>
                 {column.name}
               </TableColumn>
             )}
@@ -607,11 +564,7 @@ export default function PageDataDosen() {
             }
             items={tableItems}
           >
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-              </TableRow>
-            )}
+            {(item) => <TableRow key={item.id}>{(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
           </TableBody>
         </Table>
       </div>
