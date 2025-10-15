@@ -37,11 +37,11 @@ function TentangMhsCard({ item }: { item: TentangMhsItem }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
       <div className="relative flex h-full flex-col justify-end p-4 text-white">
-        <div className="space-y-2 transition-transform duration-500 ease-out group-hover:-translate-y-3">
+        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-3">
           <p className="text-sm opacity-90">{item.tanggal}</p>
-          <h3 className="text-xl font-bold leading-tight">{item.title}</h3>
+          <h3 className="text-xl font-bold leading-tight mt-1">{item.title}</h3>
         </div>
-        <div className="mt-1 grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out group-hover:grid-rows-[1fr]">
+        <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out group-hover:grid-rows-[1fr]">
           <div className="flex translate-y-3 transform flex-col gap-3 overflow-hidden text-sm leading-relaxed opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
             <p className="indent-8 text-justify">{item.kepalaBerita}</p>
             <a
@@ -68,7 +68,7 @@ export default function TentangMhs() {
     let active = true;
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:8000/api/berita", { cache: "no-store" });
+        const response = await fetch("/api/berita", { cache: "no-store" });
 
         if (!response.ok) {
           throw new Error("Gagal mengambil data dari server");
@@ -84,7 +84,11 @@ export default function TentangMhs() {
           nomor: item.id,
           title: item.judul,
           link: `/tentang-mahasiswa/berita/${item.slug}`,
-          tanggal: new Date(item.created_at).toLocaleDateString("id-ID"),
+          tanggal: new Date(item.created_at).toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
           gambar: item.gambar_berita,
           kepalaBerita: item.kepala_berita,
           isiBerita: item.tubuh_berita,

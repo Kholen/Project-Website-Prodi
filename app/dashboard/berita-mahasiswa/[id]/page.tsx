@@ -1,143 +1,195 @@
 "use client";
 
-import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, FormEvent, ChangeEvent, useEffect, useMemo } from "react";
 import { useRouter, useParams } from "next/navigation";
 import DashboardClient from "@/app/dashboard/DashboardClient";
-import { Input, Button, Spinner, Textarea } from "@heroui/react"; // Sesuaikan library UI Anda
+import { Input, Button, Spinner, Textarea } from "@heroui/react";
 import { FiUpload } from "react-icons/fi";
 
-// Tipe data form disesuaikan untuk file dan data awal
 type BeritaFormData = {
   judul: string;
   kepala_berita: string;
   tubuh_berita: string;
   ekor_berita: string;
-  gambar_berita: File | null; // Untuk file baru yang akan diupload
+  gambar_berita: File | null;
 };
+
+const backendBaseUrl = (process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000").replace(/\/$/, "");
 
 export default function EditBeritaPage() {
   const router = useRouter();
-  const params = useParams(); // Hook untuk mendapatkan parameter dari URL
-  const id = params.id; // Ambil ID berita dari URL
+  const params = useParams();
+  const slugParam = useMemo(() => {
+    const raw = params?.id;
+    if (Array.isArray(raw)) {
+      return raw[0] ?? "";
+    }
+    return typeof raw === "string" ? raw : "";
+  }, [params]);
 
   const [formData, setFormData] = useState<BeritaFormData>({
-    judul: '',
-    kepala_berita: '',
-    tubuh_berita: '',
-    ekor_berita: '',
+    judul: "",
+    kepala_berita: "",
+    tubuh_berita: "",
+    ekor_berita: "",
     gambar_berita: null,
   });
 
-  const [isLoadingData, setIsLoadingData] = useState(true); // State untuk loading data awal
-  const [gambarPreview, setGambarPreview] = useState<string | null>(null); // State untuk URL preview gambar
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [gambarPreview, setGambarPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState("Tidak ada file baru dipilih");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // # Perbedaan 1: Mengambil data berita yang ada saat komponen dimuat
   useEffect(() => {
-    if (!id) return;
+    if (!slugParam) {
+      setIsLoadingData(false);
+      setError("Slug berita tidak ditemukan di URL.");
+      return;
+    }
+
+    let isMounted = true;
 
     const fetchBerita = async () => {
       try {
         setIsLoadingData(true);
-        const response = await fetch(`http://localhost:8000/api/berita/${id}`);
+        const response = await fetch(`/api/berita/${slugParam}`, { cache: "no-store" });
         if (!response.ok) {
           throw new Error("Gagal mengambil data berita.");
         }
-        const data = await response.json();
-        
-        // Isi form dengan data yang ada
-        setFormData({
-          judul: data.judul,
-          kepala_berita: data.kepala_berita,
-          tubuh_berita: data.tubuh_berita,
-          ekor_berita: data.ekor_berita,
-          gambar_berita: null, // Reset pilihan file
-        });
-        
-        // Set URL gambar yang sudah ada untuk preview
-        setGambarPreview(data.gambar_url); // Asumsi backend mengirim URL gambar
 
+        const data = await response.json();
+        if (!isMounted) return;
+
+        setFormData({
+          judul: data.judul ?? "",
+          kepala_berita: data.kepala_berita ?? "",
+          tubuh_berita: data.tubuh_berita ?? "",
+          ekor_berita: data.ekor_berita ?? "",
+          gambar_berita: null,
+        });
+
+        const previewUrl =
+          data.gambar_url ??
+          (data.gambar_berita
+            ? `${backendBaseUrl}/storage/${data.gambar_berita}`
+            : null);
+
+        setGambarPreview(previewUrl);
+        setFileName(data.gambar_berita ?? "Tidak ada file baru dipilih");
       } catch (err: any) {
-        setError(err.message);
-        alert(`Error: ${err.message}`);
+        if (!isMounted) return;
+        const message = err?.message ?? "Terjadi kesalahan saat mengambil data.";
+        setError(message);
+        alert(`Error: ${message}`);
       } finally {
-        setIsLoadingData(false);
+        if (isMounted) {
+          setIsLoadingData(false);
+        }
       }
     };
 
     fetchBerita();
-  }, [id]); // Efek ini berjalan setiap kali 'id' berubah
 
-  // Handler untuk input teks biasa
+    return () => {
+      isMounted = false;
+      setFormData({
+        judul: "",
+        kepala_berita: "",
+        tubuh_berita: "",
+        ekor_berita: "",
+        gambar_berita: null,
+      });
+    };
+  }, [slugParam]);
+
+  useEffect(() => {
+    return () => {
+      if (gambarPreview && gambarPreview.startsWith("blob:")) {
+        URL.revokeObjectURL(gambarPreview);
+      }
+    };
+  }, [gambarPreview]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // # Perbedaan 2: Handler file diubah untuk menampilkan preview gambar baru
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (gambarPreview && gambarPreview.startsWith("blob:")) {
+        URL.revokeObjectURL(gambarPreview);
+      }
       setFormData((prev) => ({ ...prev, gambar_berita: file }));
       setFileName(file.name);
-      
-      // Buat URL sementara untuk preview gambar yang baru dipilih
       setGambarPreview(URL.createObjectURL(file));
     }
   };
 
-  // # Perbedaan 3: Logic Submit diubah untuk proses UPDATE
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!slugParam) {
+      alert("Slug berita tidak ditemukan.");
+      return;
+    }
+
     if (!confirm("Simpan perubahan data berita?")) return;
 
     setIsSubmitting(true);
     setError(null);
 
     const data = new FormData();
-    data.append('judul', formData.judul);
-    data.append('kepala_berita', formData.kepala_berita);
-    data.append('tubuh_berita', formData.tubuh_berita);
-    data.append('ekor_berita', formData.ekor_berita);
-    
-    // Kirim method PUT untuk Laravel
-    data.append('_method', 'PUT'); 
+    data.append("judul", formData.judul);
+    data.append("kepala_berita", formData.kepala_berita);
+    data.append("tubuh_berita", formData.tubuh_berita);
+    data.append("ekor_berita", formData.ekor_berita);
+    data.append("_method", "PUT");
 
-    // HANYA kirim file gambar jika pengguna memilih file baru
     if (formData.gambar_berita) {
-      data.append('gambar_berita', formData.gambar_berita);
+      data.append("gambar_berita", formData.gambar_berita);
     }
 
     try {
-      // Kirim ke endpoint update dengan metode POST (karena FormData)
-      const response = await fetch(`http://localhost:8000/api/berita/${id}`, {
-        method: "POST", // Tetap POST, karena _method akan dihandle Laravel
+      const response = await fetch(`/api/berita/${slugParam}`, {
+        method: "POST",
         body: data,
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 422) {
-            const validationErrors = Object.values(errorData.errors || errorData).flat().join('\n');
-            throw new Error(`Gagal validasi:\n${validationErrors}`);
+        const contentType = response.headers.get("content-type") ?? "";
+        if (response.status === 422 && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          const validationErrors = Object.values(errorData.errors || errorData)
+            .flat()
+            .join("\n");
+          throw new Error(`Gagal validasi:\n${validationErrors}`);
         }
-        throw new Error(errorData.message || "Gagal menyimpan perubahan.");
+
+        const fallbackMessage = contentType.includes("application/json")
+          ? (await response.json())?.message
+          : await response.text();
+        throw new Error(fallbackMessage || "Gagal menyimpan perubahan.");
       }
 
       alert("Data berita berhasil diperbarui!");
-      router.push("/dashboard/berita-mahasiswa"); 
-
+      router.push("/dashboard/berita-mahasiswa");
+      router.refresh();
     } catch (err: any) {
-      setError(err.message);
-      alert(`Error: ${err.message}`);
+      const message = err?.message ?? "Terjadi kesalahan saat menyimpan data.";
+      setError(message);
+      alert(`Error: ${message}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   if (isLoadingData) {
-    return <div className="flex justify-center items-center h-screen"><Spinner size="lg" /></div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   return (
@@ -150,43 +202,66 @@ export default function EditBeritaPage() {
       <form onSubmit={handleSubmit} className="w-full p-6 bg-white rounded-lg text-black space-y-4">
         <div>
           <label className="font-bold">Judul Berita:</label>
-          <Input name="judul" value={formData.judul} onChange={handleChange} variant="bordered" isRequired />
+          <Input
+            name="judul"
+            value={formData.judul}
+            onChange={handleChange}
+            variant="bordered"
+            isRequired
+          />
         </div>
         <div>
           <label className="font-bold">Kepala Berita:</label>
-          <Input name="kepala_berita" value={formData.kepala_berita} onChange={handleChange} variant="bordered" />
+          <Input
+            name="kepala_berita"
+            value={formData.kepala_berita}
+            onChange={handleChange}
+            variant="bordered"
+          />
         </div>
         <div>
           <label className="font-bold">Tubuh Berita:</label>
-          <Textarea name="tubuh_berita" value={formData.tubuh_berita} onChange={handleChange} variant="bordered" isRequired />
+          <Textarea
+            name="tubuh_berita"
+            value={formData.tubuh_berita}
+            onChange={handleChange}
+            variant="bordered"
+            isRequired
+          />
         </div>
         <div>
           <label className="font-bold">Ekor Berita:</label>
-          <Input name="ekor_berita" value={formData.ekor_berita} onChange={handleChange} variant="bordered" />
+          <Input
+            name="ekor_berita"
+            value={formData.ekor_berita}
+            onChange={handleChange}
+            variant="bordered"
+          />
         </div>
 
         <div>
           <label className="font-bold">Gambar Berita:</label>
-          
-          {/* # Perbedaan 4: Menampilkan preview gambar */}
           {gambarPreview && (
             <div className="mt-4">
-                <p className="text-sm text-gray-600 mb-2">Preview Gambar:</p>
-                
-                <img src={gambarPreview} alt="Preview Gambar Berita" className="w-full max-w-sm h-auto rounded-lg object-cover" />
+              <p className="text-sm text-gray-600 mb-2">Preview Gambar:</p>
+              <img
+                src={gambarPreview}
+                alt="Preview Gambar Berita"
+                className="w-full max-w-sm h-auto rounded-lg object-cover"
+              />
             </div>
           )}
 
           <div className="mt-4">
-            <input 
-              type="file" 
+            <input
+              type="file"
               id="gambar_berita_input"
-              name="gambar_berita" 
-              onChange={handleFileChange} 
+              name="gambar_berita"
+              onChange={handleFileChange}
               className="hidden"
-              accept="image/*" // Batasi hanya file gambar
+              accept="image/*"
             />
-            <label 
+            <label
               htmlFor="gambar_berita_input"
               className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 transition-colors w-max"
             >
@@ -199,9 +274,13 @@ export default function EditBeritaPage() {
 
         <div className="mt-8 flex justify-end">
           <Button color="primary" type="submit" className="font-bold" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner size="sm" color="white" /> : 'Update Data'}
+            {isSubmitting ? <Spinner size="sm" color="white" /> : "Update Data"}
           </Button>
         </div>
+
+        {error && (
+          <p className="text-sm text-red-500 mt-2">{error}</p>
+        )}
       </form>
     </>
   );
