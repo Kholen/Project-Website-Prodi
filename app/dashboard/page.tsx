@@ -26,6 +26,8 @@ import {
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import DashboardClient from "./DashboardClient";
 
+const BACKEND_URL = "http://localhost:8000";
+
 interface ImageUrl {
   id: number;
   url: string;
@@ -38,7 +40,7 @@ interface RelasiProdi {
 
 interface Dosen {
   id: number;
-  image_url: ImageUrl[];
+  images: ImageUrl[];
   nama: string;
   NUPTK: string;
   prodis?: RelasiProdi[];
@@ -382,12 +384,14 @@ export default function PageDataDosen() {
 
       switch (key) {
         case "name":
+          const imageUrl = item.dosen.images?.[0]?.url;
+          const fullImageUrl = imageUrl ? `${BACKEND_URL}${imageUrl}` : undefined;
           return (
             <User
               avatarProps={{
                 radius: "full",
                 size: "sm",
-                src: item.dosen.image_url?.[0]?.url,
+                src: fullImageUrl,
               }}
               classNames={{description: "text-default-500"}}
               description={item.nuptk || "-"}
