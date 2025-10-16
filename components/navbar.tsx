@@ -85,7 +85,7 @@ export const Navbar = () => {
   };
 
     //agar tidak muncul pada sign in dan dashboard
-      const adminPathname = pathname.startsWith("/dashboard")|| pathname.startsWith("/tentang-mahasiswa/berita");
+      const adminPathname = pathname.startsWith("/dashboard")|| pathname.startsWith("/aktivitas-mahasiswa/berita");
       const isHidden = pathname === "/sign-in" || adminPathname;
 //
 
