@@ -21,7 +21,6 @@ export default function TambahDosenPage() {
     nama: "",
     NUPTK: "",
     email: "",
-    image_url: "",
   });
 
   // State untuk mengelola daftar relasi
