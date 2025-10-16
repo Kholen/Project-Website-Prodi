@@ -13,11 +13,6 @@ interface SimpleRelasi {
   nama_prodi?: string;
 }
 
-interface ImageUrl {
-  id: number;
-  url: string;
-}
-
 // Tipe untuk data dari API
 interface ApiDosenData {
   nama: string;
@@ -26,7 +21,7 @@ interface ApiDosenData {
   skills: SimpleRelasi[];
   jabatans: SimpleRelasi[];
   prodis: SimpleRelasi[];
-  image_url: ImageUrl[];
+  image: string;
 }
 
 // Tipe yang dibutuhkan oleh card
@@ -192,15 +187,15 @@ export default function HomeIf() {
         const kerjasamaData: { nama_prodi: string; daftar_kerjasama: string | null }[] = await kerjasamaResponse.json();
         // Transformasi data dari format API ke format yang dibutuhkan komponen yang kemudian dipecah atau disusun
         const transformedData: PersonData[] = apiData.map((dosen) => {
-          const jobList = dosen.jabatans.map(j => j.nama_jabatan).filter(Boolean) as string[];
+          const jobList = dosen.jabatans.map((j) => j.nama_jabatan).filter(Boolean) as string[];
 
           return {
             name: dosen.nama,
             nuptk: dosen.NUPTK,
-            prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
-            job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
+            prodi: dosen.prodis?.[0]?.nama_prodi ?? "", // Ambil dari array prodis
+            job: jobList.join(", "), // Gabungkan daftar jabatan menjadi string
             contact: dosen.email,
-            imageUrl: dosen.image_url?.[0]?.url ?? '',
+            imageUrl: dosen.image,
             jobs: jobList, // Simpan dalam bentuk array
           };
         });
@@ -233,11 +228,12 @@ export default function HomeIf() {
   const kerjasamaProdi = kerjasamaList.filter((group) => group.prodi.trim().toLowerCase() == "teknik informatika");
   const kerjasamaLinks = kerjasamaProdi.flatMap((group) => group.links);
 
-  if (loading)   return (
-        <div className="flex justify-center py-10">
-          <Spinner variant="dots" label="Memuat data Kepala Prodi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
-        </div>
-      );
+  if (loading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner variant="dots" label="Memuat data Kepala Prodi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
@@ -395,7 +391,7 @@ export default function HomeIf() {
 
                     // Mengubah warna teks dari tab yang aktif
                     tabContent: "group-data-[selected=true]:text-white",
-        
+
                     panel: "w-full",
                   }}
                 >
@@ -456,9 +452,9 @@ export default function HomeIf() {
                   {/* pemetaan link, serta pengecekan link */}
                   {kerjasamaLinks.map((link, index) => {
                     const normalisasiLink = link.trim();
-                    const Url = normalisasiLink.startsWith("http://") || normalisasiLink.startsWith("https://");
-                    const imageSrc = Url ? normalisasiLink : "https://heroui.com/images/hero-card-complete.jpeg";
-
+                    let imageSrc = ["jpg", "jpeg", "png", "webp"].some((e) => normalisasiLink.toLowerCase().endsWith(e))
+                      ? normalisasiLink
+                      : "https://heroui.com/images/hero-card.jpeg"; // Ganti dengan URL gambar default jika bukan link gambar
                     return (
                       <Image
                         key={`kerjasama-si-${index}`}
@@ -543,4 +539,3 @@ export default function HomeIf() {
     </div>
   );
 }
-

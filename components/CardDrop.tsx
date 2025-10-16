@@ -14,11 +14,6 @@ interface SimpleRelation {
   nama_prodi?: string;
 }
 
-interface ImageUrl {
-  id: number;
-  url: string;
-}
-
 interface ApiDosenData {
   id: number;
   nama: string;
@@ -27,7 +22,7 @@ interface ApiDosenData {
   prodis: SimpleRelation[];
   skills: SimpleRelation[];
   jabatans: SimpleRelation[];
-  image_url: ImageUrl[];
+  image: string;
 }
 
 interface PersonData {
@@ -167,7 +162,6 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
           const skills = (dosen.skills ?? [])
             .map((skill) => skill.nama_skill)
             .filter((skill): skill is string => Boolean(skill));
-          const imageUrl = dosen.image_url?.[0]?.url ?? "";
 
           return {
             name: dosen.nama,
@@ -175,7 +169,7 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
             prodi: prodiName,
             job: jobs,
             contact: dosen.email ?? "Tidak tersedia",
-            imageUrl,
+            imageUrl: dosen.image || "/default-profile.png",
             skills,
           };
         });
