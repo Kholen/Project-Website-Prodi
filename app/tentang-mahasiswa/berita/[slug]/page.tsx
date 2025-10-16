@@ -39,7 +39,7 @@ export default function TentangMhsDetail() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`http://localhost:8000/api/berita/${slug}`, {
+        const response = await fetch(`/api/berita/${slug}`, {
           cache: "no-store",
         });
 
@@ -115,7 +115,7 @@ export default function TentangMhsDetail() {
 
   return (
     <section className="container p-8">
-      <Button className="mb-4 bg-[#0a0950] text-white" onPress={() => router.back()}>
+      <Button className="mb-8 bg-[#0a0950] text-white" onPress={() => router.back()}>
         <FiArrowLeft />
         Kembali
       </Button>
@@ -132,9 +132,9 @@ export default function TentangMhsDetail() {
             />
           </figure>
 
-          {data.kepala_berita && <p className="indent-8 text-justify leading-relaxed">{data.kepala_berita}</p>}
-          {data.tubuh_berita && <p className="indent-8 text-justify leading-relaxed">{data.tubuh_berita}</p>}
-          {data.ekor_berita && <p className="indent-8 text-justify leading-relaxed">{data.ekor_berita}</p>}
+          {data.kepala_berita && <p className="indent-8 text-justify leading-relaxed mb-2">{data.kepala_berita}</p>}
+          {data.tubuh_berita && <p className="indent-8 text-justify leading-relaxed mb-4">{data.tubuh_berita}</p>}
+          {data.ekor_berita && <p className="indent-8 text-justify leading-relaxed mb-4">{data.ekor_berita}</p>}
         </header>
       </article>
     </section>

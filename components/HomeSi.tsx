@@ -13,11 +13,6 @@ interface SimpleRelasi {
   nama_prodi?: string;
 }
 
-interface ImageUrl {
-  id: number;
-  url: string;
-}
-
 // Tipe untuk data dari API
 interface ApiDosenData {
   id:string;
@@ -27,7 +22,7 @@ interface ApiDosenData {
   skills: SimpleRelasi[];
   jabatans: SimpleRelasi[];
   prodis: SimpleRelasi[];
-  image_url: ImageUrl[];
+  image: string;
 }
 
 // Tipe yang dibutuhkan oleh card
@@ -202,7 +197,7 @@ export default function HomeSI() {
             prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
             job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
             contact: dosen.email,
-            imageUrl: dosen.image_url?.[0]?.url ?? '',
+            imageUrl: dosen.image,
             jobs: jobList, // Simpan dalam bentuk array
           };
         });
@@ -453,8 +448,9 @@ export default function HomeSI() {
                   {/* pemetaan link, serta pengecekan link */}
                   {kerjasamaLinks.map((link, index) => {
                     const normalisasiLink = link.trim();
-                    const Url = normalisasiLink.startsWith("http://") || normalisasiLink.startsWith("https://");
-                    const imageSrc = Url ? normalisasiLink : "https://heroui.com/images/hero-card-complete.jpeg";
+                    let imageSrc = ["jpg", "jpeg", "png", "webp"].some((e) => normalisasiLink.toLowerCase().endsWith(e))
+                      ? normalisasiLink
+                      : "https://heroui.com/images/hero-card.jpeg"; // Ganti dengan URL gambar default jika bukan link gambar
                     return (
                       <Image
                         key={`kerjasama-si-${index}`}

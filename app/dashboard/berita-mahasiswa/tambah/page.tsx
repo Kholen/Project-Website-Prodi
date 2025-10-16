@@ -67,7 +67,7 @@ export default function TambahBeritaPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/berita`, {
+      const response = await fetch(`/api/berita`, {
         method: "POST",
         body: data,
       });
@@ -106,7 +106,7 @@ export default function TambahBeritaPage() {
         </div>
         <div>
           <label className="font-bold">Kepala Berita:</label>
-          <Input name="kepala_berita" value={formData.kepala_berita} onChange={handleChange} variant="bordered" />
+          <Textarea name="kepala_berita" value={formData.kepala_berita} onChange={handleChange} variant="bordered" />
         </div>
         <div>
           <label className="font-bold">Tubuh Berita:</label>
@@ -114,7 +114,7 @@ export default function TambahBeritaPage() {
         </div>
         <div>
           <label className="font-bold">Ekor Berita:</label>
-          <Input name="ekor_berita" value={formData.ekor_berita} onChange={handleChange} variant="bordered" />
+          <Textarea name="ekor_berita" value={formData.ekor_berita} onChange={handleChange} variant="bordered" />
         </div>
 
         <div>
