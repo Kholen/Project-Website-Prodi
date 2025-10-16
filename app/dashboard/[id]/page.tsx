@@ -7,10 +7,6 @@ import { Input, Button, Image, Dropdown, DropdownItem, DropdownMenu, DropdownTri
 import { FiUpload } from "react-icons/fi";
 
 // Tipe Data
-interface ImageUrl {
-  id: number;
-  url: string;
-}
 interface SimpleRelasi {
   id: number;
   [key: string]: any;
@@ -20,7 +16,7 @@ interface Dosen {
   nama: string;
   NUPTK: string;
   email: string;
-  images: ImageUrl[];
+  image: string;
   prodis: SimpleRelasi[];
   jabatans: SimpleRelasi[];
   skills: SimpleRelasi[];
@@ -77,7 +73,7 @@ export default function UpdateDosenPage() {
         setSelectedSkills(dosenData.skills || []);
         setSelectedProdiIds(dosenData.prodis?.map(p => p.id) || []);
         
-        const initialImageUrl = dosenData.images?.[0]?.url;
+        const initialImageUrl = dosenData.image;
         if (initialImageUrl) {
           setImagePreview(initialImageUrl.startsWith('http') ? initialImageUrl : `${BACKEND_URL}${initialImageUrl}`);
         }
