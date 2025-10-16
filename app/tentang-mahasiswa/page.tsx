@@ -6,7 +6,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { cn } from "@/lib/utils";
 import { Spinner } from "@heroui/react";
 
-interface BeritaMhsItem {
+interface TentangMhsItem {
   nomor: number;
   title: string;
   link: string;
@@ -27,7 +27,7 @@ interface ApiBerita {
   created_at: string;
 }
 
-function BeritaMhsCard({ item }: { item: BeritaMhsItem }) {
+function TentangMhsCard({ item }: { item: TentangMhsItem }) {
   return (
     <div className="group relative aspect-[19/20] w-full overflow-hidden rounded-2xl shadow-lg">
       <img
@@ -58,8 +58,8 @@ function BeritaMhsCard({ item }: { item: BeritaMhsItem }) {
   );
 }
 
-export default function AktivitasMhs() {
-  const [pageContent, setPageContent] = useState <BeritaMhsItem[]>([]);
+export default function TentangMhs() {
+  const [pageContent, setPageContent] = useState<TentangMhsItem[]>([]);
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -148,7 +148,7 @@ export default function AktivitasMhs() {
         <CarouselContent className="">
           {pageContent.map((item, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-              <BeritaMhsCard item={item} />
+              <TentangMhsCard item={item} />
             </CarouselItem>
           ))}
         </CarouselContent>

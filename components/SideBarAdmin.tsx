@@ -91,7 +91,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
         <button
           type="button"
           onClick={handleLogout}
-          className={`flex items-center h-16 rounded-md transition-colors duration-200 group text-danger hover:bg-danger/20 ${
+          className={`flex items-center h-16 rounded-md transition-colors duration-200 group text-red-400 hover:bg-red-500/20 ${
             isOpen ? "justify-start px-5" : "justify-center"
           } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400`}
         >
