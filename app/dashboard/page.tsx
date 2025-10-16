@@ -26,11 +26,6 @@ import {
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import DashboardClient from "./DashboardClient";
 
-interface ImageUrl {
-  id: number;
-  url: string;
-}
-
 interface RelasiProdi {
   id: number;
   nama_prodi?: string;
@@ -38,7 +33,7 @@ interface RelasiProdi {
 
 interface Dosen {
   id: number;
-  image_url: ImageUrl[];
+  image: string;
   nama: string;
   NUPTK: string;
   prodis?: RelasiProdi[];
@@ -69,6 +64,7 @@ type DosenRow = {
   nuptk: string;
   prodi: string[];
   dosen: Dosen;
+  imageDosen: string;
 };
 
 const INITIAL_VISIBLE_COLUMNS: ColumnKey[] = ["name", "nuptk", "prodi", "actions"];
@@ -149,7 +145,7 @@ export default function PageDataDosen() {
     async function fetchData() {
       try {
         setError(null);
-        const response = await fetch("http://localhost:8000/api/dosen");
+        const response = await fetch("/api/dosen");
         if (!response.ok) {
           throw new Error("Gagal mengambil data dari server");
         }
@@ -182,7 +178,7 @@ export default function PageDataDosen() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/dosen/${id}`, {
+      const response = await fetch(`/api/dosen/${id}`, {
         method: "DELETE",
       });
 
@@ -281,6 +277,7 @@ export default function PageDataDosen() {
       id: dosen.id,
       name: dosen.nama ?? "-",
       nuptk: dosen.NUPTK ?? "-",
+      imageDosen: dosen.image,
       prodi: (dosen.prodis ?? []).map((prodi) => prodi.nama_prodi ?? "").filter((name) => name.trim().length > 0),
       dosen,
     }));
@@ -355,7 +352,7 @@ export default function PageDataDosen() {
               avatarProps={{
                 radius: "full",
                 size: "sm",
-                src: item.dosen.image_url?.[0]?.url,
+                src: item.imageDosen,
               }}
               classNames={{ description: "text-default-500" }}
               description={item.nuptk || "-"}

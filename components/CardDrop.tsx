@@ -169,7 +169,7 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
             prodi: prodiName,
             job: jobs,
             contact: dosen.email ?? "Tidak tersedia",
-            imageUrl: dosen.image || "/default-profile.png",
+            imageUrl: dosen.image || "/logo-white.png",
             skills,
           };
         });
