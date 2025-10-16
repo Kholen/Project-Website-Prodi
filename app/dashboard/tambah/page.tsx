@@ -3,7 +3,8 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import DashboardClient from "@/app/dashboard/DashboardClient"; // Sesuaikan path jika perlu
-import { Input, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Selection, Spinner } from "@heroui/react";
+import { Input, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Selection, Spinner, Image } from "@heroui/react";
+import { FiUpload } from "react-icons/fi";
 
 // Tipe Data (bisa ditaruh di file terpisah agar bisa di-import)
 interface SimpleRelasi {
@@ -24,6 +25,10 @@ export default function TambahDosenPage() {
   });
 
   // State untuk mengelola daftar relasi
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [fileName, setFileName] = useState("Pilih file gambar...");
+
   const [selectedJabatans, setSelectedJabatans] = useState<SimpleRelasi[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<SimpleRelasi[]>([]);
   const [selectedProdiIds, setSelectedProdiIds] = useState<number[]>([]); // State untuk prodi
@@ -39,6 +44,7 @@ export default function TambahDosenPage() {
 
   // State untuk loading dan error
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // useEffect untuk mengambil data master (jabatan, skill, prodi)
@@ -72,6 +78,15 @@ export default function TambahDosenPage() {
     fetchMasterData();
   }, []);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImageFile(file); // Simpan file yang akan di-upload
+      setFileName(file.name);
+      // Buat URL sementara untuk preview gambar
+      setImagePreview(URL.createObjectURL(file)); 
+    }
+  };
   // --- Event Handlers ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -107,24 +122,33 @@ export default function TambahDosenPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!confirm("Simpan data dosen baru?")) return;
+    setIsSubmitting(true);
 
-    const payload = {
-      ...formData,
-      prodi_ids: selectedProdiIds,
-      jabatan_ids: selectedJabatans.map((j) => j.id),
-      skill_ids: selectedSkills.map((s) => s.id),
-    };
+    // Gunakan FormData untuk mengirim file
+    const data = new FormData();
+    data.append("nama", formData.nama);
+    data.append("NUPTK", formData.NUPTK);
+    data.append("email", formData.email);
+
+    // Kirim file gambar HANYA jika ada yang dipilih
+    if (imageFile) {
+      data.append("image", imageFile); // 'image' harus cocok dengan nama di backend
+    }
+    
+    // Kirim ID relasi sebagai array
+    selectedProdiIds.forEach(id => data.append('prodi_ids[]', String(id)));
+    selectedJabatans.forEach(j => data.append('jabatan_ids[]', String(j.id)));
+    selectedSkills.forEach(s => data.append('skill_ids[]', String(s.id)));
 
     try {
       const response = await fetch(`http://localhost:8000/api/dosen`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
+        // Hapus header 'Content-Type', browser akan otomatis mengaturnya untuk FormData
+        body: data,
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        // Menampilkan error validasi dari Laravel
         if (response.status === 422) {
           const validationErrors = Object.values(errorData.errors).flat().join("\n");
           throw new Error(`Gagal validasi:\n${validationErrors}`);
@@ -133,9 +157,11 @@ export default function TambahDosenPage() {
       }
 
       alert("Dosen baru berhasil ditambahkan!");
-      router.push("/dashboard"); // Sesuaikan dengan path halaman daftar Anda
+      router.push("/dashboard"); 
     } catch (err: any) {
       alert(`Error: ${err.message}`);
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
@@ -175,12 +201,6 @@ export default function TambahDosenPage() {
           <label className="font-bold">email:</label>
           <Input name="email" value={formData.email} onChange={handleChange} variant="bordered" placeholder="Contoh: sttindonesia@gmail.com" />
         </div>
-        <div>
-          <label className="font-bold">Url Image Dosen:</label>
-          <Input name="image_url" value={formData.image_url} onChange={handleChange} variant="bordered" placeholder="https://.../gambar.png" />
-        </div>
-
-        <hr className="my-4" />
 
         {/* Anda perlu menambahkan dropdown untuk Prodi di sini, contoh: */}
         <div>
@@ -278,6 +298,25 @@ export default function TambahDosenPage() {
             ))}
           </div>
         </div>
+
+        <div>
+          <label className="font-bold">Gambar Dosen:</label>
+          <div className="mt-2">
+            <input type="file" id="image_input" name="image" onChange={handleFileChange} className="hidden" accept="image/png, image/jpeg, image/jpg, image/gif"/>
+            <label htmlFor="image_input" className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 w-max">
+              <FiUpload />
+              <span>{fileName}</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Tampilkan preview gambar jika ada */}
+        {imagePreview && (
+          <div className="mt-4">
+            <p className="font-bold mb-2">Preview:</p>
+            <Image src={imagePreview} alt="Preview Dosen" width={200} className="rounded-lg object-cover" />
+          </div>
+        )}
 
         <div className="mt-8 flex justify-end">
           <Button color="success" type="submit" className="font-bold text-white">
