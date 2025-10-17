@@ -17,8 +17,8 @@ export const siteConfig = {
       href: "/riset-publikasi",
     },
     {
-      label: "Tentang Mahasiswa",
-      href: "/tentang-mahasiswa",
+      label: "Aktivitas Mahasiswa",
+      href: "/aktivitas-mahasiswa",
     },
     {
       label: "Daftar Dosen",

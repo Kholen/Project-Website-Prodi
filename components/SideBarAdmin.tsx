@@ -53,11 +53,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
         </button>
       </div>
 
-      <div
-        className={`flex w-full items-center border-y border-black py-2 ${
-          isOpen ? "justify-start gap-4" : "justify-center"
-        }`}
-      >
+      <div className={`flex w-full items-center border-y border-black py-2 ${isOpen ? "justify-start gap-4" : "justify-center"}`}>
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
           <FiUser className="text-3xl text-black" />
         </div>
@@ -74,10 +70,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
                   isOpen ? "px-5 justify-start" : "justify-center"
                 } ${pathname === item.href ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
               >
-                <item.icon
-                  size={25}
-                  className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
-                />
+                <item.icon size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
                 <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full ml-4" : "w-0 ml-0"}`}>
                   <span className="whitespace-nowrap">{item.label}</span>
                 </div>
@@ -91,7 +84,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
         <button
           type="button"
           onClick={handleLogout}
-          className={`flex items-center h-16 rounded-md transition-colors duration-200 group text-red-400 hover:bg-red-500/20 ${
+          className={`flex items-center h-16 rounded-md transition-colors duration-200 group text-danger hover:bg-danger/20 ${
             isOpen ? "justify-start px-5" : "justify-center"
           } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400`}
         >

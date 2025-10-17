@@ -51,7 +51,7 @@ export default function TambahRisetPage() {
 
     try {
       // Mengirim data dari formData
-      const response = await fetch(`http://localhost:8000/api/riset`, {
+      const response = await fetch("/api/riset", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(formData),
