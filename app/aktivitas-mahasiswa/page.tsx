@@ -129,7 +129,7 @@ export default function AktivitasMhs() {
   if (loading)
     return (
       <div className="flex justify-center py-10">
-        <Spinner variant="dots" label="Memuat Informasi Tentang Mahasiswa..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+        <Spinner variant="dots" label="Memuat Informasi Aktivitas Mahasiswa..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
       </div>
     );
 
