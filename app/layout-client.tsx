@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -30,7 +30,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
 
     return () => clearTimeout(timer);
   }, [pathname]);
-  const hiddenRoutes = pathname.startsWith("/dashboard") || pathname.startsWith("/tentang-mahasiswa/berita");
+  const hiddenRoutes = pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-mahasiswa/berita");
   const isPathname = hiddenRoutes;
 
   return (
@@ -41,7 +41,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
       <ProdiProvider>
         <Banner />
 
-        {!isPathname && ( 
+        {!isPathname && (
           <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M0,160L60,144C120,128,240,96,360,122.7C480,149,600,235,720,250.7C840,267,960,213,1080,197.3C1200,181,1320,203,1380,213.3L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"

@@ -13,14 +13,12 @@ import { siteConfig } from "@/config/site";
 export const Navbar = () => {
   const pathname = usePathname();
   // State untuk menyimpan hash aktif
-  const [activeHash, setActiveHash] = useState(""); 
+  const [activeHash, setActiveHash] = useState("");
 
   // Effect untuk mendeteksi scroll dan mengupdate hash aktif
   useEffect(() => {
     const handleScroll = () => {
-      const sections = siteConfig.navItems
-        .filter((item) => item.href.startsWith("/#"))
-        .map((item) => item.href.substring(2)); // e.g., "Visi-Misi"
+      const sections = siteConfig.navItems.filter((item) => item.href.startsWith("/#")).map((item) => item.href.substring(2)); // e.g., "Visi-Misi"
 
       let currentSection = "";
 
@@ -55,7 +53,6 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
-
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (pathname === "/" && href.startsWith("/#")) {
       e.preventDefault();
@@ -84,10 +81,10 @@ export const Navbar = () => {
     // Untuk link ke halaman lain, biarkan default behavior
   };
 
-    //agar tidak muncul pada sign in dan dashboard
-      const adminPathname = pathname.startsWith("/dashboard")|| pathname.startsWith("/tentang-mahasiswa/berita");
-      const isHidden = pathname === "/sign-in" || adminPathname;
-//
+  //agar tidak muncul pada sign in dan dashboard
+  const adminPathname = pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-mahasiswa/berita");
+  const isHidden = pathname === "/sign-in" || adminPathname;
+  //
 
   return (
     <HeroUINavbar className={`${isHidden && "hidden"}`} maxWidth="xl" position="sticky">

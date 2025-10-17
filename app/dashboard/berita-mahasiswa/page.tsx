@@ -13,19 +13,14 @@ type Berita = {
 };
 
 async function getBeritaData(): Promise<Berita[]> {
-  const backendUrl =
-    process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
-
   try {
-    const response = await fetch(`${backendUrl}/api/berita`, {
+    const response = await fetch("http://localhost:8000/api/berita", {
       cache: "no-store",
       headers: { Accept: "application/json" },
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Gagal mengambil data dari backend: ${response.status} ${response.statusText}`
-      );
+      throw new Error("Gagal mengambil data dari API");
     }
 
     const data = await response.json();

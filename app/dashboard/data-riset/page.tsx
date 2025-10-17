@@ -18,17 +18,18 @@ type Riset = {
 // Fungsi untuk mengambil data di server
 async function getRisetData(): Promise<Riset[]> {
   try {
-    const response = await fetch('http://localhost:8000/api/riset', {
-      cache: 'no-store' // Data selalu baru setiap request
+    const response = await fetch("http://localhost:8000/api/riset", {
+      cache: "no-store", // Data selalu baru setiap request
     });
     if (!response.ok) {
       // Di Server Component, lebih baik melempar error agar ditangkap oleh error boundary Next.js
-      throw new Error('Gagal mengambil data dari API');
+      throw new Error("Gagal mengambil data dari API");
     }
-    return response.json();
+    const data = await response.json();
+    return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Fetch Error:", error);
-    return []; // Kembalikan array kosong jika gagal
+    console.error("Fetch Error (dashboard/berita-mahasiswa):", error);
+    return [];
   }
 }
 
@@ -41,9 +42,9 @@ export default async function RisetPage() {
     <section className="">
       <div className="w-full p-4 bg-white text-black rounded-lg mb-10 text-center shadow-xl">
         <h1 className="text-2xl font-bold mb-5">Daftar Riset STTI Tanjungpinang</h1>
-      
-      {/* Teruskan data awal sebagai prop ke komponen client */}
-      <RisetTable initialData={initialRisetData} />
+
+        {/* Teruskan data awal sebagai prop ke komponen client */}
+        <RisetTable initialData={initialRisetData} />
       </div>
     </section>
   );

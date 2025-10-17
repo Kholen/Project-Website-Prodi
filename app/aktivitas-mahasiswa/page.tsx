@@ -6,7 +6,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { cn } from "@/lib/utils";
 import { Spinner } from "@heroui/react";
 
-interface TentangMhsItem {
+interface BeritaMhsItem {
   nomor: number;
   title: string;
   link: string;
@@ -27,7 +27,7 @@ interface ApiBerita {
   created_at: string;
 }
 
-function TentangMhsCard({ item }: { item: TentangMhsItem }) {
+function BeritaMhsCard({ item }: { item: BeritaMhsItem }) {
   return (
     <div className="group relative aspect-[19/20] w-full overflow-hidden rounded-2xl shadow-lg">
       <img
@@ -58,8 +58,8 @@ function TentangMhsCard({ item }: { item: TentangMhsItem }) {
   );
 }
 
-export default function TentangMhs() {
-  const [pageContent, setPageContent] = useState<TentangMhsItem[]>([]);
+export default function AktivitasMhs() {
+  const [pageContent, setPageContent] = useState<BeritaMhsItem[]>([]);
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -83,7 +83,7 @@ export default function TentangMhs() {
         const mapped = data.map((item) => ({
           nomor: item.id,
           title: item.judul,
-          link: `/tentang-mahasiswa/berita/${item.slug}`,
+          link: `/aktivitas-mahasiswa/berita/${item.slug}`,
           tanggal: new Date(item.created_at).toLocaleDateString("id-ID", {
             year: "numeric",
             month: "long",
@@ -129,7 +129,7 @@ export default function TentangMhs() {
   if (loading)
     return (
       <div className="flex justify-center py-10">
-        <Spinner variant="dots" label="Memuat Informasi Tentang Mahasiswa..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+        <Spinner variant="dots" label="Memuat Informasi Aktivitas Mahasiswa..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
       </div>
     );
 
@@ -140,15 +140,15 @@ export default function TentangMhs() {
   return (
     <section className="container space-y-6 px-6 py-10">
       <div className="flex flex-col gap-2 text-center">
-        <h2 className="text-2xl font-bold sm:text-3xl">Tentang Mahasiswa</h2>
-        <p className="text-sm text-neutral-500">Sorotan aktivitas dan berita terbaru mahasiswa STTI Tanjungpinang.</p>
+        <h2 className="text-2xl font-bold sm:text-3xl">Aktivitas Mahasiswa</h2>
+        <p className="text-sm text-neutral-500">Sorotan Aktivitas dan Berita terbaru mahasiswa STTI Tanjungpinang.</p>
       </div>
 
       <Carousel className="w-full" setApi={setApi}>
         <CarouselContent className="">
           {pageContent.map((item, index) => (
             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-              <TentangMhsCard item={item} />
+              <BeritaMhsCard item={item} />
             </CarouselItem>
           ))}
         </CarouselContent>
