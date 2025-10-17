@@ -8,6 +8,7 @@ import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoSearchSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
+import { extractPlainText } from "@/lib/richText";
 
 type Berita = {
   id: number;
@@ -123,13 +124,15 @@ export default function BeritaTable({ initialData }: { initialData: Berita[] }) 
           const rowNumber = (page - 1) * rowsPerPage + index + 1;
           return <span className="font-semibold text-gray-800">{rowNumber}</span>;
         }
-        case "judul":
+        case "judul": {
+          const preview = extractPlainText(berita.kepala_berita);
           return (
             <div>
               <p className="font-medium text-gray-900">{berita.judul}</p>
-              {berita.kepala_berita && <p className="text-gray-500 text-xs mt-1 line-clamp-2">{berita.kepala_berita}</p>}
+              {preview && <p className="text-gray-500 text-xs mt-1 line-clamp-2">{preview}</p>}
             </div>
           );
+        }
         case "created_at":
           return new Date(berita.created_at).toLocaleDateString("id-ID", {
             year: "numeric",

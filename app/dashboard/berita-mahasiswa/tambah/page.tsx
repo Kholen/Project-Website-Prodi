@@ -1,9 +1,11 @@
-"use client";
+﻿"use client";
 
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import DashboardClient from "@/app/dashboard/DashboardClient";
-import { Input, Button, Spinner, Textarea } from "@heroui/react"; // Sesuaikan library UI Anda
+import { Input, Button, Spinner } from "@heroui/react"; // Sesuaikan library UI Anda
+import RichTextEditor from "@/components/RichTextEditor";
+import { isRichTextEmpty, normalizeRichText } from "@/lib/richText";
 import { FiUpload } from "react-icons/fi";
 
 // # Perbaikan 1: Tipe data form disesuaikan untuk file
@@ -31,8 +33,12 @@ export default function TambahBeritaPage() {
   const [error, setError] = useState<string | null>(null);
 
   // Handler untuk input teks biasa
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleRichTextChange = (field: keyof Pick<BeritaFormData, "kepala_berita" | "tubuh_berita" | "ekor_berita">) => (value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   // # Perbaikan 2: Handler KHUSUS untuk input file
@@ -49,15 +55,19 @@ export default function TambahBeritaPage() {
     e.preventDefault();
     if (!confirm("Simpan data berita baru?")) return;
 
+    if (isRichTextEmpty(formData.tubuh_berita)) {
+      alert("Isi tubuh berita tidak boleh kosong!");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
-    // Buat objek FormData untuk mengirim file
     const data = new FormData();
     data.append('judul', formData.judul);
-    data.append('kepala_berita', formData.kepala_berita);
-    data.append('tubuh_berita', formData.tubuh_berita);
-    data.append('ekor_berita', formData.ekor_berita);
+    data.append('kepala_berita', normalizeRichText(formData.kepala_berita));
+    data.append('tubuh_berita', normalizeRichText(formData.tubuh_berita));
+    data.append('ekor_berita', normalizeRichText(formData.ekor_berita));
     if (formData.gambar_berita) {
       data.append('gambar_berita', formData.gambar_berita);
     } else {
@@ -105,16 +115,34 @@ export default function TambahBeritaPage() {
           <Input name="judul" value={formData.judul} onChange={handleChange} variant="bordered" isRequired />
         </div>
         <div>
-          <label className="font-bold">Kepala Berita:</label>
-          <Textarea name="kepala_berita" value={formData.kepala_berita} onChange={handleChange} variant="bordered" />
+          <label className="font-bold" htmlFor="kepala_berita">Kepala Berita:</label>
+          <RichTextEditor
+            id="kepala_berita"
+            value={formData.kepala_berita}
+            onChange={handleRichTextChange("kepala_berita")}
+            placeholder="Tulis paragraf pembuka berita..."
+            className="mt-2"
+          />
         </div>
         <div>
-          <label className="font-bold">Tubuh Berita:</label>
-          <Textarea name="tubuh_berita" value={formData.tubuh_berita} onChange={handleChange} variant="bordered" isRequired />
+          <label className="font-bold" htmlFor="tubuh_berita">Tubuh Berita:</label>
+          <RichTextEditor
+            id="tubuh_berita"
+            value={formData.tubuh_berita}
+            onChange={handleRichTextChange("tubuh_berita")}
+            placeholder="Tulis isi utama berita..."
+            className="mt-2"
+          />
         </div>
         <div>
-          <label className="font-bold">Ekor Berita:</label>
-          <Textarea name="ekor_berita" value={formData.ekor_berita} onChange={handleChange} variant="bordered" />
+          <label className="font-bold" htmlFor="ekor_berita">Ekor Berita:</label>
+          <RichTextEditor
+            id="ekor_berita"
+            value={formData.ekor_berita}
+            onChange={handleRichTextChange("ekor_berita")}
+            placeholder="Tulis penutup berita (opsional)..."
+            className="mt-2"
+          />
         </div>
 
         <div>

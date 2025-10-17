@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @config "../tailwind.config.js";
 
@@ -71,4 +71,52 @@ body::-webkit-scrollbar {
 .imgBanner {
   background-image: url("/b.png");
   border-bottom: 5px solid white;
+}
+
+.rich-text-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rich-text-editor .ql-toolbar,
+.rich-text-editor .ql-container {
+  border-color: #d4d4d8;
+}
+
+.rich-text-editor .ql-toolbar {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  background-color: #f9fafb;
+}
+
+.rich-text-editor .ql-container {
+  min-height: 12rem;
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  font-family: inherit;
+}
+
+.rich-text-editor .ql-editor {
+  min-height: 8rem;
+  line-height: 1.65;
+}
+
+.rich-text-content p {
+  margin-bottom: 1rem;
+}
+
+.rich-text-content ul,
+.rich-text-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.rich-text-content h1,
+.rich-text-content h2,
+.rich-text-content h3,
+.rich-text-content h4 {
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
 }

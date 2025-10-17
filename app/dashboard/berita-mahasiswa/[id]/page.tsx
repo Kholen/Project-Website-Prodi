@@ -3,7 +3,9 @@
 import React, { useState, FormEvent, ChangeEvent, useEffect, useMemo } from "react";
 import { useRouter, useParams } from "next/navigation";
 import DashboardClient from "@/app/dashboard/DashboardClient";
-import { Input, Button, Spinner, Textarea } from "@heroui/react";
+import { Input, Button, Spinner } from "@heroui/react";
+import RichTextEditor from "@/components/RichTextEditor";
+import { isRichTextEmpty, normalizeRichText } from "@/lib/richText";
 import { FiUpload } from "react-icons/fi";
 
 type BeritaFormData = {
@@ -111,8 +113,12 @@ export default function EditBeritaPage() {
     };
   }, [gambarPreview]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleRichTextChange = (field: keyof Pick<BeritaFormData, "kepala_berita" | "tubuh_berita" | "ekor_berita">) => (value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -136,14 +142,19 @@ export default function EditBeritaPage() {
 
     if (!confirm("Simpan perubahan data berita?")) return;
 
+    if (isRichTextEmpty(formData.tubuh_berita)) {
+      alert("Isi tubuh berita tidak boleh kosong!");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
     const data = new FormData();
     data.append("judul", formData.judul);
-    data.append("kepala_berita", formData.kepala_berita);
-    data.append("tubuh_berita", formData.tubuh_berita);
-    data.append("ekor_berita", formData.ekor_berita);
+    data.append("kepala_berita", normalizeRichText(formData.kepala_berita));
+    data.append("tubuh_berita", normalizeRichText(formData.tubuh_berita));
+    data.append("ekor_berita", normalizeRichText(formData.ekor_berita));
     data.append("_method", "PUT");
 
     if (formData.gambar_berita) {
@@ -211,31 +222,33 @@ export default function EditBeritaPage() {
           />
         </div>
         <div>
-          <label className="font-bold">Kepala Berita:</label>
-          <Input
-            name="kepala_berita"
+          <label className="font-bold" htmlFor="kepala_berita">Kepala Berita:</label>
+          <RichTextEditor
+            id="kepala_berita"
             value={formData.kepala_berita}
-            onChange={handleChange}
-            variant="bordered"
+            onChange={handleRichTextChange("kepala_berita")}
+            placeholder="Tulis paragraf pembuka berita..."
+            className="mt-2"
           />
         </div>
         <div>
-          <label className="font-bold">Tubuh Berita:</label>
-          <Textarea
-            name="tubuh_berita"
+          <label className="font-bold" htmlFor="tubuh_berita">Tubuh Berita:</label>
+          <RichTextEditor
+            id="tubuh_berita"
             value={formData.tubuh_berita}
-            onChange={handleChange}
-            variant="bordered"
-            isRequired
+            onChange={handleRichTextChange("tubuh_berita")}
+            placeholder="Tulis isi utama berita..."
+            className="mt-2"
           />
         </div>
         <div>
-          <label className="font-bold">Ekor Berita:</label>
-          <Input
-            name="ekor_berita"
+          <label className="font-bold" htmlFor="ekor_berita">Ekor Berita:</label>
+          <RichTextEditor
+            id="ekor_berita"
             value={formData.ekor_berita}
-            onChange={handleChange}
-            variant="bordered"
+            onChange={handleRichTextChange("ekor_berita")}
+            placeholder="Tulis penutup berita (opsional)..."
+            className="mt-2"
           />
         </div>
 

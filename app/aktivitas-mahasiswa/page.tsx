@@ -5,6 +5,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@heroui/react";
+import { extractPlainText } from "@/lib/richText";
 
 interface BeritaMhsItem {
   nomor: number;
@@ -90,7 +91,7 @@ export default function AktivitasMhs() {
             day: "numeric",
           }),
           gambar: item.gambar_berita,
-          kepalaBerita: item.kepala_berita,
+          kepalaBerita: extractPlainText(item.kepala_berita),
           isiBerita: item.tubuh_berita,
           ekorBerita: item.ekor_berita,
         }));
