@@ -7,6 +7,8 @@ import { CloseIcon } from "./CloseIcon";
 import styles from "./CardDrop.module.css";
 import { MovingBorderDemo } from "./MovingBorderDemo";
 
+const BACKEND_URL = "http://localhost:8000";
+
 interface SimpleRelation {
   id: number;
   nama_skill?: string;
@@ -81,7 +83,7 @@ function MyCard({ person }: { person: PersonData }) {
               <Image
                 alt={person.name}
                 className="rounded-full w-24 h-24 object-cover transition-transform duration-300 ease-in-out group-hover:scale-120"
-                src={person.imageUrl}
+                src={BACKEND_URL + person.imageUrl}
               />
             </div>
           </div>
