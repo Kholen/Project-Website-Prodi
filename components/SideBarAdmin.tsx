@@ -32,6 +32,12 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
     removeAuthToken();
     router.push("/sign-in");
   };
+  
+  const activeHref = mainNavItems
+  .map((item) => item.href)
+  .filter((href) => pathname.startsWith(href)) // 
+  .sort((a, b) => b.length - a.length)       // 
+  [0] ?? "";
 
   return (
     <aside
@@ -62,21 +68,27 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
 
       <nav className="flex-grow mt-4">
         <ul className="space-y-2">
-          {mainNavItems.map((item) => (
-            <li key={item.label} className="w-full">
-              <Link
-                href={item.href}
-                className={`flex w-full items-center h-16 rounded-md transition-colors duration-200 group ${
-                  isOpen ? "px-5 justify-start" : "justify-center"
-                } ${pathname === item.href ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
-              >
-                <item.icon size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
-                <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full ml-4" : "w-0 ml-0"}`}>
-                  <span className="whitespace-nowrap">{item.label}</span>
-                </div>
-              </Link>
-            </li>
-          ))}
+          {mainNavItems.map((item) => {
+            const isActive = item.href === activeHref;
+
+            return (
+              <li key={item.label} className="w-full">
+                <Link
+                  href={item.href}
+                  className={`flex w-full items-center h-16 rounded-md transition-colors duration-200 group ${
+                    isOpen ? "px-5 justify-start" : "justify-center"
+                  } ${
+                    isActive ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"
+                  } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
+                >
+                  <item.icon size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
+                  <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full ml-4" : "w-0 ml-0"}`}>
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
