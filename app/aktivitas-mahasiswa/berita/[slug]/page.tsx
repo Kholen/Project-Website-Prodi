@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Button } from "@heroui/button";
 import { FiArrowLeft } from "react-icons/fi";
 import { useEffect, useMemo, useState } from "react";
@@ -101,7 +101,7 @@ export default function TentangMhsDetail() {
     return (
       <section className="container px-4 py-10 text-center">
         <p className="text-sm text-red-500">{error}</p>
-        <Button className="mx-auto mt-4 bg-[#0a0950] text-white" onPress={() => router.push("/tentang-mahasiswa")}>
+        <Button className="mx-auto mt-4 bg-[#0a0950] text-white" onPress={() => router.push("/aktivitas-mahasiswa")}>
           <FiArrowLeft />
           Kembali
         </Button>
@@ -132,11 +132,28 @@ export default function TentangMhsDetail() {
             />
           </figure>
 
-          {data.kepala_berita && <p className="indent-8 text-justify leading-relaxed mb-2">{data.kepala_berita}</p>}
-          {data.tubuh_berita && <p className="indent-8 text-justify leading-relaxed mb-4">{data.tubuh_berita}</p>}
-          {data.ekor_berita && <p className="indent-8 text-justify leading-relaxed mb-4">{data.ekor_berita}</p>}
+          {data.kepala_berita && (
+            <div
+              className="rich-text-content indent-8 text-justify leading-relaxed mb-2"
+              dangerouslySetInnerHTML={{ __html: data.kepala_berita }}
+            />
+          )}
+          {data.tubuh_berita && (
+            <div
+              className="rich-text-content indent-8 text-justify leading-relaxed mb-4"
+              dangerouslySetInnerHTML={{ __html: data.tubuh_berita }}
+            />
+          )}
+          {data.ekor_berita && (
+            <div
+              className="rich-text-content indent-8 text-justify leading-relaxed mb-4"
+              dangerouslySetInnerHTML={{ __html: data.ekor_berita }}
+            />
+          )}
         </header>
       </article>
     </section>
   );
 }
+
+

@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiSlack, FiFolder, FiGlobe, FiLogOut, FiMenu, FiX, FiUser } from "react-icons/fi";
 
 import { removeAuthToken } from "@/lib/api";
@@ -25,19 +25,24 @@ const mainNavItems: NavItem[] = [
 ];
 
 const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
+  const [hasMounted, setHasMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const handleLogout = () => {
     removeAuthToken();
     router.push("/sign-in");
   };
-  
-  const activeHref = mainNavItems
-  .map((item) => item.href)
-  .filter((href) => pathname.startsWith(href)) // 
-  .sort((a, b) => b.length - a.length)       // 
-  [0] ?? "";
+
+  const activeHref =
+    mainNavItems
+      .map((item) => item.href)
+      .filter((href) => pathname.startsWith(href)) //
+      .sort((a, b) => b.length - a.length)[0] ?? ""; //
 
   return (
     <aside
