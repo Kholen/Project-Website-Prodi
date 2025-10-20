@@ -155,5 +155,6 @@ export default function RichTextEditor({
 
   const classes = ['rich-text-editor', className].filter(Boolean).join(' ');
 
-  return <div id={id} ref={containerRef} className={classes} />;
+  return <div id={id} ref={containerRef} className={classes} suppressHydrationWarning />;
 }
+

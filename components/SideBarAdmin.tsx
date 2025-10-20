@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiSlack, FiFolder, FiGlobe, FiLogOut, FiMenu, FiX, FiUser } from "react-icons/fi";
 
 import { removeAuthToken } from "@/lib/api";
@@ -25,8 +25,13 @@ const mainNavItems: NavItem[] = [
 ];
 
 const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
+  const [hasMounted, setHasMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const handleLogout = () => {
     removeAuthToken();
@@ -62,21 +67,34 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
 
       <nav className="flex-grow mt-4">
         <ul className="space-y-2">
-          {mainNavItems.map((item) => (
-            <li key={item.label} className="w-full">
-              <Link
-                href={item.href}
-                className={`flex w-full items-center h-16 rounded-md transition-colors duration-200 group ${
-                  isOpen ? "px-5 justify-start" : "justify-center"
-                } ${pathname === item.href ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
-              >
-                <item.icon size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
-                <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full ml-4" : "w-0 ml-0"}`}>
-                  <span className="whitespace-nowrap">{item.label}</span>
-                </div>
-              </Link>
-            </li>
-          ))}
+          {mainNavItems.map((item) => {
+            const isDataRiset = item.href === "/dashboard/data-riset";
+            const isBeritaMahasiswa = item.href === "/dashboard/berita-mahasiswa";
+            const isDataDosen = item.href === "/dashboard";
+            const isActive =
+              hasMounted &&
+              (pathname === item.href ||
+                (isDataRiset && pathname.startsWith("/dashboard/data-riset/")) ||
+                (isBeritaMahasiswa && pathname.startsWith("/dashboard/berita-mahasiswa/"))||
+                (isDataDosen && pathname.startsWith("/dashboard/")));
+
+
+            return (
+              <li key={item.label} className="w-full">
+                <Link
+                  href={item.href}
+                  className={`flex w-full items-center h-16 rounded-md transition-colors duration-200 group ${
+                    isOpen ? "px-5 justify-start" : "justify-center"
+                  } ${isActive ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
+                >
+                  <item.icon size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
+                  <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full ml-4" : "w-0 ml-0"}`}>
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
@@ -97,5 +115,6 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
     </aside>
   );
 };
+
 
 export default Sidebar;
