@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FiSlack, FiFolder, FiGlobe, FiLogOut, FiMenu, FiX, FiUser } from "react-icons/fi";
+import { FiSlack, FiFolder, FiGlobe, FiLogOut, FiMenu, FiX, FiUser, FiBell } from "react-icons/fi";
 
 import { removeAuthToken } from "@/lib/api";
 
@@ -22,6 +22,7 @@ const mainNavItems: NavItem[] = [
   { href: "/dashboard", label: "Data Dosen", icon: FiSlack },
   { href: "/dashboard/data-riset", label: "Data Riset", icon: FiFolder },
   { href: "/dashboard/berita-mahasiswa", label: "Data Berita", icon: FiGlobe },
+  { href: "/dashboard/pengumuman", label: "Data Pengumuman", icon: FiBell },
 ];
 
 const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
@@ -45,9 +46,9 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
       .sort((a, b) => b.length - a.length)[0] ?? ""; //
 
   return (
-    <aside
+    <div
       className={`relative flex-shrink-0 bg-white text-black flex flex-col transition-[width] duration-300 ease-in-out ${
-        isOpen ? "w-60 p-4" : "w-24 p-4"
+        isOpen ? "w-68 p-4" : "w-24 p-4"
       }`}
     >
       <div className={`flex w-full items-center mb-5 ${isOpen ? "justify-between" : "justify-center"}`}>
@@ -111,8 +112,9 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
           </div>
         </button>
       </div>
-    </aside>
+    </div>
   );
 };
 
 export default Sidebar;
+
