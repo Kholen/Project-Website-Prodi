@@ -137,7 +137,8 @@ export default function AktivitasMhs() {
         if (!active) {
           return;
         }
-        const mapped = data.map((item) => ({
+        const sortedBerita = [...data].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        const mapped = sortedBerita.map((item) => ({
           nomor: item.id,
           title: item.judul,
           link: `/aktivitas-mahasiswa/berita/${item.slug}`,
@@ -176,7 +177,8 @@ export default function AktivitasMhs() {
         if (!active) {
           return;
         }
-        const mapped = data.map((item) => ({
+        const sortedPengumuman = [...data].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        const mapped = sortedPengumuman.map((item) => ({
           id: item.id,
           judul: item.judul,
           tanggal: new Date(item.created_at).toLocaleDateString("id-ID", {
@@ -245,7 +247,11 @@ export default function AktivitasMhs() {
   if (loadingBerita && loadingPengumuman) {
     return (
       <div className="flex justify-center py-10">
-        <Spinner variant="dots" label="Memuat Informasi Aktivitas Mahasiswa..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+        <Spinner
+          variant="dots"
+          label="Memuat Informasi Aktivitas Mahasiswa..."
+          classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }}
+        />
       </div>
     );
   }
@@ -255,43 +261,6 @@ export default function AktivitasMhs() {
       <div className="flex flex-col gap-2 text-center">
         <h2 className="text-2xl font-bold sm:text-3xl">Aktivitas Mahasiswa</h2>
         <p className="text-sm text-neutral-500">Sorotan terbaru berita dan pengumuman mahasiswa STTI Tanjungpinang.</p>
-      </div>
-
-      <div className="space-y-6">
-        <header className="flex flex-col gap-1">
-          <h3 className="text-xl font-semibold text-[#0a0950]">Berita Terbaru</h3>
-          {beritaError && <p className="text-sm text-red-500">{beritaError}</p>}
-        </header>
-        {beritaContent.length ? (
-          <>
-            <Carousel className="w-full" setApi={setBeritaApi}>
-              <CarouselContent>
-                {beritaContent.map((item, index) => (
-                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                    <BeritaMhsCard item={item} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-3 hidden sm:flex" />
-              <CarouselNext className="right-3 hidden sm:flex" />
-            </Carousel>
-
-            <div className="flex justify-center gap-2">
-              {Array.from({ length: beritaIndicators }).map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => beritaApi?.scrollTo(index)}
-                  className={cn("h-2 rounded-full transition-all", currentBeritaIndex === index ? "w-5 bg-[#0a0950]" : "w-2 bg-neutral-300 dark:bg-neutral-700")}
-                  aria-label={`Slide berita ${index + 1}`}
-                  aria-current={currentBeritaIndex === index}
-                />
-              ))}
-            </div>
-          </>
-        ) : !loadingBerita && !beritaError ? (
-          <p className="text-sm text-center text-neutral-500">Belum ada data berita.</p>
-        ) : null}
       </div>
 
       <div className="space-y-6">
@@ -319,7 +288,10 @@ export default function AktivitasMhs() {
                   key={index}
                   type="button"
                   onClick={() => pengumumanApi?.scrollTo(index)}
-                  className={cn("h-2 rounded-full transition-all", currentPengumumanIndex === index ? "w-5 bg-[#0a0950]" : "w-2 bg-neutral-300 dark:bg-neutral-700")}
+                  className={cn(
+                    "h-2 rounded-full transition-all",
+                    currentPengumumanIndex === index ? "w-5 bg-[#0a0950]" : "w-2 bg-neutral-300 dark:bg-neutral-700"
+                  )}
                   aria-label={`Slide pengumuman ${index + 1}`}
                   aria-current={currentPengumumanIndex === index}
                 />
@@ -330,7 +302,46 @@ export default function AktivitasMhs() {
           <p className="text-sm text-center text-neutral-500">Belum ada pengumuman.</p>
         ) : null}
       </div>
+
+      <div className="space-y-6">
+        <header className="flex flex-col gap-1">
+          <h3 className="text-xl font-semibold text-[#0a0950]">Berita Terbaru</h3>
+          {beritaError && <p className="text-sm text-red-500">{beritaError}</p>}
+        </header>
+        {beritaContent.length ? (
+          <>
+            <Carousel className="w-full" setApi={setBeritaApi}>
+              <CarouselContent>
+                {beritaContent.map((item, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                    <BeritaMhsCard item={item} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-3 hidden sm:flex" />
+              <CarouselNext className="right-3 hidden sm:flex" />
+            </Carousel>
+
+            <div className="flex justify-center gap-2">
+              {Array.from({ length: beritaIndicators }).map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => beritaApi?.scrollTo(index)}
+                  className={cn(
+                    "h-2 rounded-full transition-all",
+                    currentBeritaIndex === index ? "w-5 bg-[#0a0950]" : "w-2 bg-neutral-300 dark:bg-neutral-700"
+                  )}
+                  aria-label={`Slide berita ${index + 1}`}
+                  aria-current={currentBeritaIndex === index}
+                />
+              ))}
+            </div>
+          </>
+        ) : !loadingBerita && !beritaError ? (
+          <p className="text-sm text-center text-neutral-500">Belum ada data berita.</p>
+        ) : null}
+      </div>
     </section>
   );
 }
-

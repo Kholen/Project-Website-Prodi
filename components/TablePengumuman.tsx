@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -28,6 +28,14 @@ const columns = [
   { name: "AKSI", uid: "actions" },
 ];
 
+function normalizeDate(dateString: string): string {
+  if (!dateString) {
+    return "-";
+  }
+  const [datePart] = dateString.split(" ");
+  return datePart ?? dateString;
+}
+
 export default function TablePengumuman({ initialData }: { initialData: Pengumuman[] }) {
   const router = useRouter();
 
@@ -42,7 +50,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
 
   const handleDelete = useCallback(
     async (id: number, judul: string) => {
-      if (!window.confirm("Apakah Anda yakin ingin menghapus pengumuman?")) {
+      if (!window.confirm(`Apakah Anda yakin ingin menghapus pengumuman: "${judul}"?`)) {
         return;
       }
 
@@ -57,7 +65,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
           throw new Error(message || "Gagal menghapus data dari server.");
         }
 
-        setPengumumanData((prevData) => prevData.filter((item) => item.id !== id));
+        setPengumumanData((prev) => prev.filter((item) => item.id !== id));
         alert("Data pengumuman berhasil dihapus.");
         router.refresh();
       } catch (error: unknown) {
@@ -70,12 +78,12 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
   );
 
   const filteredItems = useMemo(() => {
-    if (!filterValue) {
+    if (!filterValue.trim()) {
       return pengumumanData;
     }
 
-    const keyword = filterValue.toLowerCase();
-    return pengumumanData.filter((item) => item.judul.toLowerCase().includes(keyword));
+    const keyword = filterValue.trim().toLowerCase();
+    return pengumumanData.filter((pengumuman) => pengumuman.judul.toLowerCase().includes(keyword));
   }, [pengumumanData, filterValue]);
 
   const pages = Math.max(1, Math.ceil(filteredItems.length / rowsPerPage));
@@ -125,7 +133,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
         case "judul": {
           const preview = extractPlainText(pengumuman.kepala_pengumuman) || extractPlainText(pengumuman.isi_pengumuman);
           return (
-            <div>
+            <div className="text-left">
               <p className="font-medium text-gray-900">{pengumuman.judul}</p>
               {preview && <p className="text-gray-500 text-xs mt-1 line-clamp-2">{preview}</p>}
             </div>
@@ -139,7 +147,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
           });
         case "actions":
           return (
-            <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center justify-end gap-2">
               <Tooltip color="warning" content="Edit pengumuman" className="text-white">
                 <Link href={`/dashboard/pengumuman/${pengumuman.id}`}>
                   <Button isIconOnly variant="light" size="sm" color="warning">
@@ -236,11 +244,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
         )}
       </TableHeader>
       <TableBody emptyContent="Tidak ada pengumuman ditemukan" items={paginatedItems}>
-        {(item: any) => (
-          <TableRow key={item.id}>
-            {(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
+        {(item: any) => <TableRow key={item.id}>{(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
       </TableBody>
     </Table>
   );
