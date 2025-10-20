@@ -51,6 +51,9 @@ function MyCard({ person }: { person: PersonData }) {
     setShowDetail(false);
   };
 
+  // Pengkondisian jika ada gambar dosen atau tidak
+  const imageDosen = person.imageUrl ? `${BACKEND_URL}${person.imageUrl}` : "logo-white.png";
+
   return (
     <div
       className={`${styles.cardContainer} ${expanded ? styles.expanded : ""}`}
@@ -83,7 +86,7 @@ function MyCard({ person }: { person: PersonData }) {
               <Image
                 alt={person.name}
                 className="rounded-full w-24 h-24 object-cover transition-transform duration-300 ease-in-out group-hover:scale-120"
-                src={BACKEND_URL + person.imageUrl}
+                src={imageDosen}
               />
             </div>
           </div>
@@ -171,7 +174,7 @@ export default function CardDrop({ value, searchTerm = "" }: { value: string; se
             prodi: prodiName,
             job: jobs,
             contact: dosen.email ?? "Tidak tersedia",
-            imageUrl: dosen.image || "/logo-white.png",
+            imageUrl: dosen.image,
             skills,
           };
         });
