@@ -52,7 +52,7 @@ function MyCard({ person }: { person: PersonData }) {
   };
 
   // Pengkondisian jika ada gambar dosen atau tidak
-  const imageDosen = person.imageUrl ? `${BACKEND_URL}${person.imageUrl}` : "logo-white.png";
+  const imageDosen = person.imageUrl ? `${BACKEND_URL}${person.imageUrl}` : "default_profil.png";
 
   return (
     <div
