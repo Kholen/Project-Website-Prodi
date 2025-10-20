@@ -38,6 +38,12 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
     router.push("/sign-in");
   };
 
+  const activeHref =
+    mainNavItems
+      .map((item) => item.href)
+      .filter((href) => pathname.startsWith(href)) //
+      .sort((a, b) => b.length - a.length)[0] ?? ""; //
+
   return (
     <aside
       className={`relative flex-shrink-0 bg-white text-black flex flex-col transition-[width] duration-300 ease-in-out ${
@@ -68,16 +74,7 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
       <nav className="flex-grow mt-4">
         <ul className="space-y-2">
           {mainNavItems.map((item) => {
-            const isDataRiset = item.href === "/dashboard/data-riset";
-            const isBeritaMahasiswa = item.href === "/dashboard/berita-mahasiswa";
-            const isDataDosen = item.href === "/dashboard";
-            const isActive =
-              hasMounted &&
-              (pathname === item.href ||
-                (isDataRiset && pathname.startsWith("/dashboard/data-riset/")) ||
-                (isBeritaMahasiswa && pathname.startsWith("/dashboard/berita-mahasiswa/"))||
-                (isDataDosen && pathname.startsWith("/dashboard/")));
-
+            const isActive = item.href === activeHref;
 
             return (
               <li key={item.label} className="w-full">
@@ -85,7 +82,9 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
                   href={item.href}
                   className={`flex w-full items-center h-16 rounded-md transition-colors duration-200 group ${
                     isOpen ? "px-5 justify-start" : "justify-center"
-                  } ${isActive ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
+                  } ${
+                    isActive ? "bg-[#eeeeee] font-bold" : "hover:bg-[#eeeeee] hover:font-bold"
+                  } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400`}
                 >
                   <item.icon size={25} className="transition-transform duration-200 group-hover:scale-110 flex-shrink-0" />
                   <div className={`overflow-hidden transition-all duration-0 ease-in-out ${isOpen ? "w-full ml-4" : "w-0 ml-0"}`}>
@@ -115,6 +114,5 @@ const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
     </aside>
   );
 };
-
 
 export default Sidebar;
