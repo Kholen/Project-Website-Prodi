@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FiSlack, FiFolder, FiGlobe, FiLogOut, FiMenu, FiX, FiUser } from "react-icons/fi";
+import { IoMdSettings } from "react-icons/io";
 
 import { removeAuthToken } from "@/lib/api";
 
@@ -22,6 +23,7 @@ const mainNavItems: NavItem[] = [
   { href: "/dashboard", label: "Data Dosen", icon: FiSlack },
   { href: "/dashboard/data-riset", label: "Data Riset", icon: FiFolder },
   { href: "/dashboard/berita-mahasiswa", label: "Data Berita", icon: FiGlobe },
+  { href: "/dashboard/settings", label: "More Settings", icon: IoMdSettings },
 ];
 
 const Sidebar = ({ isOpen, toggle }: SidebarProps) => {
