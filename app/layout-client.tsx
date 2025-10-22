@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 
 import { Banner } from "@/components/Banner";
 import { Navbar } from "@/components/navbar";
-import ConditionalFooter from "@/components/ConditionalFooter";
+import Footer from "@/components/Footer";
 import { ProdiProvider } from "./context/ProdiContext";
 
 export function LayoutClient({ children }: { children: React.ReactNode }) {
@@ -33,6 +33,14 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
   const hiddenRoutes = pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-mahasiswa/berita") || pathname.startsWith("/aktivitas-mahasiswa/pengumuman");
   const isPathname = hiddenRoutes;
 
+  function footer() {
+    if (pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-mahasiswa/berita") || pathname === "/sign-in") {
+      return null;
+    } else {
+      return <Footer />;
+    }
+  }
+
   return (
     <div className="relative flex min-h-screen flex-col">
       <div className="w-screen sticky top-0 z-11 bg-black/10">
@@ -55,7 +63,7 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </ProdiProvider>
-      <ConditionalFooter />
+      { footer() }
     </div>
   );
 }
