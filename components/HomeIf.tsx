@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { Card, Image, Spinner, Tabs, Tab, CardBody, Accordion, AccordionItem } from "@heroui/react";
-import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
-import { MdAccessTimeFilled } from "react-icons/md";
+import { Card, Image, Spinner, Tabs, Tab, CardBody, Accordion, AccordionItem, Link } from "@heroui/react";
+import { FaUserGraduate, FaMedal, FaMoneyBillWave,FaBook } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import "../styles/globals.css";
 
@@ -244,7 +243,7 @@ export default function HomeIf() {
         placement="top"
         classNames={{
           tabList: "w-full p-2 mainColor",
-          tab: "flex-1 text-center px-3 py-5 font-bold",
+          tab: "flex-1 text-center px-3 py-5 font-bold ",
           tabContent: "text-white group-data-[selected=true]:text-black",
           panel: "w-full",
         }}
@@ -292,9 +291,8 @@ export default function HomeIf() {
                 <div className="flex-1">
                   <p>
                     Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
-                    yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi.
-                    Pada dasarnya, sistem ini dirancang untuk mengubah data mentah menjadi informasi yang berguna dan dapat dipahami untuk mendukung
-                    pengambilan keputusan.
+                    yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah
+                    data mentah menjadi informasi yang berguna dan dapat dipahami untuk mendukung pengambilan keputusan.
                   </p>
                 </div>
               </div>
@@ -356,23 +354,21 @@ export default function HomeIf() {
                   <CardBody className="flex flex-col justify-center items-center text-center">
                     <FaMedal className="text-3xl pb-2" />
                     <h2>Akreditasi Prodi</h2>
-                    <h3 className="font-bold">Baik Sekali</h3>
+                    <Link href="https://campus50.sttindonesia.ac.id/"> Klik Disini</Link>
                   </CardBody>
                 </Card>
                 <Card className="flex justify-center h-30 w-40">
                   <CardBody className="flex flex-col justify-center items-center text-center">
-                    <MdAccessTimeFilled className="text-3xl pb-2" />
-                    <h2 className="leading-none">Jumlah Semester</h2>
-                    <h3 className="font-bold">8 Semester</h3>
+                    <FaBook className="text-3xl pb-2" />
+                    <h2>Kurikulum</h2>
+                    <Link href="https://campus50.sttindonesia.ac.id/"> Klik Disini</Link>
                   </CardBody>
                 </Card>
                 <Card className="flex justify-center h-30 w-40">
                   <CardBody className="flex flex-col justify-center items-center text-center">
                     <FaMoneyBillWave className="text-3xl pb-2" />
                     <h2>Informasi Biaya</h2>
-                    <a href="#" className="font-bold underline underline-offset-2">
-                      Klik Disini
-                    </a>
+                    <Link href="https://campus50.sttindonesia.ac.id/"> Klik Disini</Link>
                   </CardBody>
                 </Card>
               </div>
@@ -456,7 +452,7 @@ export default function HomeIf() {
                   {/* pemetaan link, serta pengecekan link */}
                   {kerjasamaLinks.map((link, index) => {
                     const normalisasiLink = link.trim();
-                    let imageSrc = ["jpg", "jpeg", "png", "webp"].some((e) => normalisasiLink.toLowerCase().endsWith(e))
+                    let imageSrc = ["jpg", "jpeg", "png"].some((e) => normalisasiLink.toLowerCase().endsWith(e))
                       ? normalisasiLink
                       : "https://heroui.com/images/hero-card.jpeg"; // Ganti dengan URL gambar default jika bukan link gambar
                     return (

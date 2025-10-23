@@ -93,8 +93,8 @@ export const Navbar = () => {
           {/* <Logo /> */}
           <Image priority alt="logo" className="mr-2 " height={50} src={"/ERD.png"} width={50} />
           <p className={clsx("font-bold text-inherit leading-none", fontNavbar.className)}>
-            Sekolah Tinggi Teknologi Indonesia.
-            <br /> Tanjungpinang
+            Sekolah Tinggi Teknologi Indonesia
+            <br /> Tanjung Pinang
           </p>
         </NextLink>
       </NavbarBrand>

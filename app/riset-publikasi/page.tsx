@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Pagination, Spinner } from "@heroui/react";
+import { Pagination, Spinner, Link} from "@heroui/react";
 interface RisetRecord {
   id: number;
   nama_ketua: string | null;
@@ -131,7 +131,7 @@ export default function RisetPublikasiPage() {
               Nama Jurnal
             </th>
             <th scope="col" className="px-4 py-3 border border-gray-200">
-              Nama Ketua Penulis
+              Nama Ketua Peneliti
             </th>
             <th scope="col" className="px-4 py-3 text-center border border-gray-200">
               URL Publikasi
@@ -148,11 +148,11 @@ export default function RisetPublikasiPage() {
               <td className="px-4 py-3 align-top border border-gray-200">{formatPublishedAt(item.published_at, item.tahun)}</td>
               <td className="px-4 py-3 align-top border border-gray-200">{item.journal_name ?? "Tidak tersedia"}</td>
               <td className="px-4 py-3 align-top border border-gray-200">{item.nama_ketua ?? "Tidak tersedia"}</td>
-              <td className="px-4 py-3 text-center align-top border border-gray-200">
+              <td className="px-4 py-3 text-center align-center border border-gray-200">
                 {item.url_riset ? (
-                  <a className="text-blue-600 underline" href={item.url_riset} rel="noopener noreferrer" target="_blank">
-                    Lihat Publikasi
-                  </a>
+                  <Link className="text-primary" href={item.url_riset} rel="noopener noreferrer" target="_blank">
+                    Lihat
+                  </Link>
                 ) : (
                   <span className="text-gray-400">Tidak tersedia</span>
                 )}

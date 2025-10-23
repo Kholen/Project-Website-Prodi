@@ -69,7 +69,7 @@ export default function Footer() {
                   <Image alt="Logo STTI" src={pathname === "/" ? `${BACKEND_URL}${data?.default_logo}` : `${BACKEND_URL}${data?.white_logo}`} width={50} />
                   <h1 className="ml-2">
                     Sekolah Tinggi Teknologi Indonesia <br />
-                    Tanjungpinang
+                    Tanjung Pinang
                   </h1>
                 </div>
                 <p className="text-sm mt-4">
