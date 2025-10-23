@@ -30,11 +30,11 @@ export function LayoutClient({ children }: { children: React.ReactNode }) {
 
     return () => clearTimeout(timer);
   }, [pathname]);
-  const hiddenRoutes = pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-mahasiswa/berita") || pathname.startsWith("/aktivitas-mahasiswa/pengumuman");
+  const hiddenRoutes = pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-program-studi/berita") || pathname.startsWith("/aktivitas-program-studi/pengumuman");
   const isPathname = hiddenRoutes;
 
   function footer() {
-    if (pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-mahasiswa/berita") || pathname === "/sign-in") {
+    if (pathname.startsWith("/dashboard") || pathname.startsWith("/aktivitas-program-studi/berita") || pathname === "/sign-in") {
       return null;
     } else {
       return <Footer />;

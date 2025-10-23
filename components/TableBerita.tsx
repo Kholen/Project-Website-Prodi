@@ -143,7 +143,7 @@ export default function BeritaTable({ initialData }: { initialData: Berita[] }) 
           return (
             <div className="relative flex items-center gap-2">
               <Tooltip color="warning" content="Edit berita" className="text-white">
-                <Link href={`/dashboard/berita-mahasiswa/${berita.slug}`}>
+                <Link href={`/dashboard/berita-program-studi/${berita.slug}`}>
                   <Button isIconOnly variant="light" size="sm" color="warning">
                     <FiEdit className="text-lg text-warning" />
                   </Button>
@@ -181,7 +181,7 @@ export default function BeritaTable({ initialData }: { initialData: Berita[] }) 
             onClear={onClear}
             onValueChange={onSearchChange}
           />
-          <Link href="/dashboard/berita-mahasiswa/tambah">
+          <Link href="/dashboard/berita-program-studi/tambah">
             <Button color="primary" endContent={<FaPlus />}>
               Tambah Baru
             </Button>

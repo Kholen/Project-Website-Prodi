@@ -15,7 +15,7 @@ interface SimpleRelasi {
 
 // Tipe untuk data dari API
 interface ApiDosenData {
-  id:string;
+  id: string;
   nama: string;
   NUPTK: string;
   email: string;
@@ -188,14 +188,14 @@ export default function HomeSI() {
         const kerjasamaData: { nama_prodi: string; daftar_kerjasama: string | null }[] = await kerjasamaResponse.json();
 
         // Transformasi data dari format API ke format yang dibutuhkan yang kemudian dipecah atau mapping
-       const transformedData: PersonData[] = apiData.map((dosen) => {
-          const jobList = dosen.jabatans.map(j => j.nama_jabatan).filter(Boolean) as string[];
+        const transformedData: PersonData[] = apiData.map((dosen) => {
+          const jobList = dosen.jabatans.map((j) => j.nama_jabatan).filter(Boolean) as string[];
 
           return {
             name: dosen.nama,
             nuptk: dosen.NUPTK,
-            prodi: dosen.prodis?.[0]?.nama_prodi ?? '', // Ambil dari array prodis
-            job: jobList.join(', '), // Gabungkan daftar jabatan menjadi string
+            prodi: dosen.prodis?.[0]?.nama_prodi ?? "", // Ambil dari array prodis
+            job: jobList.join(", "), // Gabungkan daftar jabatan menjadi string
             contact: dosen.email,
             imageUrl: dosen.image,
             jobs: jobList, // Simpan dalam bentuk array
@@ -255,41 +255,44 @@ export default function HomeSI() {
         <Tab key="tentang" title="Tentang" className="w-full">
           <Card className="mainColor text-white mt-2 w-full">
             <div className="p-6">
-              <strong className="text-3xl underline underline-offset-10">{kepalaProdi.prodi}</strong>
-              <p className="mt-6 text-justify indent-8">
-                Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
-                yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah data
-                mentah menjadi informasi yang berguna dan dapat dipahami untuk mendukung pengambilan keputusan.
-              </p>
-
-              <div className="w-full mt-2 flex items-center">
-                {kepalaProdi ? (
-                  <>
-                    <Image
-                      alt={`Foto ${kepalaProdi.name}`}
-                      src={kepalaProdi.imageUrl || "https://heroui.com/images/hero-card-complete.jpeg"}
-                      width={200}
-                      height={240}
-                      className="rounded-lg object-cover"
-                    />
-                    <div className="ml-4 self-start">
-                      <h3 className="text-xl font-bold">Kepala Prodi</h3>
-                      <p className="mt-1 text-lg">{kepalaProdi.name}</p>
-                      <p className="mt-2">
-                        <strong>NUPTK: </strong>
-                        <br />
-                        {kepalaProdi.nuptk}
-                      </p>
-                      <p className="mt-4">
-                        <strong>Nomor Telepon:</strong>
-                        <br />
-                        {kepalaProdi?.contact ?? "Tidak tersedia"}
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="mt-4">Data kepala prodi Teknik Informatika belum tersedia.</p>
-                )}
+              <strong className="flex text-3xl underline underline-offset-10 justify-center">{kepalaProdi.prodi}</strong>
+              <div className="mt-8 flex flex-coL lg:flex-row">
+                <div className="flex items-center w-1/2">
+                  {kepalaProdi ? (
+                    <>
+                      <Image
+                        alt={`Foto ${kepalaProdi.name}`}
+                        src={kepalaProdi.imageUrl || "https://heroui.com/images/hero-card-complete.jpeg"}
+                        width={200}
+                        height={240}
+                        className="rounded-lg object-cover"
+                      />
+                      <div className="ml-4 self-start">
+                        <h3 className="text-xl font-bold">Kepala Prodi</h3>
+                        <p className="mt-1 text-lg">{kepalaProdi.name}</p>
+                        <p className="mt-2">
+                          <strong>NUPTK: </strong>
+                          <br />
+                          {kepalaProdi.nuptk}
+                        </p>
+                        <p className="mt-4">
+                          <strong>Nomor Telepon:</strong>
+                          <br />
+                          {kepalaProdi?.contact ?? "Tidak tersedia"}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="mt-4">Data kepala prodi Teknik Informatika belum tersedia.</p>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p>
+                    Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
+                    yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi. Pada dasarnya, sistem ini dirancang untuk mengubah
+                    data mentah menjadi informasi yang berguna dan dapat dipahami untuk mendukung pengambilan keputusan.
+                  </p>
+                </div>
               </div>
             </div>
           </Card>
@@ -535,4 +538,3 @@ export default function HomeSI() {
     </div>
   );
 }
-

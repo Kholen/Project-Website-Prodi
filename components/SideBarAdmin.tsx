@@ -22,7 +22,7 @@ type NavItem = {
 const mainNavItems: NavItem[] = [
   { href: "/dashboard", label: "Data Dosen", icon: FiSlack },
   { href: "/dashboard/data-riset", label: "Data Riset", icon: FiFolder },
-  { href: "/dashboard/berita-mahasiswa", label: "Data Berita", icon: FiGlobe },
+  { href: "/dashboard/berita-program-studi", label: "Data Berita", icon: FiGlobe },
   { href: "/dashboard/pengumuman", label: "Data Pengumuman", icon: FiBell },
   { href: "/dashboard/settings", label: "More Settings", icon: IoMdSettings },
 ];

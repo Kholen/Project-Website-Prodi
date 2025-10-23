@@ -26,7 +26,7 @@ async function getBeritaData(): Promise<Berita[]> {
     const data = await response.json();
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Fetch Error (dashboard/berita-mahasiswa):", error);
+    console.error("Fetch Error (dashboard/berita-program-studi):", error);
     return [];
   }
 }

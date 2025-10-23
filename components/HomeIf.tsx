@@ -254,7 +254,6 @@ export default function HomeIf() {
           <Card className="mainColor text-white mt-2 w-full">
             <div className="p-6">
               <strong className="flex text-3xl underline underline-offset-10 justify-center">{kepalaProdi.prodi}</strong>
-
               <div className="mt-8 flex flex-coL lg:flex-row">
                 <div className="flex items-center w-1/2">
                   {kepalaProdi ? (
@@ -291,7 +290,7 @@ export default function HomeIf() {
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="">
+                  <p>
                     Sistem informasi adalah gabungan terorganisir dari manusia, perangkat keras, perangkat lunak, jaringan komunikasi, dan sumber data
                     yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi.
                     Pada dasarnya, sistem ini dirancang untuk mengubah data mentah menjadi informasi yang berguna dan dapat dipahami untuk mendukung
