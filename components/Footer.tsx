@@ -73,8 +73,8 @@ export default function Footer() {
                   </h1>
                 </div>
                 <p className="text-sm mt-4">
-                  Website Seputar Prodi Kampus & Mahasiswa <br />
-                  STTI Tanjungpinang
+                  Website resmi Program Studi<br/>
+                  STTI Tanjung Pinang
                 </p>
                 <div className="flex flex-row gap-4 text-2xl mt-4">
                   <a href={data?.instagram_url || ""}>
