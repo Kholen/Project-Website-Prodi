@@ -101,7 +101,7 @@ export default function TentangMhsDetail() {
     return (
       <section className="container px-4 py-10 text-center">
         <p className="text-sm text-red-500">{error}</p>
-        <Button className="mx-auto mt-4 bg-[#0a0950] text-white" onPress={() => router.push("/aktivitas-mahasiswa")}>
+        <Button className="mx-auto mt-4 bg-[#0a0950] text-white" onPress={() => router.push("/aktivitas-program-studi")}>
           <FiArrowLeft />
           Kembali
         </Button>
@@ -128,7 +128,7 @@ export default function TentangMhsDetail() {
             <img
               src={data.gambar_berita ? `http://localhost:8000/storage/${data.gambar_berita}` : "/default-image.jpg"}
               alt={data.judul}
-              className="h-80 w-full object-cover"
+              className="h-80 w-auto object-cover"
             />
           </figure>
 

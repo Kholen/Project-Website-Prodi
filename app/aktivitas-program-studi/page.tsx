@@ -32,6 +32,7 @@ interface ApiBerita {
 interface PengumumanItem {
   id: number;
   judul: string;
+  links:string;
   tanggal: string;
   gambar: string | null;
   kepala: string;
@@ -42,6 +43,7 @@ interface PengumumanItem {
 interface ApiPengumuman {
   id: number;
   judul: string;
+  slug:string;
   gambar: string | null;
   kepala_pengumuman: string | null;
   isi_pengumuman: string;
@@ -98,7 +100,7 @@ function PengumumanCard({ item }: { item: PengumumanItem }) {
           <div className="flex translate-y-3 transform flex-col gap-3 overflow-hidden text-sm leading-relaxed opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
             <p className="indent-8 text-justify">{item.kepala}</p>
             <a
-              href={`/aktivitas-program-studi/pengumuman/${item.id}`}
+              href={item.links}
               className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors duration-300 hover:text-blue-400"
             >
               <span>Baca Selengkapnya</span>
@@ -181,6 +183,7 @@ export default function AktivitasMhs() {
         const mapped = sortedPengumuman.map((item) => ({
           id: item.id,
           judul: item.judul,
+          links: `/aktivitas-program-studi/pengumuman/${item.slug}`,
           tanggal: new Date(item.created_at).toLocaleDateString("id-ID", {
             year: "numeric",
             month: "long",

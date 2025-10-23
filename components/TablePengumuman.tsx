@@ -17,6 +17,7 @@ type Pengumuman = {
   kepala_pengumuman: string | null;
   isi_pengumuman: string;
   ekor_pengumuman: string | null;
+  slug:string;
   created_at: string;
   updated_at: string;
 };
@@ -49,13 +50,13 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
   }, [initialData]);
 
   const handleDelete = useCallback(
-    async (id: number, judul: string) => {
+    async (slug: string, judul: string) => {
       if (!window.confirm(`Apakah Anda yakin ingin menghapus pengumuman: "${judul}"?`)) {
         return;
       }
 
       try {
-        const response = await fetch(`/api/pengumuman/${id}`, {
+        const response = await fetch(`/api/pengumuman/${slug}`, {
           method: "DELETE",
         });
 
@@ -65,7 +66,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
           throw new Error(message || "Gagal menghapus data dari server.");
         }
 
-        setPengumumanData((prev) => prev.filter((item) => item.id !== id));
+        setPengumumanData((prev) => prev.filter((item) => item.slug !== slug));
         alert("Data pengumuman berhasil dihapus.");
         router.refresh();
       } catch (error: unknown) {
@@ -126,7 +127,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
     (pengumuman: Pengumuman, columnKey: React.Key) => {
       switch (columnKey) {
         case "no": {
-          const index = paginatedItems.findIndex((item) => item.id === pengumuman.id);
+          const index = paginatedItems.findIndex((item) => item.slug === pengumuman.slug);
           const rowNumber = (page - 1) * rowsPerPage + index + 1;
           return <span className="font-semibold text-gray-800">{rowNumber}</span>;
         }
@@ -149,14 +150,14 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
           return (
             <div className="relative flex items-center justify-end gap-2">
               <Tooltip color="warning" content="Edit pengumuman" className="text-white">
-                <Link href={`/dashboard/pengumuman/${pengumuman.id}`}>
+                <Link href={`/dashboard/pengumuman/${pengumuman.slug}`}>
                   <Button isIconOnly variant="light" size="sm" color="warning">
                     <FiEdit className="text-lg text-warning" />
                   </Button>
                 </Link>
               </Tooltip>
               <Tooltip color="danger" content="Hapus pengumuman">
-                <Button isIconOnly variant="light" size="sm" color="danger" onPress={() => handleDelete(pengumuman.id, pengumuman.judul)}>
+                <Button isIconOnly variant="light" size="sm" color="danger" onPress={() => handleDelete(pengumuman.slug, pengumuman.judul)}>
                   <RiDeleteBin6Line className="text-lg text-danger" />
                 </Button>
               </Tooltip>
@@ -194,7 +195,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
           </Link>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {filteredItems.length} pengumuman</span>
+          <span className="text-default-400 text-small">Total {filteredItems.length} Pengumuman</span>
           <label className="flex items-center text-default-400 text-small">
             Baris per halaman:
             <select className="bg-transparent outline-none text-default-400 text-small ml-1" onChange={onRowsPerPageChange} value={rowsPerPage}>
@@ -244,7 +245,7 @@ export default function TablePengumuman({ initialData }: { initialData: Pengumum
         )}
       </TableHeader>
       <TableBody emptyContent="Tidak ada pengumuman ditemukan" items={paginatedItems}>
-        {(item: any) => <TableRow key={item.id}>{(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
+        {(item: any) => <TableRow key={item.slug}>{(columnKey: any) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
       </TableBody>
     </Table>
   );
