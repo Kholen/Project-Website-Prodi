@@ -91,15 +91,10 @@ export default function RisetPublikasiPage() {
     return Array.from(uniqueYears).sort((a, b) => Number(b) - Number(a));
   }, [records]);
 
-  const yearMenuItems = useMemo(() => {
-    const items: { key: string; label: string }[] = [{ key: "ALL", label: "Semua Tahun" }];
-
-    yearOptions.forEach((year) => {
-      items.push({ key: year, label: `Tahun ${year}` });
-    });
-
-    return items;
-  }, [yearOptions]);
+  const yearMenuItems = useMemo(
+    () => [{ key: "ALL", label: "Semua Tahun" }, ...yearOptions.map((year) => ({ key: year, label: `Tahun ${year}` }))],
+    [yearOptions]
+  );
 
   const filteredRecords = useMemo(() => {
     const term = searchValue.trim().toLowerCase();
@@ -191,7 +186,11 @@ export default function RisetPublikasiPage() {
 
         <Dropdown>
           <DropdownTrigger>
-            <Button className="w-full capitalize text-white mainColor h-auto sm:w-auto" variant="bordered">
+            <Button
+              className="w-full capitalize text-white mainColor h-auto sm:w-auto"
+              variant="bordered"
+              onPress={(event: PressEvent) => event.continuePropagation()}
+            >
               {dropdownLabel}
             </Button>
           </DropdownTrigger>
