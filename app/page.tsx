@@ -1,4 +1,3 @@
-// app/prodi/page.tsx (SUDAH DIPERBAIKI)
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -8,7 +7,6 @@ import { FaUserGraduate, FaMedal, FaMoneyBillWave } from "react-icons/fa";
 import { MdAccessTimeFilled } from "react-icons/md";
 import "../styles/globals.css";
 
-// --- Tipe Data dari API (Sesuaikan dengan Model Anda) ---
 interface SimpleRelasi {
   id: number;
   nama_jabatan: string; 
@@ -26,16 +24,15 @@ interface ProspekKerja {
   deskripsi: string;
 }
 
-interface Dosen { // Tipe ini hanya dipakai untuk kepala_prodi
+interface Dosen { 
   id: number;
   nama: string;
   NUPTK: string;
   email: string;
   image: string | null; 
-  jabatans: SimpleRelasi[]; // Ini mungkin tidak terkirim (tidak apa-apa)
+  jabatans: SimpleRelasi[]; 
 }
 
-// ▼▼▼ INTERFACE DIPERBAIKI (dosen[] dihapus) ▼▼▼
 interface ProdiData {
   id: number;
   nama_prodi: string;
@@ -45,22 +42,19 @@ interface ProdiData {
   desc_prospek_kerja: string;
   desc_program: string;
   keunggulan: string;
-  // dosen: Dosen[]; <-- DIHAPUS, karena sudah tidak ada di API
   kerjasama: Kerjasama[];
   prospek_kerja: ProspekKerja[];
-  kepala_prodi: Dosen | null; // <-- INI YANG KITA PAKAI
+  kepala_prodi: Dosen | null; 
 }
 
 const BACKEND_URL = "http://localhost:8000";
 
-// --- Komponen Halaman Prodi (Menggantikan HomeIf/HomeSi) ---
 export default function ProdiPage() {
-  const { prodi } = useProdi(); // 'IF' atau 'SI'
+  const { prodi } = useProdi();
   const [data, setData] = useState<ProdiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch data setiap kali 'prodi' dari context berubah
   useEffect(() => {
     async function fetchData(prodiId: number) {
       setLoading(true);
@@ -80,20 +74,14 @@ export default function ProdiPage() {
       }
     }
 
-    // ▼▼▼ KESALAHAN 1 DIPERBAIKI (Logika ID dibalik) ▼▼▼
-    // ID 1 = Teknik Informatika (IF)
-    // ID 2 = Sistem Informasi (SI)
     const prodiId = prodi === 'IF' ? 1 : 2; 
     
     fetchData(prodiId);
 
-  }, [prodi]); // Dependensi: Berjalan ulang saat 'prodi' berubah
+  }, [prodi]);
 
-  // ▼▼▼ KESALAHAN 2 DIPERBAIKI (Blok useMemo dihapus) ▼▼▼
-  // Ambil data kaprodi langsung dari API
   const kepalaProdi = data?.kepala_prodi;
 
-  // Render Misi dengan format yang benar
   const MisiDisplay = ({ misiString }: { misiString: string | undefined }) => {
     if (!misiString) return <p>Misi belum tersedia.</p>;
     const daftarMisi = misiString.split(/\r?\n/).filter(poin => poin.trim() !== '');
@@ -106,7 +94,6 @@ export default function ProdiPage() {
     );
   };
   
-  // Tampilan Loading
   if (loading) {
     return (
       <div className="flex justify-center py-10">
@@ -115,13 +102,10 @@ export default function ProdiPage() {
     );
   }
 
-  // Tampilan Error
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
-  // Tampilan jika data tidak ada
   if (!data) return <p className="text-center">Data prodi tidak ditemukan.</p>;
 
-  // Render UI dinamis menggunakan data dari state 'data'
   return (
     <div className="container px-6 mx-auto">
       <Tabs
@@ -136,19 +120,16 @@ export default function ProdiPage() {
         }}
       >
         
-        {/* Tab 1: Tentang */}
         <Tab key="tentang" title="Tentang" className="w-full">
           <Card className="mainColor text-white mt-2 w-full">
             <div className="p-6">
               <strong className="flex text-3xl underline underline-offset-10 justify-center">{data.nama_prodi}</strong>
               <div className="mt-8 flex flex-col lg:flex-row">
                 <div className="flex items-center w-full lg:w-1/2">
-                  {/* Logika ini sekarang akan bekerja karena 'kepalaProdi' diambil dari API */}
                   {kepalaProdi ? (
                     <>
                       <Image
                         alt={`Foto ${kepalaProdi.nama}`}
-                        // API Anda mengirim URL lengkap, jadi BACKEND_URL tidak perlu
                         src={kepalaProdi.image ? kepalaProdi.image : "/placeholder.jpg"}
                         width={200}
                         height={240}
@@ -158,11 +139,6 @@ export default function ProdiPage() {
                         <h3 className="text-xl font-bold">Kepala Prodi</h3>
                         <p className="mt-1 text-lg">{kepalaProdi.nama}</p>
                         <p className="mt-2"><strong>NUPTK: </strong><br />{kepalaProdi.NUPTK}</p>
-                        {/* Catatan: 'jabatans' mungkin tidak ada di data 'kepala_prodi'.
-                          Jika tidak ada, Anda bisa tampilkan nama prodinya saja, 
-                          atau tambahkan 'jabatans' di kueri 'kepala_prodi' Anda di backend.
-                          Untuk saat ini, kita tampilkan saja nama prodinya.
-                        */}
                         <p className="mt-2"><strong>Jabatan: </strong><br />Kepala Prodi {data.nama_prodi}</p>
                         <p className="mt-4"><strong>email:</strong><br />{kepalaProdi.email ?? "Tidak tersedia"}</p>
                       </div>
@@ -179,7 +155,6 @@ export default function ProdiPage() {
           </Card>
         </Tab>
 
-        {/* Tab 2: Prospek Kerja */}
         <Tab key="prospek-kerja" title="Prospek Kerja" className="w-full">
           <Card className="mainColor text-white w-full">
             <CardBody className="flex flex-col lg:flex-row gap-4 justify-center items-center p-6">
@@ -192,7 +167,6 @@ export default function ProdiPage() {
                   {data.prospek_kerja && data.prospek_kerja.length > 0 ? (
                     data.prospek_kerja.map((item) => (
                       <AccordionItem key={item.id} aria-label={item.nama_pekerjaan} className="overflow-hidden" title={item.nama_pekerjaan}>
-                        {/* Ini sudah benar menggunakan item.deskripsi */}
                         <div className="text-justify p-2">{item.deskripsi}</div>
                       </AccordionItem>
                     ))
@@ -207,13 +181,11 @@ export default function ProdiPage() {
           </Card>
         </Tab>
 
-        {/* Tab 3: Program Pendidikan */}
         <Tab key="programPendidikan" title="Program Pendidikan" className="w-full">
            <Card className="mainColor text-white mt-2 w-full">
              <CardBody className="p-6">
                <h1 className="text-center underline underline-offset-10 text-3xl">Program Pendidikan</h1>
                <div className="flex flex-wrap justify-evenly items-center pt-6">
-                   {/* UI Statis Anda (Gelar, Akreditasi, dll.) */}
                    <Card className="flex justify-center h-30 w-40">
                        <CardBody className="flex flex-col justify-center items-center text-center">
                            <FaUserGraduate className="text-3xl pb-2" />
@@ -275,7 +247,6 @@ export default function ProdiPage() {
            </Card>
         </Tab>
 
-        {/* Tab 4: Kerja Sama */}
         <Tab key="kerjaSama" title="Kerja Sama Prodi" className="w-full">
           <Card className="mainColor mt-2 w-full">
             <h1 className="text-white text-center text-3xl p-6 underline underline-offset-10">Kerja Sama</h1>
@@ -288,7 +259,7 @@ export default function ProdiPage() {
                     <Image
                       key={item.id}
                       alt={`Mitra Kerjasama ${item.id}`} 
-                      src={item.link_url} // Ini sudah benar
+                      src={item.link_url} 
                       width={221}
                       height={334}
                       className="object-cover rounded-xl"
@@ -301,7 +272,6 @@ export default function ProdiPage() {
         </Tab>
       </Tabs>
       
-      {/* Visi Misi Section (di luar Tabs) */}
       <svg className="w-screen relative left-1/2 -translate-x-1/2 -mb-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path fill="#0A0950" fillOpacity="1" d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,170.7C1200,171,1320,213,1380,234.7L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
       </svg>
