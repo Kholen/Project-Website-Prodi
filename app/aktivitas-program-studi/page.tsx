@@ -32,6 +32,7 @@ interface ApiBerita {
 interface PengumumanItem {
   id: number;
   judul: string;
+  links:string;
   tanggal: string;
   gambar: string | null;
   kepala: string;
@@ -42,6 +43,7 @@ interface PengumumanItem {
 interface ApiPengumuman {
   id: number;
   judul: string;
+  slug:string;
   gambar: string | null;
   kepala_pengumuman: string | null;
   isi_pengumuman: string;
@@ -98,7 +100,7 @@ function PengumumanCard({ item }: { item: PengumumanItem }) {
           <div className="flex translate-y-3 transform flex-col gap-3 overflow-hidden text-sm leading-relaxed opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
             <p className="indent-8 text-justify">{item.kepala}</p>
             <a
-              href={`/aktivitas-mahasiswa/pengumuman/${item.id}`}
+              href={item.links}
               className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors duration-300 hover:text-blue-400"
             >
               <span>Baca Selengkapnya</span>
@@ -141,7 +143,7 @@ export default function AktivitasMhs() {
         const mapped = sortedBerita.map((item) => ({
           nomor: item.id,
           title: item.judul,
-          link: `/aktivitas-mahasiswa/berita/${item.slug}`,
+          link: `/aktivitas-program-studi/berita/${item.slug}`,
           tanggal: new Date(item.created_at).toLocaleDateString("id-ID", {
             year: "numeric",
             month: "long",
@@ -181,6 +183,7 @@ export default function AktivitasMhs() {
         const mapped = sortedPengumuman.map((item) => ({
           id: item.id,
           judul: item.judul,
+          links: `/aktivitas-program-studi/pengumuman/${item.slug}`,
           tanggal: new Date(item.created_at).toLocaleDateString("id-ID", {
             year: "numeric",
             month: "long",
@@ -249,7 +252,7 @@ export default function AktivitasMhs() {
       <div className="flex justify-center py-10">
         <Spinner
           variant="dots"
-          label="Memuat Informasi Aktivitas Mahasiswa..."
+          label="Memuat Informasi Aktivitas Program Studi..."
           classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }}
         />
       </div>
@@ -259,8 +262,8 @@ export default function AktivitasMhs() {
   return (
     <section className="container space-y-10 px-6 py-10">
       <div className="flex flex-col gap-2 text-center">
-        <h2 className="text-2xl font-bold sm:text-3xl">Aktivitas Mahasiswa</h2>
-        <p className="text-sm text-neutral-500">Sorotan terbaru berita dan pengumuman mahasiswa STTI Tanjungpinang.</p>
+        <h2 className="text-2xl font-bold sm:text-3xl">Aktivitas Program Studi</h2>
+        <p className="text-sm text-neutral-500">Sorotan terbaru berita dan pengumuman Program Studi STTI Tanjungpinang.</p>
       </div>
 
       <div className="space-y-6">

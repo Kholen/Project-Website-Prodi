@@ -13,6 +13,7 @@ interface ApiPengumumanDetail {
   kepala_pengumuman: string | null;
   isi_pengumuman: string;
   ekor_pengumuman: string | null;
+  slug: string;
   created_at: string;
   author?: string | null;
 }
@@ -21,16 +22,16 @@ const backendBaseUrl = (process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost
 
 export default function DetailPengumuman() {
   const router = useRouter();
-  const params = useParams<{ id: string | string[] }>();
-  const idParam = params?.id;
-  const pengumumanId = useMemo(() => (Array.isArray(idParam) ? idParam[0] : idParam ?? ""), [idParam]);
+  const params = useParams<{ slug: string | string[] }>();
+  const slugParam = params?.slug;
+  const slug = useMemo(() => (Array.isArray(slugParam) ? slugParam[0] : slugParam ?? ""), [slugParam]);
 
   const [data, setData] = useState<ApiPengumumanDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!pengumumanId) {
+    if (!slug) {
       return;
     }
 
@@ -41,7 +42,7 @@ export default function DetailPengumuman() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/pengumuman/${pengumumanId}`, {
+        const response = await fetch(`/api/pengumuman/${slug}`, {
           cache: "no-store",
         });
 
@@ -75,7 +76,7 @@ export default function DetailPengumuman() {
     return () => {
       active = false;
     };
-  }, [pengumumanId]);
+  }, [slug]);
 
   const tanggalTerbit = useMemo(() => {
     if (!data?.created_at) return "";
@@ -87,7 +88,7 @@ export default function DetailPengumuman() {
     });
   }, [data?.created_at]);
 
-  if (!pengumumanId) {
+  if (!slug) {
     return <section className="container px-4 py-10 text-center text-sm text-red-500">ID pengumuman tidak valid.</section>;
   }
 
@@ -103,7 +104,7 @@ export default function DetailPengumuman() {
     return (
       <section className="container px-4 py-10 text-center">
         <p className="text-sm text-red-500">{error}</p>
-        <Button className="mx-auto mt-4 bg-[#0a0950] text-white" onPress={() => router.push("/aktivitas-mahasiswa")}>
+        <Button className="mx-auto mt-4 bg-[#0a0950] text-white" onPress={() => router.push("/aktivitas-program-studi")}>
           <FiArrowLeft />
           Kembali
         </Button>
@@ -129,7 +130,7 @@ export default function DetailPengumuman() {
           <p className="text-[#0a0950] font-semibold">{data.author ?? "Admin"}</p>
           <p className="text-tiny text-default-500 mb-1">{tanggalTerbit}</p>
           <figure className="overflow-hidden rounded-xl mb-4 mt-2">
-            <img src={imageUrl} alt={data.judul} className="h-80 w-full object-cover" />
+            <img src={imageUrl} alt={data.judul} className="h-80 w-auto object-cover" />
           </figure>
         </header>
 

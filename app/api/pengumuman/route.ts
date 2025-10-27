@@ -2,10 +2,10 @@
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
 
-async function forwardResponse(response: Response) {
-  const contentType = response.headers.get("content-type") ?? "";
-  const rawBody = await response.text();
-  const status = response.status;
+async function forwardResponse(backendResponse: Response) {
+  const contentType = backendResponse.headers.get("content-type") ?? "";
+  const rawBody = await backendResponse.text();
+  const status = backendResponse.status;
 
   if (!rawBody) {
     return new NextResponse(null, { status });
@@ -16,7 +16,7 @@ async function forwardResponse(response: Response) {
       const payload = JSON.parse(rawBody);
       return NextResponse.json(payload, { status });
     } catch (error) {
-      // fallback to text response
+      // fall through to send raw response as text
     }
   }
 
@@ -28,31 +28,26 @@ async function forwardResponse(response: Response) {
 
 export async function GET() {
   try {
-    const response = await fetch(`${backendUrl}/api/pengumuman`, { cache: "no-store" });
-    return await forwardResponse(response);
+    const backendResponse = await fetch(`${backendUrl}/api/pengumuman`, { cache: "no-store" });
+    return await forwardResponse(backendResponse);
   } catch (error) {
     const message = error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json(
-      { error: "Failed to fetch data", details: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch data", details: message }, { status: 500 });
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const formData = await request.formData();
-    const response = await fetch(`${backendUrl}/api/pengumuman`, {
+    const formData = await req.formData();
+
+    const backendResponse = await fetch(`${backendUrl}/api/pengumuman`, {
       method: "POST",
       body: formData,
     });
 
-    return await forwardResponse(response);
+    return await forwardResponse(backendResponse);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json(
-      { error: "Failed to forward request", details: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to forward request", details: message }, { status: 500 });
   }
 }

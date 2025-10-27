@@ -7,6 +7,7 @@ type Pengumuman = {
   kepala_pengumuman: string | null;
   isi_pengumuman: string;
   ekor_pengumuman: string | null;
+  slug:string;
   created_at: string;
   updated_at: string;
 };

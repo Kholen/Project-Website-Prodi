@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { Pagination, Spinner } from "@heroui/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Searchbar from "@/components/Searchbar";
+import type { PressEvent } from "@react-types/shared";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Pagination, Spinner, Link, type Selection } from "@heroui/react";
+
 interface RisetRecord {
   id: number;
   nama_ketua: string | null;
@@ -39,6 +42,8 @@ export default function RisetPublikasiPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["ALL"]) as Selection);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     async function fetchRiset() {
@@ -63,12 +68,52 @@ export default function RisetPublikasiPage() {
     fetchRiset();
   }, []);
 
-  useEffect(() => {
-    setPage(1);
-  }, [records.length]);
+  const selectedYear = useMemo(() => {
+    if (selectedKeys === "all") {
+      return "ALL";
+    }
+
+    const keys = Array.from(selectedKeys);
+    const firstKey = keys[0];
+
+    return typeof firstKey === "string" ? firstKey : String(firstKey ?? "ALL");
+  }, [selectedKeys]);
+
+  const yearOptions = useMemo(() => {
+    const uniqueYears = new Set<string>();
+
+    records.forEach((record) => {
+      if (record.tahun) {
+        uniqueYears.add(String(record.tahun));
+      }
+    });
+
+    return Array.from(uniqueYears).sort((a, b) => Number(b) - Number(a));
+  }, [records]);
+
+  const yearMenuItems = useMemo(
+    () => [{ key: "ALL", label: "Semua Tahun" }, ...yearOptions.map((year) => ({ key: year, label: `Tahun ${year}` }))],
+    [yearOptions]
+  );
+
+  const filteredRecords = useMemo(() => {
+    const term = searchValue.trim().toLowerCase();
+
+    return records.filter((record) => {
+      const matchesSearch =
+        !term ||
+        (record.nama_ketua ?? "").toLowerCase().includes(term) ||
+        record.judul.toLowerCase().includes(term) ||
+        (record.journal_name ?? "").toLowerCase().includes(term);
+
+      const matchesYear = selectedYear === "ALL" || (record.tahun ? String(record.tahun) === selectedYear : false);
+
+      return matchesSearch && matchesYear;
+    });
+  }, [records, searchValue, selectedYear]);
 
   const sortedRecords = useMemo(() => {
-    return [...records].sort((a, b) => {
+    return [...filteredRecords].sort((a, b) => {
       const dateA = a.published_at ? new Date(`${a.published_at}T00:00:00`).getTime() : 0;
       const dateB = b.published_at ? new Date(`${b.published_at}T00:00:00`).getTime() : 0;
 
@@ -85,7 +130,7 @@ export default function RisetPublikasiPage() {
 
       return a.judul.localeCompare(b.judul);
     });
-  }, [records]);
+  }, [filteredRecords]);
 
   const totalPages = Math.max(1, Math.ceil(sortedRecords.length / ITEMS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
@@ -93,94 +138,146 @@ export default function RisetPublikasiPage() {
   const paginatedRecords = sortedRecords.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   useEffect(() => {
-    if (page > totalPages) {
-      setPage(totalPages);
+    if (page !== currentPage) {
+      setPage(currentPage);
     }
-  }, [page, totalPages]);
+  }, [currentPage, page]);
 
-  if (loading)   return (
-        <div className="flex justify-center py-10">
-          <Spinner variant="dots" label="Memuat data Riset dan Publikasi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
-        </div>
-      );
-  
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchValue(value);
+    setPage(1);
+  }, []);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchValue("");
+    setPage(1);
+  }, []);
+
+  const handleSelectionChange = useCallback((keys: Selection) => {
+    setSelectedKeys(keys);
+    setPage(1);
+  }, []);
+
+  if (loading)
+    return (
+      <div className="flex justify-center py-10">
+        <Spinner variant="dots" label="Memuat data Riset dan Publikasi..." classNames={{ label: "mt-4 text-[#0a0950]", dots: "!bg-[#0a0950]" }} />
+      </div>
+    );
 
   if (error) {
     return <p className="text-center text-red-500">{error}</p>;
   }
 
-  if (!sortedRecords.length) {
-    return <p className="text-center">Belum ada data riset yang tersedia.</p>;
-  }
+  const hasResults = sortedRecords.length > 0;
+  const emptyMessage = records.length === 0 ? "Belum ada data riset yang tersedia." : "Tidak ditemukan hasil yang cocok.";
+  const dropdownLabel = selectedYear === "ALL" ? "Semua Tahun" : `Tahun ${selectedYear}`;
 
   return (
-    <div className="w-full max-w-6xl mx-auto overflow-hidden rounded-lg shadow-md bg-white">
-      <table className="w-full text-sm text-left text-gray-600 border border-gray-200 border-collapse">
-        <thead className="text-xs text-white uppercase mainColor">
-          <tr className="text-center">
-            <th scope="col" className="px-4 py-3 border border-gray-200">
-              No
-            </th>
-            <th scope="col" className="px-4 py-3 text-left border border-gray-200">
-              Judul Artikel
-            </th>
-            <th scope="col" className="px-4 py-3 border border-gray-200">
-              Tanggal Publish
-            </th>
-            <th scope="col" className="px-4 py-3 border border-gray-200">
-              Nama Jurnal
-            </th>
-            <th scope="col" className="px-4 py-3 border border-gray-200">
-              Nama Ketua Penulis
-            </th>
-            <th scope="col" className="px-4 py-3 text-center border border-gray-200">
-              URL Publikasi
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedRecords.map((item, index) => (
-            <tr key={`${item.id}-${index}`} className="bg-white hover:bg-gray-50">
-              <td className="px-4 py-3 font-medium align-top border border-gray-200">{startIndex + index + 1}</td>
-              <td className="px-4 py-3 font-medium text-gray-900 align-top border border-gray-200" scope="row">
-                {item.judul}
-              </td>
-              <td className="px-4 py-3 align-top border border-gray-200">{formatPublishedAt(item.published_at, item.tahun)}</td>
-              <td className="px-4 py-3 align-top border border-gray-200">{item.journal_name ?? "Tidak tersedia"}</td>
-              <td className="px-4 py-3 align-top border border-gray-200">{item.nama_ketua ?? "Tidak tersedia"}</td>
-              <td className="px-4 py-3 text-center align-top border border-gray-200">
-                {item.url_riset ? (
-                  <a className="text-blue-600 underline" href={item.url_riset} rel="noopener noreferrer" target="_blank">
-                    Lihat Publikasi
-                  </a>
-                ) : (
-                  <span className="text-gray-400">Tidak tersedia</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {totalPages > 1 && (
-        <div className="flex justify-center px-4 py-4 border border-t-0 border-gray-200">
-          <Pagination
-            showControls
-            page={currentPage}
-            total={totalPages}
-            onChange={setPage}
-            classNames={{
-              cursor: "!bg-[#0a0950]",
-            }}
-          />
+    <section className="container mx-auto px-6 py-10">
+      <div className="grid gap-3 mt-6 mb-8 sm:grid-cols-[minmax(0,1fr)_auto]">
+        <Searchbar
+          value={searchValue}
+          onValueChange={handleSearchChange}
+          onClear={handleSearchClear}
+          isClearable
+          placeholder="Cari judul atau ketua riset?"
+        />
+
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              className="w-full capitalize text-white mainColor h-auto sm:w-auto"
+              variant="bordered"
+              onPress={(event: PressEvent) => event.continuePropagation()}
+            >
+              {dropdownLabel}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            disallowEmptySelection
+            aria-label="Filter tahun"
+            selectedKeys={selectedKeys}
+            selectionMode="single"
+            variant="flat"
+            onSelectionChange={handleSelectionChange}
+            items={yearMenuItems}
+          >
+            {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
+          </DropdownMenu>
+        </Dropdown>
+      </div>
+      <div className="overflow-hidden rounded-lg shadow-md bg-white">
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm text-left text-gray-600 border border-gray-200 border-collapse">
+            <thead className="text-xs text-white uppercase mainColor">
+              <tr className="text-center">
+                <th scope="col" className="px-4 py-3 border border-gray-200">
+                  No
+                </th>
+                <th scope="col" className="px-4 py-3 text-left border border-gray-200">
+                  Judul Artikel
+                </th>
+                <th scope="col" className="px-4 py-3 border border-gray-200">
+                  Tanggal Publish
+                </th>
+                <th scope="col" className="px-4 py-3 border border-gray-200">
+                  Nama Jurnal
+                </th>
+                <th scope="col" className="px-4 py-3 border border-gray-200">
+                  Nama Ketua Peneliti
+                </th>
+                <th scope="col" className="px-4 py-3 text-center border border-gray-200">
+                  URL Publikasi
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {hasResults ? (
+                paginatedRecords.map((item, index) => (
+                  <tr key={item.id} className="bg-white hover:bg-gray-50">
+                    <td className="px-4 py-3 font-medium align-top border border-gray-200">{startIndex + index + 1}</td>
+                    <td className="px-4 py-3 font-medium text-gray-900 align-top border border-gray-200" scope="row">
+                      {item.judul}
+                    </td>
+                    <td className="px-4 py-3 align-top border border-gray-200">{formatPublishedAt(item.published_at, item.tahun)}</td>
+                    <td className="px-4 py-3 align-top border border-gray-200">{item.journal_name ?? "Tidak tersedia"}</td>
+                    <td className="px-4 py-3 align-top border border-gray-200">{item.nama_ketua ?? "Tidak tersedia"}</td>
+                    <td className="px-4 py-3 text-center align-center border border-gray-200">
+                      {item.url_riset ? (
+                        <Link className="text-primary" href={item.url_riset} rel="noopener noreferrer" target="_blank">
+                          Lihat
+                        </Link>
+                      ) : (
+                        <span className="text-gray-400">Tidak tersedia</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td className="px-4 py-6 text-center border border-gray-200 text-gray-500" colSpan={6}>
+                    {emptyMessage}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
-    </div>
+        {hasResults && totalPages > 1 && (
+          <div className="flex justify-center px-4 py-4 border border-t-0 border-gray-200">
+            <Pagination
+              showControls
+              page={currentPage}
+              total={totalPages}
+              onChange={setPage}
+              classNames={{
+                cursor: "!bg-[#0a0950]",
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
-
-
-
-
-
-
-

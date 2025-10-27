@@ -94,7 +94,7 @@ export default function TambahBeritaPage() {
       }
 
       alert("Data berita berhasil ditambahkan!");
-      router.push("/dashboard/berita-mahasiswa");
+      router.push("/dashboard/berita-program-studi");
     } catch (err: any) {
       setError(err.message);
       alert(`Error: ${err.message}`);
